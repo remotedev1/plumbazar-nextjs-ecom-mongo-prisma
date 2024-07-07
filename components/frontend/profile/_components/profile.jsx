@@ -56,7 +56,7 @@ const Profile = async () => {
               {user.email}
             </div>
             <div className="mb-2 text-blueGray-600 mt-10">
-              {Object.keys(user.address).map((key) => (
+              {user?.address && Object.keys(user.address).map((key) => (
                 <div key={key} className="text-sm leading-normal  ">
                   <strong className="capitalize">{key} : &nbsp; </strong>
                   {user.address[key]}

@@ -18,10 +18,11 @@ import {
 } from "@/app/components";
 
 // Contexts
-import { useInvoiceContext } from "@/contexts/InvoiceContext";
+
 
 // Icons
 import { FileInput, FolderUp, Import, Plus } from "lucide-react";
+import { useInvoiceContext } from "@/providers/invoice-provider";
 
 const InvoiceActions = () => {
     const { invoicePdfLoading } = useInvoiceContext();
