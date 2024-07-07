@@ -63,27 +63,27 @@ const WizardProgress = ({ wizard }) => {
   const steps = [
     {
       id: 0,
-      label: "form.wizard.fromAndTo",
+      label: "Bill To",
       isValid: step1Valid,
     },
     {
       id: 1,
-      label: "form.wizard.invoiceDetails",
+      label: "Details",
       isValid: step2Valid,
     },
     {
       id: 2,
-      label: "form.wizard.lineItems",
+      label: "Line Items",
       isValid: step3Valid,
     },
     {
       id: 3,
-      label: "form.wizard.paymentInfo",
+      label: "Payment Info",
       isValid: step4Valid,
     },
     {
       id: 4,
-      label: "form.wizard.summary",
+      label: "Summary",
       isValid: step5Valid,
     },
   ];

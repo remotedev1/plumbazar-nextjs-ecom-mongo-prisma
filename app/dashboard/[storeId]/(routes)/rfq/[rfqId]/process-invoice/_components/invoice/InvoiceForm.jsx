@@ -20,14 +20,12 @@ import { Wizard } from "react-use-wizard";
 import WizardStep from "./form/wizard/WizardStep";
 
 //components
-import BillFromSection from "./form/sections/BillFromSection";
 import BillToSection from "./form/sections/BillToSection";
 import InvoiceDetails from "./form/sections/InvoiceDetails";
 import PaymentInformation from "./form/sections/PaymentInformation";
 import InvoiceSummary from "./form/sections/InvoiceSummary";
 import Items from "./form/sections/Items";
 
-// Contexts
 
 const InvoiceForm = () => {
   const { control } = useFormContext();
@@ -52,20 +50,19 @@ const InvoiceForm = () => {
         <CardHeader>
           <div className="flex gap-3">
             <CardTitle className="flex items-center gap-3">
-              <span className="uppercase">{"form.title"}</span>
+              <span className="uppercase">Invoice</span>
             </CardTitle>
             <Badge variant="secondary" className="w-fit">
               <p style={{ fontSize: "14px" }}>{invoiceNumberLabel}</p>
             </Badge>
           </div>
-          <CardDescription>{"form.description"}</CardDescription>
+          <CardDescription>Create RFQ response</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-8">
             <Wizard>
               <WizardStep>
                 <div className="flex flex-wrap gap-x-20 gap-y-10">
-                  <BillFromSection />
 
                   <BillToSection />
                 </div>

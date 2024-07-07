@@ -86,7 +86,7 @@ const Items = () => {
 
   return (
     <section className="flex flex-col gap-2 w-full">
-      <Subheading>heading:</Subheading>
+      <Subheading>Line items:</Subheading>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}

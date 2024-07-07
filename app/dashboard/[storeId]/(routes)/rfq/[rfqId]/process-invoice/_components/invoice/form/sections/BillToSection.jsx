@@ -39,7 +39,7 @@ const BillToSection = () => {
 
     return (
         <section className="flex flex-col gap-3">
-            <Subheading>billTo:</Subheading>
+            <Subheading>Bill To:</Subheading>
 
             <FormInput
                 name="receiver.name"

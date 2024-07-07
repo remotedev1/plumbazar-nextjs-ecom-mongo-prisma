@@ -9,13 +9,13 @@ import {
 } from "@/components/ui/card";
 
 // Components
-import {
-    PdfViewer,
-    BaseButton,
-    NewInvoiceAlert,
-    InvoiceLoaderModal,
-    InvoiceExportModal,
-} from "@/app/components";
+// import {
+//     // PdfViewer,
+//     // BaseButton,
+//     // NewInvoiceAlert,
+//     // InvoiceLoaderModal,
+//     // InvoiceExportModal,
+// } from "@/app/components";
 
 // Contexts
 
@@ -23,6 +23,8 @@ import {
 // Icons
 import { FileInput, FolderUp, Import, Plus } from "lucide-react";
 import { useInvoiceContext } from "@/providers/invoice-provider";
+import BaseButton from "../BaseButton";
+import PdfViewer from "./actions/PdfViewer";
 
 const InvoiceActions = () => {
     const { invoicePdfLoading } = useInvoiceContext();
@@ -38,7 +40,7 @@ const InvoiceActions = () => {
                 <div className="flex flex-col flex-wrap items-center gap-2">
                     <div className="flex flex-wrap gap-3">
                         {/* Load modal button */}
-                        <InvoiceLoaderModal>
+                        {/* <InvoiceLoaderModal>
                             <BaseButton
                                 variant="outline"
                                 tooltipLabel="Open load invoice menu"
@@ -47,10 +49,10 @@ const InvoiceActions = () => {
                                 <FolderUp />
                                 Load Invoice
                             </BaseButton>
-                        </InvoiceLoaderModal>
+                        </InvoiceLoaderModal> */}
 
                         {/* Export modal button */}
-                        <InvoiceExportModal>
+                        {/* <InvoiceExportModal>
                             <BaseButton
                                 variant="outline"
                                 tooltipLabel="Open load invoice menu"
@@ -59,12 +61,12 @@ const InvoiceActions = () => {
                                 <Import />
                                 Export Invoice
                             </BaseButton>
-                        </InvoiceExportModal>
+                        </InvoiceExportModal> */}
                     </div>
 
                     <div className="flex flex-wrap gap-3">
                         {/* New invoice button */}
-                        <NewInvoiceAlert>
+                        {/* <NewInvoiceAlert>
                             <BaseButton
                                 variant="outline"
                                 tooltipLabel="Get a new invoice form"
@@ -73,7 +75,7 @@ const InvoiceActions = () => {
                                 <Plus />
                                 New Invoice
                             </BaseButton>
-                        </NewInvoiceAlert>
+                        </NewInvoiceAlert> */}
 
                         {/* Generate pdf button */}
                         <BaseButton

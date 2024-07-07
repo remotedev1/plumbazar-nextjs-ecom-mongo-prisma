@@ -185,11 +185,7 @@ const SingleItem = ({
                     />
                 </div>
             </div>
-            <FormTextarea
-                name={`${name}[${index}].description`}
-                label="description"
-                placeholder="Item description"
-            />
+           
             <div>
                 {/* Not allowing deletion for first item when there is only 1 item */}
                 {fields.length > 1 && (

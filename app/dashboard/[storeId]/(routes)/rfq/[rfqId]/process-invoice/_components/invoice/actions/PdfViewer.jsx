@@ -7,10 +7,14 @@ import { useDebounce } from "use-debounce";
 import { useFormContext } from "react-hook-form";
 
 // Components
-// import { FinalPdf, LivePreview } from "@/app/components";
+import LivePreview from "./LivePreview";
+import FinalPdf from "./FinalPdf";
 
 // Contexts
-import { useInvoiceContext } from "@/contexts/InvoiceContext";
+import { useInvoiceContext } from "@/providers/invoice-provider";
+
+
+
 
 
 const PdfViewer = () => {
@@ -23,11 +27,11 @@ const PdfViewer = () => {
 
     return (
         <div className="my-3">
-            {/* {invoicePdf.size == 0 ? (
+            {invoicePdf.size == 0 ? (
                 <LivePreview data={formValues} />
             ) : (
                 <FinalPdf />
-            )} */}
+            )}
         </div>
     );
 };

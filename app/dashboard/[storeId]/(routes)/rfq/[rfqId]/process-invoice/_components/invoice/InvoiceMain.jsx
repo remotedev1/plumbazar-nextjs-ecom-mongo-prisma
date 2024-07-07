@@ -7,13 +7,13 @@ import { useFormContext } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 
 // Components
-import {  InvoiceForm } from "@/app/components";
+import InvoiceActions from "./InvoiceActions";
 
 // Context
 
 // Types
-import { InvoiceType } from "@/types";
 import { useInvoiceContext } from "@/providers/invoice-provider";
+import InvoiceForm from "./InvoiceForm";
 
 const InvoiceMain = () => {
     const { handleSubmit } = useFormContext();
@@ -31,7 +31,7 @@ const InvoiceMain = () => {
                 >
                     <div className="flex flex-wrap">
                         <InvoiceForm />
-                        {/* <InvoiceActions /> */}
+                        <InvoiceActions />
                     </div>
                 </form>
             </Form>
