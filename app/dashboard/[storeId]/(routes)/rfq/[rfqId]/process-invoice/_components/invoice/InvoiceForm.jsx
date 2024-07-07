@@ -23,8 +23,9 @@ import WizardStep from "./form/wizard/WizardStep";
 import BillFromSection from "./form/sections/BillFromSection";
 import BillToSection from "./form/sections/BillToSection";
 import InvoiceDetails from "./form/sections/InvoiceDetails";
-
-
+import PaymentInformation from "./form/sections/PaymentInformation";
+import InvoiceSummary from "./form/sections/InvoiceSummary";
+import Items from "./form/sections/Items";
 
 // Contexts
 
@@ -75,7 +76,7 @@ const InvoiceForm = () => {
                 </div>
               </WizardStep>
 
-              {/* <WizardStep>
+              <WizardStep>
                 <Items />
               </WizardStep>
 
@@ -85,7 +86,7 @@ const InvoiceForm = () => {
 
               <WizardStep>
                 <InvoiceSummary />
-              </WizardStep> */}
+              </WizardStep>
             </Wizard>
           </div>
         </CardContent>

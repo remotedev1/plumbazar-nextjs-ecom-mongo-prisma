@@ -15,25 +15,14 @@ import {
 import { Input } from "@/components/ui/input";
 
 // Components
-import { BaseButton } from "@/app/components";
+import BaseButton from "../BaseButton";
+
 
 // Icons
 import { Percent, RefreshCw } from "lucide-react";
 
-// Types
-import { NameType } from "@/types";
 
-type ChargeInputProps = {
-    label: string;
-    name: NameType;
-    switchAmountType: (
-        type: string,
-        setType: React.Dispatch<React.SetStateAction<string>>
-    ) => void;
-    type: string;
-    setType: React.Dispatch<React.SetStateAction<string>>;
-    currency: string;
-};
+
 
 const ChargeInput = ({
     label,
@@ -42,7 +31,7 @@ const ChargeInput = ({
     type,
     setType,
     currency,
-}: ChargeInputProps) => {
+}) => {
     const { control } = useFormContext();
 
     return (

@@ -13,12 +13,6 @@ import {
 } from "@/components/ui/form";
 import { Textarea, TextareaProps } from "@/components/ui/textarea";
 
-type FormTextareaProps = {
-    name: string;
-    label?: string;
-    labelHelper?: string;
-    placeholder?: string;
-} & TextareaProps;
 
 const FormTextarea = ({
     name,
@@ -26,7 +20,7 @@ const FormTextarea = ({
     labelHelper,
     placeholder,
     ...props
-}: FormTextareaProps) => {
+}) => {
     const { control } = useFormContext();
     return (
         <FormField

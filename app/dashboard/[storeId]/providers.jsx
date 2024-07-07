@@ -1,5 +1,6 @@
 "use client";
 import { FORM_DEFAULT_VALUES } from "@/lib/variables";
+import { ChargesContextProvider } from "@/providers/charges-provider";
 import { InvoiceContextProvider } from "@/providers/invoice-provider";
 import { InvoiceSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,8 +14,10 @@ export default function InvoiceProvidersComponent({ children, params }) {
   });
 
   return (
-      <FormProvider {...form}>
-        <InvoiceContextProvider>{children}</InvoiceContextProvider>
-      </FormProvider>
+    <FormProvider {...form}>
+      <InvoiceContextProvider>
+        <ChargesContextProvider>{children}</ChargesContextProvider>
+      </InvoiceContextProvider>
+    </FormProvider>
   );
 }
