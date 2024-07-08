@@ -2,7 +2,7 @@ import { format } from "date-fns";
 
 import { rupeeFormatter } from "@/lib/utils";
 
-import ProductsClient from "../../../../(client)/rfq/_components/Client";
+import ProductsClient from "./components/Client";
 import { db } from "@/lib/db";
 
 const ProductsPage = async ({ params }) => {

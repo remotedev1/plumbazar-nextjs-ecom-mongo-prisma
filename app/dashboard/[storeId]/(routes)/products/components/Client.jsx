@@ -6,20 +6,20 @@ import { Separator } from "@/components/ui/separator";
 import { Billboard } from "@prisma/client";
 import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { ProductColumn, columns } from "../../../dashboard/[storeId]/(routes)/products/components/columns";
+import { ProductColumn, columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
-import { ApiList } from "@/components/ui/api-list";
+// import { ApiList } from "@/components/ui/api-list";
 
 
 
-const RfqClient = ({ data }) => {
+const ProductsClient = ({ data }) => {
   const router = useRouter();
   const params = useParams();
   return (
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title="Request for quote"
+          title={`Products (${data.length})`}
           description="Manage products for your store."
         />
 
@@ -29,11 +29,11 @@ const RfqClient = ({ data }) => {
       </div>
       <Separator />
       <DataTable searchKey="name" columns={columns} data={data} />
-      <Heading title="API" description="API calls for Products." />
+      {/* <Heading title="API" description="API calls for Products." />
       <Separator />
-      <ApiList entityName="products" entityIdName="productId" />
+      <ApiList entityName="products" entityIdName="productId" /> */}
     </>
   );
 };
 
-export default RfqClient;
+export default ProductsClient;
