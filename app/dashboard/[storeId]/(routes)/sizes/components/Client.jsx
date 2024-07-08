@@ -8,7 +8,7 @@ import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { SizeColumn, columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
-import { ApiList } from "@/components/ui/api-list";
+// import { ApiList } from "@/components/ui/api-list";
 
 const SizesClient = ({ data }) => {
   const router = useRouter();
@@ -28,12 +28,12 @@ const SizesClient = ({ data }) => {
       <Separator />
       <DataTable searchKey="name" columns={columns} data={data} />
 
-      <Heading
+      {/* <Heading
         title="API"
         description="API calls for Sizes. You can also use the endpoints to get the billboards of a specific store."
       />
       <Separator />
-      <ApiList entityName="sizes" entityIdName="sizeId" />
+      <ApiList entityName="sizes" entityIdName="sizeId" /> */}
     </>
   );
 };

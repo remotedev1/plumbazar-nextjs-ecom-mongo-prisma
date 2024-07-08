@@ -1,6 +1,6 @@
 "use client";
 
-import { ApiList } from "@/components/ui/api-list";
+// import { ApiList } from "@/components/ui/api-list";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import Heading from "@/components/ui/heading";
@@ -30,7 +30,7 @@ const ColorClient = ({ data }) => {
 
       <Heading title="API" description="API calls for Color" />
       <Separator />
-      <ApiList entityName="Color" entityIdName="colorId" />
+      {/* <ApiList entityName="Color" entityIdName="colorId" /> */}
     </>
   );
 };

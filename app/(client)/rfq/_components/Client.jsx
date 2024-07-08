@@ -15,8 +15,8 @@ const RfqClient = ({ data }) => {
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title="Request for quote"
-          description="Manage your quotations."
+          title="Products"
+          description="Manage your products."
         />
 
         <Button onClick={() => router.push(`/rfq/new`)} variant="destructive">

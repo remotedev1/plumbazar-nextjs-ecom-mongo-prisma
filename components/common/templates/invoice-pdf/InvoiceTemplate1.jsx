@@ -14,7 +14,7 @@ import InvoiceLayout from "./InvoiceLayout";
 
 const InvoiceTemplate = (data) => {
     const { sender, receiver, details } = data;
-
+console.log(details)
     return (
         <InvoiceLayout data={data}>
             <div className="flex justify-between">
@@ -28,7 +28,7 @@ const InvoiceTemplate = (data) => {
                         />
                     )}
                     <h1 className="mt-2 text-lg md:text-xl font-semibold text-blue-600">
-                        {sender.name}
+                        Plumbazar
                     </h1>
                 </div>
                 <div className="text-right">
@@ -38,14 +38,14 @@ const InvoiceTemplate = (data) => {
                     <span className="mt-1 block text-gray-500">
                         {details.invoiceNumber}
                     </span>
-                    <address className="mt-4 not-italic text-gray-800">
+                    {/* <address className="mt-4 not-italic text-gray-800">
                         {sender.address}
                         <br />
                         {sender.zipCode}, {sender.city}
                         <br />
                         {sender.country}
                         <br />
-                    </address>
+                    </address> */}
                 </div>
             </div>
 
@@ -76,7 +76,7 @@ const InvoiceTemplate = (data) => {
                                 ).toLocaleDateString("en-US", DATE_OPTIONS )}
                             </dd>
                         </dl>
-                        <dl className="grid sm:grid-cols-6 gap-x-3">
+                        {/* <dl className="grid sm:grid-cols-6 gap-x-3">
                             <dt className="col-span-3 font-semibold text-gray-800">
                                 Due date:
                             </dt>
@@ -86,7 +86,7 @@ const InvoiceTemplate = (data) => {
                                     DATE_OPTIONS
                                 )}
                             </dd>
-                        </dl>
+                        </dl> */}
                     </div>
                 </div>
             </div>
@@ -235,14 +235,7 @@ const InvoiceTemplate = (data) => {
                             {details.additionalNotes}
                         </p>
                     </div>
-                    <div className="my-2">
-                        <p className="font-semibold text-blue-600">
-                            Payment terms:
-                        </p>
-                        <p className="font-regular text-gray-800">
-                            {details.paymentTerms}
-                        </p>
-                    </div>
+                   
                     <div className="my-2">
                         <span className="font-semibold text-md text-gray-800">
                             Please send the payment to this address
@@ -264,14 +257,14 @@ const InvoiceTemplate = (data) => {
                     If you have any questions concerning this invoice, use the
                     following contact information:
                 </p>
-                <div>
+                {/* <div>
                     <p className="block text-sm font-medium text-gray-800">
                         {sender.email}
                     </p>
                     <p className="block text-sm font-medium text-gray-800">
                         {sender.phone}
                     </p>
-                </div>
+                </div> */}
             </div>
 
             {/* Signature */}
