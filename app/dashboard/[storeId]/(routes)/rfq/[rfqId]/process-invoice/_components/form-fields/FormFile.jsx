@@ -66,15 +66,17 @@ const FormFile = ({ name, label, placeholder }) => {
           <FormItem>
             <Label>{label}:</Label>
             {base64Image ? (
-              <img
-                id="logoImage"
-                src={base64Image}
-                style={{
-                  objectFit: "contain",
-                  width: "10rem",
-                  height: "7rem",
-                }}
-              />
+              // TODO
+              // <img
+              //   id="logoImage"
+              //   src={base64Image}
+              //   style={{
+              //     objectFit: "contain",
+              //     width: "10rem",
+              //     height: "7rem",
+              //   }}
+              // />
+              <></>
             ) : (
               <div
                 style={{
