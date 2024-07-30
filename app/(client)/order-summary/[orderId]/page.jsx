@@ -6,6 +6,7 @@ import Link from "next/link";
 
 const OrderSummary = async ({ params }) => {
   const order = await getOrder(params.orderId);
+  console.log(order);
   if (!order) {
     return (
       <div className="flex items-center justify-center font-extrabold text-5xl min-h-[80vh]">
@@ -49,7 +50,7 @@ const OrderSummary = async ({ params }) => {
                 <div className="relative h-24 w-24 rounded-md overflow-hidden ">
                   <Image
                     fill
-                    src={item.product.images[0].url}
+                    src={item.product.images[0]}
                     alt=""
                     className="object-cover object-center"
                   />
@@ -60,6 +61,9 @@ const OrderSummary = async ({ params }) => {
                       <div className="">
                         <h2 className="font-semibold text-xl leading-8 text-black mb-3">
                           {item.product.name}
+                          <span className="text-3xl font-bold text-gray-900 capitalize">
+                            &nbsp; ({item.size})
+                          </span>
                         </h2>
                         <p className="font-normal text-lg leading-8 text-gray-500 mb-3 ">
                           Category: {item.product.category.name}
@@ -68,14 +72,15 @@ const OrderSummary = async ({ params }) => {
                           <p className="font-medium text-base leading-7 text-black pr-4 mr-4 border-r border-gray-200">
                             Size:{" "}
                             <span className="text-gray-500">
-                              {item.product.size.name}
+                              {item.product.size}
                             </span>
                           </p>
                           <p className="font-medium text-base leading-7 text-black ">
                             color:{" "}
-                            <span className="text-gray-500">
-                              {item.product.color.name}
-                            </span>
+                            <div
+                              className="h-4 w-4 rounded-full border border-gray-600 inline-block"
+                              style={{ backgroundColor: item.product.color }}
+                            />
                           </p>
                         </div>
                       </div>
@@ -141,12 +146,12 @@ const OrderSummary = async ({ params }) => {
                 Cash on Delivery
               </p>
             </div>
-            <p className="flex font-semibold text-lg text-black py-6">
+            <span className="flex font-semibold text-lg text-black py-6">
               Total Price : &nbsp;
               <span className="text-indigo-600">
                 <Currency value={order.total} />
               </span>
-            </p>
+            </span>
           </div>
         </div>
       </div>

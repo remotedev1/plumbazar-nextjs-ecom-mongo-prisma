@@ -7,6 +7,7 @@ import ProductRating from "@/components/frontend/product-rating";
 // import { getProducts } from "@/actions/get-products";
 // import ProductList from "@/components/product-list";
 import Container from "@/components/ui/container";
+import { FaSpinner } from "react-icons/fa";
 
 // Individual Product page
 
@@ -17,6 +18,16 @@ const ProductPage = async ({ params }) => {
   // const suggestedProducts = await getProducts({
   //   categoryId: product?.category?.id,
   // });
+
+  if (!product) {
+    return (
+      <section className="py-14 relative overflow-x-hidden min-h-[80vh]">
+        <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
+          <FaSpinner className="w-10 h-10 mx-auto text-black animate-spin" />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <div className="bg-white">
@@ -29,10 +40,6 @@ const ProductPage = async ({ params }) => {
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
               {/* Info */}
               <Info data={product} />
-            </div>
-
-            <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-              <hr className="my-10" />
 
               {/* additional Info */}
               <ProductAdditionalInfo data={product} />
@@ -45,7 +52,6 @@ const ProductPage = async ({ params }) => {
             <ProductRating data={product} reviews={reviews} />
           </div>
 
-          <hr className="my-10" />
           {/* <ProductList title="Related Items" items={suggestedProducts} /> */}
         </div>
       </Container>

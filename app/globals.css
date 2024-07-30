@@ -99,3 +99,22 @@ html,
 }
 
 /* //loader end */
+/* //loader end */
+:focus {
+  outline: none;
+}
+
+/* Remove chrome input focus */
+input,
+textarea,
+select,
+a,
+svg,
+button {
+  --tw-ring-offset-color: "transparent" !important;
+}
+
+/* For Customized Calendar */
+.rdp-vhidden {
+  @apply hidden;
+}

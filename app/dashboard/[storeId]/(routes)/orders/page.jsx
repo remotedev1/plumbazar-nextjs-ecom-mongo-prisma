@@ -17,24 +17,23 @@ import Heading from "@/components/ui/heading";
 
 import { Separator } from "@/components/ui/separator";
 import {
+  AlertCircle,
   BaggageClaim,
   ChevronRight,
-  CreditCard,
-  DollarSign,
   HelpCircle,
   IndianRupee,
-  Package2,
 } from "lucide-react";
-// import { getPendingAmount } from "@/actions/get-pending-amount";
-import Link from "next/link";
+import { getPendingAmount } from "@/actions/get-pending-amount";
 import { db } from "@/lib/db";
+import { getTotalRevenue } from "@/actions/get-total-revenue";
+import { getSalesCount } from "@/actions/get-sales-count";
 
 const OrdersPage = async ({ params }) => {
-  // const totalRevenue = await getTotalRevenue(params.storeId);
-  // const { numberOfUnpaidOrders, totalUnpaidAmount } = await getPendingAmount(
-  //   params.storeId
-  // );
-  // const salesCount = await getSalesCount(params.storeId);
+  const totalRevenue = await getTotalRevenue(params.storeId);
+  const { numberOfUnpaidOrders, totalUnpaidAmount } = await getPendingAmount(
+    params.storeId
+  );
+  const salesCount = await getSalesCount(params.storeId);
 
   const orders = await db.order.findMany({
  
@@ -60,10 +59,11 @@ const OrdersPage = async ({ params }) => {
       .join(", "),
     totalPrice: rupeeFormatter.format(
       item.orderItems.reduce((total, item) => {
-        return total + Number(item.product.price);
+        return total + Number(item.product.price) * Number(item.quantity);
       }, 0)
     ),
     isPaid: item.isPaid,
+    deliveryStatus: item.deliveryStatus,
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
   }));
 
@@ -83,15 +83,11 @@ const OrdersPage = async ({ params }) => {
               <BaggageClaim className="text-zinc-100 h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              {/* <div className="text-2xl font-bold">+{salesCount} orders</div> */}
+              <div className="text-2xl font-bold">+{salesCount} orders</div>
             </CardContent>
-            <CardFooter className="flex flex-row items-center justify-between bg-[#0E4F82] p-2  ">
-              <Link href={`/dashboard/${params.storeId}/orders`}>Next Payout Date: </Link>
-              <div className="text-sm font-medium flex">
-                Today , 4:00 PM
-                <ChevronRight className="h-4 w-4" />
-              </div>
-            </CardFooter>
+            {/* <CardFooter className="flex flex-row items-center justify-between bg-[#0E4F82] p-2  ">
+             <></>
+            </CardFooter> */}
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-6">
@@ -103,7 +99,7 @@ const OrdersPage = async ({ params }) => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {/* {rupeeFormatter.format(totalRevenue)} */}
+                {rupeeFormatter.format(totalRevenue)}
               </div>
             </CardContent>
           </Card>
@@ -113,11 +109,11 @@ const OrdersPage = async ({ params }) => {
                 Amount Pending
               </CardTitle>
 
-              <HelpCircle className="h-5 w-5 text-muted-foreground" />
+              <AlertCircle className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent className="flex justify-between">
               <div className="text-2xl font-bold ">
-                {/* {rupeeFormatter.format(totalUnpaidAmount)} */}
+                {rupeeFormatter.format(totalUnpaidAmount)}
               </div>
 
               <div className="flex flex-row items-center space-x-2 text-blue-800 cursor-pointer">
@@ -126,10 +122,9 @@ const OrdersPage = async ({ params }) => {
                   aria-hidden="true"
                 />
                 <span className="text-sm text-blue-800 text-muted-foreground border-b-2 border-blue-800 ">
-                  {/* {numberOfUnpaidOrders}{" "}
-                  {numberOfUnpaidOrders > 1 ? "orders" : "order"} */}
+                  {numberOfUnpaidOrders}{" "}
+                  {numberOfUnpaidOrders > 1 ? "orders" : "order"}
                 </span>
-                <ChevronRight />
               </div>
             </CardContent>
           </Card>

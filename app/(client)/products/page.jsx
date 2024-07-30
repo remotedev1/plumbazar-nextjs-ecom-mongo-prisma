@@ -5,11 +5,16 @@ import ProductList from "@/components/frontend/product-list";
 import { getCategories } from "@/actions/get-categories";
 import { getColors } from "@/actions/get-colors";
 import { FaSpinner } from "react-icons/fa";
+import NoResults from "@/components/frontend/no-results";
+import { SkeletonCard } from "@/components/common/card-skeleton";
+import ProductCard from "@/components/ui/product-card";
 
-const Products = ({searchParams}) => {
+const Products = ({ searchParams }) => {
   // State variables to manage search query, selected category, selected color, products, categories, and colors
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(searchParams.category || "");
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.category || ""
+  );
   const [selectedColor, setSelectedColor] = useState("");
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -69,7 +74,6 @@ const Products = ({searchParams}) => {
     return (
       <section className="py-14 relative overflow-x-hidden min-h-[80vh]">
         <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
-
           <FaSpinner className="w-10 h-10 mx-auto text-black animate-spin" />
         </div>
       </section>
@@ -80,7 +84,7 @@ const Products = ({searchParams}) => {
     <section className="py-14 relative overflow-x-hidden">
       <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
         <div className="grid grid-cols-12 gap-5">
-          <div className="col-span-12 md:col-span-3 w-full">
+          <div className="col-span-12 md:col-span-3 max-w-72 mx-auto">
             <div className="box rounded-xl border border-gray-300 bg-white p-6 w-full md:max-w-sm">
               <h6 className="font-medium text-base leading-7 text-black mb-5">
                 Search
@@ -205,8 +209,15 @@ const Products = ({searchParams}) => {
             </div>
           </div>
           <div className="col-span-12 md:col-span-9 mx-auto">
-            <div className="flex flex-col gap-y-8 px-4 sm:px-6 lg:px-8">
-              <ProductList items={filteredProducts} />
+            {products.length === 0 && <NoResults />}
+            <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4 mx-auto">
+              {products.length > !0
+                ? [1, 2, 3, 4, 5].map((item) => <SkeletonCard key={item} />)
+                : products.map((item) => (
+                    <>
+                      <ProductCard key={item.id} data={item} />
+                    </>
+                  ))}
             </div>
           </div>
         </div>

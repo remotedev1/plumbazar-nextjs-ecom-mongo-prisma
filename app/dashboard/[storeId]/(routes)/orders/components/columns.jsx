@@ -33,14 +33,6 @@ export const columns = [
       );
     },
   },
-  {
-    accessorKey: "products",
-    header: "Products",
-  },
-  {
-    accessorKey: "phone",
-    header: "Phone",
-  },
 
   {
     accessorKey: "createdAt",
@@ -58,16 +50,22 @@ export const columns = [
   },
 
   {
-    accessorKey: "address",
-    header: "Address",
-  },
-  {
     accessorKey: "totalPrice",
     header: "Order Amount",
   },
   {
     accessorKey: "isPaid",
-    header: "Status",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Payment
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const order = row.original;
 
@@ -79,7 +77,30 @@ export const columns = [
             }`}
             aria-hidden="true"
           />
-          {order.isPaid ? "Successful" : "Processing"}
+          {order.isPaid ? "Paid" : "UnPaid"}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "deliveryStatus",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const order = row.original;
+      return (
+        <div className="flex items-center">
+       
+          {order.deliveryStatus}
         </div>
       );
     },
@@ -104,7 +125,9 @@ export const columns = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link href={`/dashboard/663196b29b9314c513b1d5b1/orders/${order.id}`}>
+              <Link
+                href={`/dashboard/663196b29b9314c513b1d5b1/orders/${order.id}`}
+              >
                 <Button>View Orders</Button>
               </Link>
             </DropdownMenuItem>

@@ -16,7 +16,7 @@ export const Testimonials = () => {
   return (
     <div className="min-w-screen  flex items-center justify-center">
       <Container>
-        <div className="w-full bg-white px-5 pt-16  text-gray-800">
+        <div className="w-full  px-5 pt-16  text-gray-800">
           <div className="w-full mx-auto">
             <div className="text-center mx-auto">
               <h1 className="text-4xl md:text-7xl font-bold mb-5 text-gray-600">
@@ -63,7 +63,7 @@ export const Testimonials = () => {
                     <div className="flex-1">
                       <div className="relative p-5">
                         <div className="overflow-hidden ">
-                          <p className="mb-0 font-italic text-md">{d.text}</p>
+                          <p className="mb-0 font-italic text-md select-none">{d.text}</p>
                         </div>
                       </div>
                     </div>

@@ -10,7 +10,6 @@ import NavbarWishlist from "./navbar-wishlist";
 import { Popover, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 
 export const Navbar = () => {
   const user = useSession();
@@ -21,25 +20,22 @@ export const Navbar = () => {
     },
     {
       href: "/products",
-      label: "Shop",
+      label: "shop",
     },
     {
       href: "/profile",
-      label: "Profile",
-    },
-    {
-      href: "/rfq",
-      label: "RFQ",
+      label: "profile",
     },
   ];
   return (
-    <Popover className="relative  mx-auto w-full px-2 sm:px-20 border-b bg-white z-50">
+    <Popover className="relative  mx-auto w-full px-2 sm:px-20 border-b bg-slate-100 z-50">
       <Container>
         <header className="mx-2 px-2 md:mx-10">
           <div className="flex items-center justify-between py-4 md:justify-start md:space-x-10s">
             <div className="flex flex-1 justify-start lg:w-0">
-              <Link href="/" className="ml-4 flex lg:ml-0 gap-x-2 w-35 h-35">
-                <Image src="/light-logo.png"  width={60} height={60} alt=""/>
+              <Link href="/" className="ml-4 flex lg:ml-0 gap-x-2">
+                {/* <Image className="w-36"/> */}
+                <p className="font-bold text-xl">TBI</p>
                 <p className="font-light text-xs mt-4 hidden md:block">
                   Buy with ease store
                 </p>

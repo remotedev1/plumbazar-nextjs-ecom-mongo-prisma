@@ -37,6 +37,7 @@ export const CellAction = ({ data }) => {
       // Delete store
       await axios.delete(`/api/${params.storeId}/products/${data.id}`);
       router.refresh();
+      router.push(`/dashboard/${params.storeId}/products`);
       toast.success("Product deleted successfully");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");

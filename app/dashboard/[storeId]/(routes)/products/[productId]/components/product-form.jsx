@@ -1,5 +1,14 @@
 "use client";
 
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { useParams, useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { Trash } from "lucide-react";
+
+import MultiSelect from "@/components/common/multi-selelct";
 import { AlertModal } from "@/components/models/alert-modal";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -29,16 +38,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ProductSchema } from "@/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { Trash } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
-
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-
-// formSchema -> ProductFormValues -> ProductForm using react hook form -> onSubmit -> update store
 
 export const ProductForm = ({ initialData, categories, colors, sizes }) => {
   const params = useParams();
@@ -48,29 +47,34 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? "Edit a Product" : "Create a new Product";
-
   const description = initialData
     ? "Edit your Product"
     : "Create a new Product";
-
   const toastMessage = initialData
     ? "Product updated successfully"
     : "Product created successfully";
-
   const action = initialData ? "Save Changes" : "Create Product";
 
   const defaultValues = initialData
     ? {
-        ...initialData,
-        price: parseFloat(String(initialData?.price)),
+        name: initialData.name || "",
+        images: initialData.images || [],
+        price: parseFloat(String(initialData.price || 0)),
+        purchasedPrice: parseFloat(String(initialData.purchasedPrice || 0)),
+        categoryId: initialData.categoryId || "",
+        color: initialData.color || "",
+        size: initialData.size || [],
+        isFeatured: initialData.isFeatured || false,
+        isArchived: initialData.isArchived || false,
       }
     : {
         name: "",
         images: [],
         price: 0,
+        purchasedPrice: 0,
         categoryId: "",
-        colorId: "",
-        sizeId: "",
+        color: "",
+        size: [],
         isFeatured: false,
         isArchived: false,
       };
@@ -80,28 +84,48 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
     defaultValues,
   });
 
-  // onDelete -> delete store -> refresh page -> redirect to root page (root layout will check if user has store and open createStore Modal if not found -> create store page will check if user has store and redirect to dashboard if found )
-
   const onSubmit = async (data) => {
     try {
       setLoading(true);
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("price", data.price);
+      formData.append("purchasedPrice", data.purchasedPrice);
+      formData.append("categoryId", data.categoryId);
+      formData.append("color", data.color);
+      formData.append("size", JSON.stringify(data.size));
+      formData.append("isFeatured", data.isFeatured ? "true" : "false");
+      formData.append("isArchived", data.isArchived ? "true" : "false");
 
-      //& if initialData is true then we are updating the store else we are creating a new store (initialData is null)
+      // Append images, which can be either URLs or files
+      data.images.forEach((fileOrUrl, index) => {
+        if (typeof fileOrUrl === "string") {
+          // If the image is a URL, append it as a string
+          formData.append("images", fileOrUrl);
+        } else if (fileOrUrl instanceof File) {
+          // If the image is a File object, append it as a file
+          formData.append("newImages", fileOrUrl);
+        }
+      });
 
       if (initialData) {
         await axios.patch(
           `/api/${params.storeId}/products/${params.productId}`,
-          data
+          formData
         );
       } else {
-        await axios.post(`/api/${params.storeId}/products`, data);
+        await axios.post(`/api/${params.storeId}/products`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
       }
 
       router.refresh();
       router.push(`/dashboard/${params.storeId}/products`);
       toast.success(toastMessage);
     } catch (error) {
-      toast.error(error.response.data);
+      toast.error(error.response?.data);
     } finally {
       setLoading(false);
     }
@@ -110,14 +134,12 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      // Delete store
       await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
       router.refresh();
-
-      router.push("/");
+      router.push(`/dashboard/${params.storeId}/products`);
       toast.success("Product deleted successfully");
     } catch (error) {
-      toast.error("Something went wrong. ");
+      toast.error("Something went wrong.");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -148,8 +170,6 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
       </div>
       <Separator />
 
-      {/* Form  and spreading the form using react hook form */}
-
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -163,21 +183,19 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
                 <FormLabel>Images</FormLabel>
                 <FormControl>
                   <ImageUpload
-                    value={field.value.map((image) => image.url)}
+                    value={field.value.map((image) => image)}
                     disabled={loading}
-                    onChange={(url) => {
-                      // Get the current value of the images field
-                      const currentImages = form.getValues("images");
-
-                      // Update the images field with the new image appended
-                      const updatedImages = [...currentImages, { url }];
-                      form.setValue("images", updatedImages);
+                    onChange={(newImage) => {
+                      field.onChange([...field.value, newImage]);
                     }}
-                    onRemove={(url) => {
-                      const filteredImages = field.value.filter(
-                        (current) => current.url !== url
+                    onRemove={(id) => {
+                      field.onChange(
+                        field.value.filter(
+                          (image, index) =>
+                            index !== id &&
+                            (!image.publicId || image.publicId !== id)
+                        )
                       );
-                      field.onChange(filteredImages);
                     }}
                   />
                 </FormControl>
@@ -205,6 +223,28 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
             />
             <FormField
               control={form.control}
+              name="purchasedPrice"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Purchased Price</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      disabled={loading}
+                      placeholder="0.00"
+                      {...field}
+                      value={field.value || 0}
+                      onChange={(e) =>
+                        field.onChange(parseFloat(e.target.value))
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="price"
               render={({ field }) => (
                 <FormItem>
@@ -213,8 +253,12 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
                     <Input
                       type="number"
                       disabled={loading}
-                      placeholder="9.99"
+                      placeholder="0.00"
                       {...field}
+                      value={field.value || 0}
+                      onChange={(e) =>
+                        field.onChange(parseFloat(e.target.value))
+                      }
                     />
                   </FormControl>
                   <FormMessage />
@@ -257,41 +301,28 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
             />
             <FormField
               control={form.control}
-              name="sizeId"
+              name="size"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Size</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          placeholder="Select a size"
-                          defaultValue={field.value}
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-
-                    <SelectContent>
-                      {sizes.map((size) => (
-                        <SelectItem key={size.id} value={size.id}>
-                          {size.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
+                  <FormControl>
+                    <MultiSelect
+                      isDisabled={loading}
+                      value={field.value}
+                      onChange={field.onChange}
+                      options={sizes.map((size) => ({
+                        value: size.value,
+                        label: size.name,
+                      }))}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="colorId"
+              name="color"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Color</FormLabel>
@@ -312,7 +343,7 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
 
                     <SelectContent>
                       {colors.map((color) => (
-                        <SelectItem key={color.id} value={color.id}>
+                        <SelectItem key={color.id} value={color.value}>
                           {color.name}
                         </SelectItem>
                       ))}
@@ -323,8 +354,6 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
                 </FormItem>
               )}
             />
-
-            {/* formField for checkbox */}
             <div>
               <FormField
                 control={form.control}
@@ -353,13 +382,10 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
                         </TooltipProvider>
                       </FormLabel>
                     </div>
-
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
-              {/* Formfield for checkbox   */}
               <FormField
                 control={form.control}
                 name="isArchived"
@@ -372,7 +398,6 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-
                     <div className="space-y-1 leading-none">
                       <FormLabel>
                         <TooltipProvider>
@@ -389,13 +414,13 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
                         </TooltipProvider>
                       </FormLabel>
                     </div>
-
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
           </div>
+
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
           </Button>

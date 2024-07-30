@@ -78,7 +78,7 @@ export const CellAction = ({ data }) => {
           <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" />
             Delete
-          </DropdownMenuItem>6
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>

@@ -16,6 +16,8 @@ const ProductRating = ({ data, reviews }) => {
   const [open, setOpen] = useState(false);
   const [ratingPercentages, setRatingPercentages] = useState({});
 
+  
+
   useEffect(() => {
     const percentages = calculateRatingPercentages(reviews);
     setRatingPercentages(percentages);

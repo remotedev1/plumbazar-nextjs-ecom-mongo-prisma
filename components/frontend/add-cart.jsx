@@ -10,7 +10,6 @@ export const AddCart = ({ product, onRemove }) => {
   //   const onAddToCart = (e) => {
   //     e.stopPropagation();
   //     cart.addItem(product);
-
   //   };
 
   const onAddToCart = () => {
@@ -21,8 +20,9 @@ export const AddCart = ({ product, onRemove }) => {
   const onRemoveFromCart = () => {
     cart.decrementItem(product.id);
   };
+
   return (
-    <div>
+    <div className="py-2">
       {existingItem && existingItem.quantity > 0 ? (
         <div className="flex items-center justify-center gap-x-2 border w-max font-extrabold text-3xl">
           <Button onClick={onRemoveFromCart} variant="ghost" className="text-red-500 text-3xl">-</Button>
@@ -30,7 +30,7 @@ export const AddCart = ({ product, onRemove }) => {
           <Button onClick={onAddToCart} variant="ghost" className="text-blue-500 text-3xl">+</Button>
         </div>
       ) : (
-        <Button onClick={onAddToCart}>
+        <Button onClick={onAddToCart} size="lg">
           Add to cart <ShoppingCart />
         </Button>
       )}

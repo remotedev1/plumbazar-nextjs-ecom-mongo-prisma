@@ -1,4 +1,3 @@
-import { Phone } from "lucide-react";
 import * as z from "zod";
 
 export const LoginSchema = z.object({
@@ -46,12 +45,31 @@ export const ColorSchema = z.object({
 });
 
 export const ProductSchema = z.object({
-  name: z.string().min(1),
-  images: z.object({ url: z.string() }).array(),
-  price: z.coerce.number().min(1),
-  categoryId: z.string().min(1),
-  colorId: z.string().min(1),
-  sizeId: z.string().min(1),
+  name: z.string().min(1, "Name is required"),
+  images: z.array(z.any()).min(1, "At least one image is required"),
+  // images: z.any().refine((value) => value instanceof File, {
+  //   message: "Must be a File object",
+  // }),
+  price: z.number().min(0, "Price must be a positive number"),
+  purchasedPrice: z
+    .number()
+    .min(0, "Purchased price must be a positive number"),
+  categoryId: z.string().min(1, "Category is required"),
+  discount: z.coerce.number().optional(),
+  features: z
+    .object({
+      label: z.string(),
+      value: z.string(),
+    })
+    .optional(),
+  description: z.string().optional(),
+  color: z.string().min(1, "Color is required"),
+  size: z
+    .array(z.string())
+    .min(1, { message: "At least 1 size is required" })
+    .transform((sizes) =>
+      sizes.filter((size) => size !== null && size !== undefined)
+    ),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
 });

@@ -25,6 +25,7 @@ export default function Home() {
     productId: item.id,
     quantity: item.quantity,
     price: item.price,
+    size: item.size,
   }));
   const total = items?.reduce((total, item) => {
     return total + Number(item.price) * Number(item.quantity);
@@ -56,6 +57,7 @@ export default function Home() {
         if (data?.success) {
           toast.success(data.success);
           removeAll();
+          router.refresh();
           router.push(`/order-summary/${data.order.id}`);
         }
       });

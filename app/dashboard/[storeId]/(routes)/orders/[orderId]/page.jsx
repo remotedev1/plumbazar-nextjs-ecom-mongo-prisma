@@ -35,12 +35,12 @@ const OrderDetails = async ({ params }) => {
                   {convertTimestampToFormattedDate(order?.createdAt)}
                 </span>
               </p>
-              <p className=" flex font-semibold text-base leading-7 text-black mt-4">
+              <div className=" flex font-semibold text-base leading-7 text-black mt-4">
                 Payment : &nbsp; <ChangePaymentStatus order={order} />
-              </p>
-              <p className=" flex font-semibold text-base leading-7 text-black mt-4">
+              </div>
+              <div className=" flex font-semibold text-base leading-7 text-black mt-4">
                 Delivery status : &nbsp; <ChangeDeliveryStatus order={order} />
-              </p>
+                </div>
             </div>
             {/* <button className="rounded-full py-3 px-7 font-semibold text-sm leading-7 text-white bg-indigo-600 max-lg:mt-5 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-700 hover:shadow-indigo-400">
               Track Your Order
@@ -74,14 +74,15 @@ const OrderDetails = async ({ params }) => {
                           <p className="font-medium text-base leading-7 text-black pr-4 mr-4 border-r border-gray-200">
                             Size:{" "}
                             <span className="text-gray-500">
-                              {item.product.size.name}
+                              {item.size}
                             </span>
                           </p>
                           <p className="font-medium text-base leading-7 text-black ">
                             color:{" "}
-                            <span className="text-gray-500">
-                              {item.product.color.name}
-                            </span>
+                            <div
+                              className="h-4 w-4 rounded-full border border-gray-600 inline-block"
+                              style={{ backgroundColor: item.product.color }}
+                            />
                           </p>
                         </div>
                       </div>
@@ -92,9 +93,9 @@ const OrderDetails = async ({ params }) => {
                           <p className="font-medium text-sm leading-7 text-black">
                             price
                           </p>
-                          <p className="lg:mt-4 font-medium text-sm leading-7 text-indigo-600">
+                          <div className="lg:mt-4 font-medium text-sm leading-7 text-indigo-600">
                             <Currency value={item.price} />
-                          </p>
+                          </div>
                         </div>
                       </div>
                       <div className="col-span-5 lg:col-span-2 flex items-center max-lg:mt-3 ">
@@ -137,12 +138,12 @@ const OrderDetails = async ({ params }) => {
                 Cash on Delivery
               </p>
             </div>
-            <p className="flex font-semibold text-lg text-black py-6">
+            <div className="flex font-semibold text-lg text-black py-6">
               Total Price : &nbsp;
               <span className="text-indigo-600">
                 <Currency value={order.total} />
               </span>
-            </p>
+            </div>
           </div>
         </div>
       </div>

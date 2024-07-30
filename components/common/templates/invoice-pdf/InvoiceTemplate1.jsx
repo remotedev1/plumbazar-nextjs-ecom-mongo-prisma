@@ -13,8 +13,9 @@ import InvoiceLayout from "./InvoiceLayout";
 
 
 const InvoiceTemplate = (data) => {
-    const { sender, receiver, details } = data;
-console.log(details)
+    const { receiver, details } = data;
+
+
     return (
         <InvoiceLayout data={data}>
             <div className="flex justify-between">
@@ -27,9 +28,7 @@ console.log(details)
                             alt={`Logo of ${sender.name}`}
                         />
                     )}
-                    <h1 className="mt-2 text-lg md:text-xl font-semibold text-blue-600">
-                        Plumbazar
-                    </h1>
+                
                 </div>
                 <div className="text-right">
                     <h2 className="text-2xl md:text-3xl font-semibold text-gray-800">
@@ -38,14 +37,7 @@ console.log(details)
                     <span className="mt-1 block text-gray-500">
                         {details.invoiceNumber}
                     </span>
-                    {/* <address className="mt-4 not-italic text-gray-800">
-                        {sender.address}
-                        <br />
-                        {sender.zipCode}, {sender.city}
-                        <br />
-                        {sender.country}
-                        <br />
-                    </address> */}
+                   
                 </div>
             </div>
 
@@ -76,7 +68,7 @@ console.log(details)
                                 ).toLocaleDateString("en-US", DATE_OPTIONS )}
                             </dd>
                         </dl>
-                        {/* <dl className="grid sm:grid-cols-6 gap-x-3">
+                        <dl className="grid sm:grid-cols-6 gap-x-3">
                             <dt className="col-span-3 font-semibold text-gray-800">
                                 Due date:
                             </dt>
@@ -86,7 +78,7 @@ console.log(details)
                                     DATE_OPTIONS
                                 )}
                             </dd>
-                        </dl> */}
+                        </dl>
                     </div>
                 </div>
             </div>
@@ -235,7 +227,14 @@ console.log(details)
                             {details.additionalNotes}
                         </p>
                     </div>
-                   
+                    <div className="my-2">
+                        <p className="font-semibold text-blue-600">
+                            Payment terms:
+                        </p>
+                        <p className="font-regular text-gray-800">
+                            {details.paymentTerms}
+                        </p>
+                    </div>
                     <div className="my-2">
                         <span className="font-semibold text-md text-gray-800">
                             Please send the payment to this address
@@ -257,14 +256,14 @@ console.log(details)
                     If you have any questions concerning this invoice, use the
                     following contact information:
                 </p>
-                {/* <div>
+                <div>
                     <p className="block text-sm font-medium text-gray-800">
-                        {sender.email}
+                       test@test.com
                     </p>
                     <p className="block text-sm font-medium text-gray-800">
-                        {sender.phone}
+                    1234567898
                     </p>
-                </div> */}
+                </div>
             </div>
 
             {/* Signature */}
