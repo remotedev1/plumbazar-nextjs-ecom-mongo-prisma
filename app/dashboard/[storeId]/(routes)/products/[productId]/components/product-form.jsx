@@ -39,7 +39,7 @@ import {
 } from "@/components/ui/tooltip";
 import { ProductSchema } from "@/schemas";
 
-export const ProductForm = ({ initialData, categories, colors, sizes }) => {
+export const ProductForm = ({ initialData, brands }) => {
   const params = useParams();
   const router = useRouter();
 
@@ -61,9 +61,8 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
         images: initialData.images || [],
         price: parseFloat(String(initialData.price || 0)),
         purchasedPrice: parseFloat(String(initialData.purchasedPrice || 0)),
-        categoryId: initialData.categoryId || "",
-        color: initialData.color || "",
-        size: initialData.size || [],
+        brandId: initialData.brandId || "",
+
         isFeatured: initialData.isFeatured || false,
         isArchived: initialData.isArchived || false,
       }
@@ -72,9 +71,7 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
         images: [],
         price: 0,
         purchasedPrice: 0,
-        categoryId: "",
-        color: "",
-        size: [],
+        brandId: "",
         isFeatured: false,
         isArchived: false,
       };
@@ -91,9 +88,8 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
       formData.append("name", data.name);
       formData.append("price", data.price);
       formData.append("purchasedPrice", data.purchasedPrice);
-      formData.append("categoryId", data.categoryId);
-      formData.append("color", data.color);
-      formData.append("size", JSON.stringify(data.size));
+      formData.append("brandId", data.brandId);
+
       formData.append("isFeatured", data.isFeatured ? "true" : "false");
       formData.append("isArchived", data.isArchived ? "true" : "false");
 
@@ -267,10 +263,10 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
             />
             <FormField
               control={form.control}
-              name="categoryId"
+              name="brandId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel>Brand</FormLabel>
                   <Select
                     disabled={loading}
                     onValueChange={field.onChange}
@@ -280,16 +276,16 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue
-                          placeholder="Select a category"
+                          placeholder="Select a brand"
                           defaultValue={field.value}
                         />
                       </SelectTrigger>
                     </FormControl>
 
                     <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
+                      {brands.map((brand) => (
+                        <SelectItem key={brand.id} value={brand.id}>
+                          {brand.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -299,61 +295,7 @@ export const ProductForm = ({ initialData, categories, colors, sizes }) => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="size"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Size</FormLabel>
-                  <FormControl>
-                    <MultiSelect
-                      isDisabled={loading}
-                      value={field.value}
-                      onChange={field.onChange}
-                      options={sizes.map((size) => ({
-                        value: size.value,
-                        label: size.name,
-                      }))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="color"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Color</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          placeholder="Select a color"
-                          defaultValue={field.value}
-                        />
-                      </SelectTrigger>
-                    </FormControl>
 
-                    <SelectContent>
-                      {colors.map((color) => (
-                        <SelectItem key={color.id} value={color.value}>
-                          {color.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <div>
               <FormField
                 control={form.control}

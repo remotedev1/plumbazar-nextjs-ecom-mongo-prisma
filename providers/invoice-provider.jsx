@@ -350,6 +350,7 @@ export const InvoiceContextProvider = ({
                 deleteInvoice,
                 sendPdfToMail,
                 exportInvoiceAs,
+                formValues : getValues()
             }}
         >
             {children}

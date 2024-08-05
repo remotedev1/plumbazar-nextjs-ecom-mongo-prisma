@@ -16,7 +16,7 @@ const RfqInvoice = async ({ params }) => {
     <div className="bg-white min-h-[80vh] py-14">
       <Container>
         <div className="flex flex-col space-y-5">
-          <InvoiceMain />
+          <InvoiceMain rfq={rfq} />
         </div>
       </Container>
     </div>

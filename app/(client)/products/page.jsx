@@ -2,35 +2,28 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "@/actions/get-products";
 import ProductList from "@/components/frontend/product-list";
-import { getCategories } from "@/actions/get-categories";
-import { getColors } from "@/actions/get-colors";
+import { getBrands } from "@/actions/get-brands";
 import { FaSpinner } from "react-icons/fa";
 import NoResults from "@/components/frontend/no-results";
 import { SkeletonCard } from "@/components/common/card-skeleton";
 import ProductCard from "@/components/ui/product-card";
 
 const Products = ({ searchParams }) => {
-  // State variables to manage search query, selected category, selected color, products, categories, and colors
+  // State variables to manage search query, selected brand, selected color, products, brands, and colors
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(
-    searchParams.category || ""
-  );
-  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState(searchParams.brand || "");
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [colors, setColors] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [isLoading, setIsLoading] = useState([]);
 
-  // Fetch products, categories, and colors from API on component mount
+  // Fetch products, brands, and colors from API on component mount
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       const fetchedProducts = await getProducts({ isFeatured: true });
-      const fetchedCategories = await getCategories();
-      const fetchedColors = await getColors();
+      const fetchedBrands = await getBrands();
       setProducts(fetchedProducts);
-      setCategories(fetchedCategories);
-      setColors(fetchedColors);
+      setBrands(fetchedBrands);
       setIsLoading(false);
     };
     fetchData();
@@ -41,33 +34,23 @@ const Products = ({ searchParams }) => {
     setSearchQuery(e.target.value);
   };
 
-  // Event handler for category selection change
-  const handleCategoryChange = (e) => {
-    setSelectedCategory(e.target.value);
+  // Event handler for brand selection change
+  const handleBrandChange = (e) => {
+    setSelectedBrand(e.target.value);
   };
 
-  // Event handler for color selection change
-  const handleColorChange = (e) => {
-    setSelectedColor(e.target.value);
-  };
-
-  // Event handler to reset selected category and color filters
+  // Event handler to reset selected brand and color filters
   const handleResetFilters = () => {
-    setSelectedCategory("");
-    setSelectedColor("");
+    setSelectedBrand("");
   };
 
-  // Filter products based on search query, selected category, and selected color
+  // Filter products based on search query, selected brand, and selected color
   const filteredProducts = products.filter(
     (product) =>
       (searchQuery === "" ||
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.category.name
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
-        product.color.name.toLowerCase().includes(searchQuery.toLowerCase())) &&
-      (selectedCategory === "" || product.category.name === selectedCategory) &&
-      (selectedColor === "" || product.colorId === selectedColor)
+        product.brand.name.toLowerCase().includes(searchQuery.toLowerCase())) &&
+      (selectedBrand === "" || product.brand.name === selectedBrand)
   );
 
   if (isLoading) {
@@ -122,25 +105,25 @@ const Products = ({ searchParams }) => {
               </div>
               <div>
                 <label
-                  htmlFor="Category"
+                  htmlFor="Brand"
                   className="font-medium text-sm leading-6 text-gray-600 mb-1"
                 >
-                  Category
+                  Brand
                 </label>
                 <div className="relative w-full mb-7">
                   <select
-                    id="Category"
-                    value={selectedCategory}
-                    onChange={handleCategoryChange}
+                    id="Brand"
+                    value={selectedBrand}
+                    onChange={handleBrandChange}
                     className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full block w-full py-2.5 px-4 appearance-none relative focus:outline-none bg-white"
                   >
                     <option selected="" disabled>
                       select
                     </option>
 
-                    {categories.map((category) => (
-                      <option key={category.id} value={category.name}>
-                        {category.name}
+                    {brands.map((brand) => (
+                      <option key={brand.id} value={brand.name}>
+                        {brand.name}
                       </option>
                     ))}
                   </select>
@@ -161,49 +144,6 @@ const Products = ({ searchParams }) => {
                       strokeLinejoin="round"
                     />
                   </svg>
-                </div>
-                <div>
-                  <label
-                    htmlFor="Colors"
-                    className="font-medium text-sm leading-6 text-gray-600 mb-1"
-                  >
-                    Colors
-                  </label>
-                  <div className="relative w-full mb-7">
-                    <select
-                      id="Colors"
-                      value={selectedColor}
-                      onChange={handleColorChange}
-                      className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full block w-full py-2.5 px-4 appearance-none relative focus:outline-none bg-white"
-                    >
-                      <option selected="" disabled>
-                        select
-                      </option>
-
-                      {colors.map((color) => (
-                        <option key={color.id} value={color.id}>
-                          {color.name}
-                        </option>
-                      ))}
-                    </select>
-
-                    <svg
-                      className="absolute top-1/2 -translate-y-1/2 right-4 z-50"
-                      width={16}
-                      height={16}
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M12.0002 5.99845L8.00008 9.99862L3.99756 5.99609"
-                        stroke="#111827"
-                        strokeWidth="1.6"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
                 </div>
               </div>
             </div>

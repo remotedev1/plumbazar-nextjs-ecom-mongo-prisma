@@ -18,7 +18,7 @@ export async function GET(req, { params }) {
 
       include: {
         // include the relations to get the full data of the product
-        category: true,
+        brand: true,
       },
     });
 
@@ -40,9 +40,8 @@ export async function PATCH(req, { params }) {
     const name = formData.get("name");
     const price = formData.get("price");
     const purchasedPrice = formData.get("purchasedPrice");
-    const categoryId = formData.get("categoryId");
-    const color = formData.get("color");
-    const size = formData.get("size");
+    const brandId = formData.get("brandId");
+
     const isFeatured = formData.get("isFeatured") === "true";
     const isArchived = formData.get("isArchived") === "true";
 
@@ -64,16 +63,8 @@ export async function PATCH(req, { params }) {
       return new NextResponse("Name is required", { status: 400 });
     }
 
-    if (!categoryId) {
+    if (!brandId) {
       return new NextResponse("Category Id is required", { status: 400 });
-    }
-
-    if (!color) {
-      return new NextResponse("Color Id is required", { status: 400 });
-    }
-
-    if (!size) {
-      return new NextResponse("Size Id is required", { status: 400 });
     }
 
     if (!purchasedPrice) {
@@ -147,9 +138,7 @@ export async function PATCH(req, { params }) {
         purchasedPrice: Number(purchasedPrice),
         isFeatured,
         isArchived,
-        categoryId,
-        color: color,
-        size: JSON.parse(size),
+        brandId,
         storeId: params.storeId,
         images: finalImages,
       },

@@ -69,7 +69,7 @@ export const CellAction = ({ data }) => {
           <Trash className="mr-2 h-4 w-4" />
           Cancel
         </Button>
-        <Button variant="action" onClick={onProcess}>
+        <Button variant="outline" onClick={onProcess} className="bg-blue-300">
           <ArrowBigRightDash className="mr-2 h-4 w-4" />
           Process
         </Button>

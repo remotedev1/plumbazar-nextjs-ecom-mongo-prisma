@@ -4,19 +4,19 @@ import { auth } from "@/auth";
 
 export async function GET(req, { params }) {
   try {
-    if (!params.categoryId) {
-      return new NextResponse("Category id is required", { status: 400 });
+    if (!params.brandId) {
+      return new NextResponse("Brand id is required", { status: 400 });
     }
 
-    const category = await db.category.findUnique({
+    const brand = await db.brand.findUnique({
       where: {
-        id: params.categoryId,
+        id: params.brandId,
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(brand);
   } catch (error) {
-    console.log("[CATEGORY_GET]", error);
+    console.log("[BRAND_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
@@ -29,19 +29,19 @@ export async function DELETE(req, { params }) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (!params.categoryId) {
-      return new NextResponse("Category id is required", { status: 400 });
+    if (!params.brandId) {
+      return new NextResponse("Brand id is required", { status: 400 });
     }
 
-    const category = await db.category.delete({
+    const brand = await db.brand.delete({
       where: {
-        id: params.categoryId,
+        id: params.brandId,
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(brand);
   } catch (error) {
-    console.log("[CATEGORY_DELETE]", error);
+    console.log("[BRAND_DELETE]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
@@ -62,22 +62,22 @@ export async function PATCH(req, { params }) {
       return new NextResponse("Name is required", { status: 400 });
     }
 
-    if (!params.categoryId) {
-      return new NextResponse("Category id is required", { status: 400 });
+    if (!params.brandId) {
+      return new NextResponse("Brand id is required", { status: 400 });
     }
 
-    const category = await db.category.update({
+    const brand = await db.brand.update({
       where: {
-        id: params.categoryId,
+        id: params.brandId,
       },
       data: {
         name,
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(brand);
   } catch (error) {
-    console.log("[CATEGORY_PATCH]", error);
+    console.log("[BRAND_PATCH]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

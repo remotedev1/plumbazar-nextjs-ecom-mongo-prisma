@@ -12,11 +12,10 @@ import {
 } from "@/components/ui/form";
 import Heading from "@/components/ui/heading";
 import { Input } from "@/components/ui/input";
+
 import { Separator } from "@/components/ui/separator";
-import { useOrigin } from "@/hooks/use-origin";
-import { SizeSchema } from "@/schemas";
+import { BrandSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Size } from "@prisma/client";
 import axios from "axios";
 import { Trash } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -24,34 +23,33 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { z } from "zod";
 
-// formSchema -> SizeFormValues -> SizeForm using react hook form -> onSubmit -> update store
+// formSchema -> CategoryFormValues -> CategoryForm using react hook form -> onSubmit -> update store
 
 
-export const SizeForm = ({ initialData }) => {
+export const BrandForm = ({ initialData, billboards }) => {
   const params = useParams();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? "Edit Size" : "Create Size";
+  const title = initialData ? "Edit Brand" : "Create Brand";
 
-  const description = initialData ? "Edit a size" : "Add a new sizes";
+  const description = initialData
+    ? "Edit brand details"
+    : "Add a new brand";
 
   const toastMessage = initialData
-    ? "size updated successfully"
-    : "size created successfully";
+    ? "Brand updated successfully"
+    : "Brand created successfully";
 
-  const action = initialData ? "Save Changes" : "Create sizes";
+  const action = initialData ? "Save Changes" : "Create Brand";
 
-  const origin = useOrigin();
   const form = useForm({
-    resolver: zodResolver(SizeSchema),
+    resolver: zodResolver(BrandSchema),
     defaultValues: initialData || {
       name: "",
-      value: "",
     },
   });
 
@@ -65,15 +63,15 @@ export const SizeForm = ({ initialData }) => {
 
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/sizes/${params.sizeId}`,
-          data,
+          `/api/${params.storeId}/brands/${params.brandId}`,
+          data
         );
       } else {
-        await axios.post(`/api/${params.storeId}/sizes`, data);
+        await axios.post(`/api/${params.storeId}/brands`, data);
       }
 
       router.refresh();
-      router.push(`/dashboard/${params.storeId}/sizes`);
+      router.push(`/dashboard/${params.storeId}/brands`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
@@ -86,14 +84,16 @@ export const SizeForm = ({ initialData }) => {
     try {
       setLoading(true);
       // Delete store
-      await axios.delete(`/api/${params.storeId}/sizes/${params.sizeId}`);
+      await axios.delete(
+        `/api/${params.storeId}/brands/${params.brandId}`
+      );
       router.refresh();
 
-      router.push("dashboard/${params.storeId}/sizes");
-      toast.success("sizes deleted successfully");
+      router.push("/");
+      toast.success("Brand deleted successfully");
     } catch (error) {
       toast.error(
-        "Make sure you removed all products using this sizes first. ",
+        "Make sure you removed all products from this brand before deleting it "
       );
     } finally {
       setLoading(false);
@@ -138,11 +138,11 @@ export const SizeForm = ({ initialData }) => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Label</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Size Name"
+                      placeholder="Brand Name"
                       {...field}
                     />
                   </FormControl>
@@ -150,23 +150,7 @@ export const SizeForm = ({ initialData }) => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="value"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Value</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Size Value"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}

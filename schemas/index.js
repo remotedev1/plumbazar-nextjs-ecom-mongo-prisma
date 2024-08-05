@@ -22,26 +22,11 @@ export const newPasswordSchema = z.object({
 export const billboardSchema = z.object({
   label: z.string().min(3, { message: "Label is required" }),
   imageUrl: z.string().url(),
-  category: z.string().min(1),
+  brand: z.string().min(1),
 });
 
-export const CategorySchema = z.object({
+export const BrandSchema = z.object({
   name: z.string().min(3).max(25),
-});
-
-export const SizeSchema = z.object({
-  name: z.string().min(3).max(25),
-  value: z.string(),
-});
-
-export const ColorSchema = z.object({
-  name: z.string().min(3).max(25),
-  value: z
-    .string()
-    .min(4)
-    .regex(/^#([0-9a-f]{3}){1,2}$/i, {
-      message: "String must be a valid hex color",
-    }),
 });
 
 export const ProductSchema = z.object({
@@ -54,7 +39,7 @@ export const ProductSchema = z.object({
   purchasedPrice: z
     .number()
     .min(0, "Purchased price must be a positive number"),
-  categoryId: z.string().min(1, "Category is required"),
+  brandId: z.string().min(1, "Category is required"),
   discount: z.coerce.number().optional(),
   features: z
     .object({
@@ -63,13 +48,7 @@ export const ProductSchema = z.object({
     })
     .optional(),
   description: z.string().optional(),
-  color: z.string().min(1, "Color is required"),
-  size: z
-    .array(z.string())
-    .min(1, { message: "At least 1 size is required" })
-    .transform((sizes) =>
-      sizes.filter((size) => size !== null && size !== undefined)
-    ),
+
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
 });
@@ -183,8 +162,6 @@ const CustomInputSchema = z.object({
   value: z.string(),
 });
 
-
-
 const InvoiceReceiverSchema = z.object({
   name: fieldValidators.name,
   address: fieldValidators.address,
@@ -226,7 +203,6 @@ const ShippingDetailsSchema = z.object({
   cost: fieldValidators.stringToNumberWithMax,
   costType: fieldValidators.string,
 });
-
 
 const InvoiceDetailsSchema = z.object({
   invoiceNumber: fieldValidators.stringMin1,

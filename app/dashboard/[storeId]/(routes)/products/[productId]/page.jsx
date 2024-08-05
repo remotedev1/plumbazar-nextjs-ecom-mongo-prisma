@@ -11,24 +11,13 @@ const ProductPage = async ({ params }) => {
     });
   }
 
-  //fetch categories -> pass categories to form
-  const categories = await db.category.findMany();
-
-  //Load sizes -> pass sizes to form
-  const sizes = await db.size.findMany();
-
-  //Load colors -> pass colors to form
-  const colors = await db.color.findMany();
+  //fetch brands -> pass brands to form
+  const brands = await db.brand.findMany();
 
   return (
     <div className="flex-col ">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <ProductForm
-          categories={categories}
-          colors={colors}
-          sizes={sizes}
-          initialData={product}
-        />
+        <ProductForm brands={brands} initialData={product} />
       </div>
     </div>
   );

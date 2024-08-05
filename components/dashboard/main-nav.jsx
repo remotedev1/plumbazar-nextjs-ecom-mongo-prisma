@@ -26,20 +26,11 @@ export function MainNav({ className, ...props }) {
       active: pathname === `/dashboard/${params.storeId}/billboards`,
     },
     {
-      href: `/dashboard/${params.storeId}/categories`,
-      label: "Categories",
-      active: pathname === `/dashboard/${params.storeId}/categories`,
+      href: `/dashboard/${params.storeId}/brands`,
+      label: "Brands",
+      active: pathname === `/dashboard/${params.storeId}/brands`,
     },
-    {
-      href: `/dashboard/${params.storeId}/sizes`,
-      label: "Sizes",
-      active: pathname === `/dashboard/${params.storeId}/sizes`,
-    },
-    {
-      href: `/dashboard/${params.storeId}/colors`,
-      label: "Colors",
-      active: pathname === `/dashboard/${params.storeId}/colors`,
-    },
+   
     {
       href: `/dashboard/${params.storeId}/products`,
       label: "Products",

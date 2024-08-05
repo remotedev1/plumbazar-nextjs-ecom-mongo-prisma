@@ -11,7 +11,7 @@ const ProductsPage = async ({ params }) => {
       storeId: params.storeId,
     },
     include: {
-      category: true,
+      brand: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -26,12 +26,9 @@ const ProductsPage = async ({ params }) => {
     isArchived: item.isArchived,
     price: rupeeFormatter.format(item.price),
     purchasedPrice: rupeeFormatter.format(item.purchasedPrice),
-    category: item.category.name,
-    size: item.size,
-    color: item.color,
+    brand: item.brand.name,
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
   }));
-
 
   return (
     <div className="flex-col">

@@ -15,9 +15,8 @@ export async function POST(req, { params }) {
     const name = formData.get("name");
     const price = formData.get("price");
     const purchasedPrice = formData.get("purchasedPrice");
-    const categoryId = formData.get("categoryId");
-    const color = formData.get("color");
-    const size= formData.get("size");
+    const brandId = formData.get("brandId");
+
     const isFeatured = formData.get("isFeatured") === "true";
     const isArchived = formData.get("isArchived") === "true";
 
@@ -38,16 +37,8 @@ export async function POST(req, { params }) {
       return new NextResponse("purchased price is required", { status: 400 });
     }
 
-    if (!categoryId) {
-      return new NextResponse("Category id is required", { status: 400 });
-    }
-
-    if (!color) {
-      return new NextResponse("Color is required", { status: 400 });
-    }
-
-    if (!size) {
-      return new NextResponse("Size is required", { status: 400 });
+    if (!brandId) {
+      return new NextResponse("Brand id is required", { status: 400 });
     }
 
     if (!params.storeId) {
@@ -88,12 +79,9 @@ export async function POST(req, { params }) {
         purchasedPrice: Number(purchasedPrice),
         isFeatured,
         isArchived,
-        categoryId,
-        color: color,
-        size: JSON.parse(size),
+        brandId,
         storeId: params.storeId,
-        images: uploadedImages.map(img => img.url),
-        
+        images: uploadedImages.map((img) => img.url),
       },
     });
 
@@ -107,9 +95,8 @@ export async function POST(req, { params }) {
 export async function GET(req, { params }) {
   try {
     const { searchParams } = new URL(req.url);
-    const categoryId = searchParams.get("categoryId") || undefined;
-    const colorId = searchParams.get("colorId") || undefined;
-    const sizeId = searchParams.get("sizeId") || undefined;
+    const brandId = searchParams.get("brandId") || undefined;
+
     const isFeatured = searchParams.get("isFeatured");
 
     if (!params.storeId) {
@@ -119,14 +106,12 @@ export async function GET(req, { params }) {
     const products = await db.product.findMany({
       where: {
         storeId: params.storeId,
-        categoryId,
-        colorId,
-        sizeId,
+        brandId,
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
       },
       include: {
-        category: true,
+        brand: true,
       },
       orderBy: {
         createdAt: "desc",

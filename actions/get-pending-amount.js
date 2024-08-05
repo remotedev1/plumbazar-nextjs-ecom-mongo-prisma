@@ -6,7 +6,6 @@ import { db } from "@/lib/db";
 export const getPendingAmount = async (storeId) => {
   const unpaidOrders = await db.order.findMany({
     where: {
-      storeId,
       isPaid: false,
     },
     include: {

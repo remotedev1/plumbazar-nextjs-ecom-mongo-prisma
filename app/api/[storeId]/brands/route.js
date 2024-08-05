@@ -24,15 +24,15 @@ export async function POST(req, { params }) {
 
    
 
-    const category = await db.category.create({
+    const brand = await db.brand.create({
       data: {
         name,
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(brand);
   } catch (error) {
-    console.log("[CATEGORIES_POST]", error);
+    console.log("[BRANDS_POST]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
@@ -43,11 +43,11 @@ export async function GET(req, { params }) {
       return new NextResponse("Store id is required", { status: 400 });
     }
 
-    const categories = await db.category.findMany();
+    const brands = await db.brand.findMany();
 
-    return NextResponse.json(categories);
+    return NextResponse.json(brands);
   } catch (error) {
-    console.log("[CATEGORIES_GET]", error);
+    console.log("[BRANDS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

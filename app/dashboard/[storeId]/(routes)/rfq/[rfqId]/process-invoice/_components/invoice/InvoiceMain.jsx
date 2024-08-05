@@ -15,11 +15,14 @@ import InvoiceActions from "./InvoiceActions";
 import { useInvoiceContext } from "@/providers/invoice-provider";
 import InvoiceForm from "./InvoiceForm";
 
-const InvoiceMain = () => {
+const InvoiceMain = ({ rfq }) => {
     const { handleSubmit } = useFormContext();
 
     // Get the needed values from invoice context
-    const { onFormSubmit } = useInvoiceContext();
+    const { onFormSubmit,formValues } = useInvoiceContext();
+
+    console.log(rfq)
+    console.log(formValues)
 
     return (
         <>

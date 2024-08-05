@@ -63,28 +63,6 @@ const ProductCard = ({ data }) => {
         </h5>
         <div className="flex flex-col  mt-2 gap-y-2">
           <div className="flex items-center gap-x-4">
-            <h3 className="font-semibold text-black">Color:</h3>
-            <div
-              className="h-6 w-6 rounded-full border border-gray-600"
-              style={{ backgroundColor: data.color }}
-            />
-          </div>
-          <div className="flex items-center gap-x-4">
-            <h3 className="font-semibold text-black">Sizes:</h3>
-
-            <div className="flex items-center justify-evenly space-x-3 select-none">
-              {data.size.map((item, index) => (
-                <div
-                  className="font-bold capitalize border border-slate-400 p-2 py-1 "
-                  key={index}
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-x-4">
             <h3 className="text-2xl font-semibold text-black">
               <Currency value={data?.price} />
             </h3>
