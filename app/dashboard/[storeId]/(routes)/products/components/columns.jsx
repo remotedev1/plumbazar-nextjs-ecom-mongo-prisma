@@ -27,7 +27,10 @@ export const columns = [
     accessorKey: "brand",
     header: "Brand",
   },
-
+  {
+    accessorKey: "category",
+    header: "Category",
+  },
   {
     accessorKey: "createdAt",
     header: "Date",

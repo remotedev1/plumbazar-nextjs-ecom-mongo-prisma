@@ -89,13 +89,15 @@ model Store {
 }
 
 model Billboard {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  label     String
-  imageUrl  String
-  brand     Brand    @relation(fields: [brandId], references: [id])
-  brandId   String   @db.ObjectId
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  label      String
+  imageUrl   String
+  brand      Brand     @relation(fields: [brandId], references: [id])
+  brandId    String    @db.ObjectId
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  Category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?   @db.ObjectId
 }
 
 model Brand {
@@ -107,18 +109,29 @@ model Brand {
   Billboard Billboard[]
 }
 
+model Category {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  products  Product[]   @relation("CategoryToProduct")
+  name      String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  Billboard Billboard[]
+}
+
 model Product {
-  id             String  @id @default(auto()) @map("_id") @db.ObjectId
-  storeId        String  @db.ObjectId
-  store          Store   @relation("StoreToProduct", fields: [storeId], references: [id])
-  brandId        String  @db.ObjectId
-  brand          Brand   @relation("BrandToProduct", fields: [brandId], references: [id])
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  storeId        String   @db.ObjectId
+  store          Store    @relation("StoreToProduct", fields: [storeId], references: [id])
+  brandId        String   @db.ObjectId
+  brand          Brand    @relation("BrandToProduct", fields: [brandId], references: [id])
+  categoryId     String   @db.ObjectId
+  category       Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name           String
   price          Int
   purchasedPrice Int
   discount       Int?
-  isFeatured     Boolean @default(false)
-  isArchived     Boolean @default(false)
+  isFeatured     Boolean  @default(false)
+  isArchived     Boolean  @default(false)
 
   images       String[]
   reviews      Review[]

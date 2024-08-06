@@ -39,7 +39,7 @@ import {
 } from "@/components/ui/tooltip";
 import { ProductSchema } from "@/schemas";
 
-export const ProductForm = ({ initialData, brands }) => {
+export const ProductForm = ({ initialData, brands,categories }) => {
   const params = useParams();
   const router = useRouter();
 
@@ -62,7 +62,7 @@ export const ProductForm = ({ initialData, brands }) => {
         price: parseFloat(String(initialData.price || 0)),
         purchasedPrice: parseFloat(String(initialData.purchasedPrice || 0)),
         brandId: initialData.brandId || "",
-
+        categoryId: initialData.categoryId || "",
         isFeatured: initialData.isFeatured || false,
         isArchived: initialData.isArchived || false,
       }
@@ -72,6 +72,7 @@ export const ProductForm = ({ initialData, brands }) => {
         price: 0,
         purchasedPrice: 0,
         brandId: "",
+        categoryId: "",
         isFeatured: false,
         isArchived: false,
       };
@@ -89,7 +90,7 @@ export const ProductForm = ({ initialData, brands }) => {
       formData.append("price", data.price);
       formData.append("purchasedPrice", data.purchasedPrice);
       formData.append("brandId", data.brandId);
-
+      formData.append("categoryId", data.categoryId);
       formData.append("isFeatured", data.isFeatured ? "true" : "false");
       formData.append("isArchived", data.isArchived ? "true" : "false");
 
@@ -295,7 +296,40 @@ export const ProductForm = ({ initialData, brands }) => {
                 </FormItem>
               )}
             />
+  <FormField
+              control={form.control}
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    disabled={loading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder="Select a category"
+                          defaultValue={field.value}
+                        />
+                      </SelectTrigger>
+                    </FormControl>
 
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div>
               <FormField
                 control={form.control}

@@ -29,6 +29,10 @@ export const BrandSchema = z.object({
   name: z.string().min(3).max(25),
 });
 
+export const CategorySchema = z.object({
+  name: z.string().min(3).max(35),
+});
+
 export const ProductSchema = z.object({
   name: z.string().min(1, "Name is required"),
   images: z.array(z.any()).min(1, "At least one image is required"),
@@ -40,6 +44,7 @@ export const ProductSchema = z.object({
     .number()
     .min(0, "Purchased price must be a positive number"),
   brandId: z.string().min(1, "Category is required"),
+  categoryId: z.string().min(1, "Category is required"),
   discount: z.coerce.number().optional(),
   features: z
     .object({

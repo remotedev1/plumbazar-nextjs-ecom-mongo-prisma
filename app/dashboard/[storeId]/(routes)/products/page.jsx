@@ -12,6 +12,8 @@ const ProductsPage = async ({ params }) => {
     },
     include: {
       brand: true,
+      category: true,
+
     },
     orderBy: {
       createdAt: "desc",
@@ -27,6 +29,7 @@ const ProductsPage = async ({ params }) => {
     price: rupeeFormatter.format(item.price),
     purchasedPrice: rupeeFormatter.format(item.purchasedPrice),
     brand: item.brand.name,
+    category: item.category.name,
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
   }));
 

@@ -30,7 +30,11 @@ export function MainNav({ className, ...props }) {
       label: "Brands",
       active: pathname === `/dashboard/${params.storeId}/brands`,
     },
-   
+    {
+      href: `/dashboard/${params.storeId}/categories`,
+      label: "Categories",
+      active: pathname === `/dashboard/${params.storeId}/categories`,
+    },
     {
       href: `/dashboard/${params.storeId}/products`,
       label: "Products",
