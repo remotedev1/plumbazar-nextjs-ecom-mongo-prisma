@@ -1,4 +1,3 @@
-import { isPrismaIdValid } from "@/lib/utils";
 import { CategoryForm } from "./components/category-form";
 import { db } from "@/lib/db";
 

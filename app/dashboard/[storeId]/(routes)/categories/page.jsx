@@ -13,6 +13,7 @@ const CategoriesPage = async ({ params }) => {
   const formattedCategories = categories.map((item) => ({
     id: item.id,
     name: item.name,
+    image: item.images[0],
     createdAt: format(new Date(item.createdAt), "MMMM do ,yyyy"),
   }));
 

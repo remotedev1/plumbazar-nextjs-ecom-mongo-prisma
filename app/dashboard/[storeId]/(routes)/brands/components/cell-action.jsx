@@ -72,7 +72,7 @@ export const CellAction = ({ data }) => {
           {/* Update */}
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/dashboard/${params.storeId}/categories/${data.id}`)
+              router.push(`/dashboard/${params.storeId}/brands/${data.id}`)
             }
           >
             <Edit className="mr-2 h-4 w-4" />

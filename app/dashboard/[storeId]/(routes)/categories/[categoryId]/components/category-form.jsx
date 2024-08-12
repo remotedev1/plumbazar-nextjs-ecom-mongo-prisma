@@ -11,16 +11,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Heading from "@/components/ui/heading";
+import ImageUpload from "@/components/ui/image-upload";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Separator } from "@/components/ui/separator";
-import { useOrigin } from "@/hooks/use-origin";
 import { CategorySchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -31,10 +25,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-// formSchema -> CategoryFormValues -> CategoryForm using react hook form -> onSubmit -> update store
-
-
-export const CategoryForm = ({ initialData, billboards }) => {
+export const CategoryForm = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
@@ -42,39 +33,50 @@ export const CategoryForm = ({ initialData, billboards }) => {
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? "Edit Category" : "Create Category";
-
   const description = initialData
     ? "Edit category details"
     : "Add a new category";
-
   const toastMessage = initialData
     ? "Category updated successfully"
     : "Category created successfully";
-
   const action = initialData ? "Save Changes" : "Create Category";
 
   const form = useForm({
     resolver: zodResolver(CategorySchema),
     defaultValues: initialData || {
       name: "",
+      images: [],
     },
   });
-
-  // onDelete -> delete store -> refresh page -> redirect to root page (root layout will check if user has store and open createStore Modal if not found -> create store page will check if user has store and redirect to dashboard if found )
 
   const onSubmit = async (data) => {
     try {
       setLoading(true);
+      const formData = new FormData();
+      formData.append("name", data.name);
 
-      //& if initialData is true then we are updating the store else we are creating a new store (initialData is null)
+      data.images.forEach((fileOrUrl, index) => {
+        if (typeof fileOrUrl === "string") {
+          // If the image is a URL, append it as a string
+          formData.append("images", fileOrUrl);
+        } else if (fileOrUrl instanceof File) {
+          // If the image is a File object, append it as a file
+          formData.append("newImages", fileOrUrl);
+        }
+      });
 
       if (initialData) {
         await axios.patch(
           `/api/${params.storeId}/categories/${params.categoryId}`,
-          data
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
         );
       } else {
-        await axios.post(`/api/${params.storeId}/categories`, data);
+        await axios.post(`/api/${params.storeId}/categories`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
       }
 
       router.refresh();
@@ -132,24 +134,22 @@ export const CategoryForm = ({ initialData, billboards }) => {
       </div>
       <Separator />
 
-      {/* Form  and spreading the form using react hook form */}
-
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
-          <div className="grid grid-cols-3 gap-8">
+          <div className="flex flex-col gap-5 max-w-lg">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Label</FormLabel>
+                  <FormLabel>Category Name</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Category Name"
+                      placeholder="Category..."
                       {...field}
                     />
                   </FormControl>
@@ -157,7 +157,34 @@ export const CategoryForm = ({ initialData, billboards }) => {
                 </FormItem>
               )}
             />
-          
+            <FormField
+              control={form.control}
+              name="images"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Logo</FormLabel>
+                  <FormControl>
+                    <ImageUpload
+                      value={field.value.map((image) => image)}
+                      disabled={loading}
+                      onChange={(newImage) => {
+                        field.onChange([newImage]);
+                      }}
+                      onRemove={(id) => {
+                        field.onChange(
+                          field.value.filter(
+                            (image, index) =>
+                              index !== id &&
+                              (!image.publicId || image.publicId !== id)
+                          )
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}

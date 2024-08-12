@@ -104,6 +104,7 @@ model Brand {
   id        String      @id @default(auto()) @map("_id") @db.ObjectId
   products  Product[]   @relation("BrandToProduct")
   name      String
+  images    String[]
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   Billboard Billboard[]
@@ -113,6 +114,7 @@ model Category {
   id        String      @id @default(auto()) @map("_id") @db.ObjectId
   products  Product[]   @relation("CategoryToProduct")
   name      String
+  images    String[]
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   Billboard Billboard[]

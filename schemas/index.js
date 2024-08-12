@@ -27,10 +27,12 @@ export const billboardSchema = z.object({
 
 export const BrandSchema = z.object({
   name: z.string().min(3).max(25),
+  images: z.array(z.any()).max(1),
 });
 
 export const CategorySchema = z.object({
   name: z.string().min(3).max(35),
+  images: z.array(z.any()).max(1),
 });
 
 export const ProductSchema = z.object({

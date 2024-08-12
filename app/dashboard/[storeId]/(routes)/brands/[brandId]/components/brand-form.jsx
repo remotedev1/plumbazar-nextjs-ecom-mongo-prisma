@@ -11,8 +11,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Heading from "@/components/ui/heading";
+import ImageUpload from "@/components/ui/image-upload";
 import { Input } from "@/components/ui/input";
-
 import { Separator } from "@/components/ui/separator";
 import { BrandSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,10 +24,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-// formSchema -> CategoryFormValues -> CategoryForm using react hook form -> onSubmit -> update store
-
-
-export const BrandForm = ({ initialData, billboards }) => {
+export const BrandForm = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
@@ -35,39 +32,47 @@ export const BrandForm = ({ initialData, billboards }) => {
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? "Edit Brand" : "Create Brand";
-
-  const description = initialData
-    ? "Edit brand details"
-    : "Add a new brand";
-
+  const description = initialData ? "Edit brand details" : "Add a new brand";
   const toastMessage = initialData
     ? "Brand updated successfully"
     : "Brand created successfully";
-
   const action = initialData ? "Save Changes" : "Create Brand";
 
   const form = useForm({
     resolver: zodResolver(BrandSchema),
     defaultValues: initialData || {
       name: "",
+      images: [],
     },
   });
-
-  // onDelete -> delete store -> refresh page -> redirect to root page (root layout will check if user has store and open createStore Modal if not found -> create store page will check if user has store and redirect to dashboard if found )
 
   const onSubmit = async (data) => {
     try {
       setLoading(true);
+      const formData = new FormData();
+      formData.append("name", data.name);
 
-      //& if initialData is true then we are updating the store else we are creating a new store (initialData is null)
-
+      data.images.forEach((fileOrUrl, index) => {
+        if (typeof fileOrUrl === "string") {
+          // If the image is a URL, append it as a string
+          formData.append("images", fileOrUrl);
+        } else if (fileOrUrl instanceof File) {
+          // If the image is a File object, append it as a file
+          formData.append("newImages", fileOrUrl);
+        }
+      });
       if (initialData) {
         await axios.patch(
           `/api/${params.storeId}/brands/${params.brandId}`,
-          data
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
         );
       } else {
-        await axios.post(`/api/${params.storeId}/brands`, data);
+        await axios.post(`/api/${params.storeId}/brands`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
       }
 
       router.refresh();
@@ -83,12 +88,8 @@ export const BrandForm = ({ initialData, billboards }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      // Delete store
-      await axios.delete(
-        `/api/${params.storeId}/brands/${params.brandId}`
-      );
+      await axios.delete(`/api/${params.storeId}/brands/${params.brandId}`);
       router.refresh();
-
       router.push("/");
       toast.success("Brand deleted successfully");
     } catch (error) {
@@ -125,24 +126,22 @@ export const BrandForm = ({ initialData, billboards }) => {
       </div>
       <Separator />
 
-      {/* Form  and spreading the form using react hook form */}
-
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full"
+          className="space-y-8 w-full "
         >
-          <div className="grid grid-cols-3 gap-8">
+          <div className="flex flex-col gap-5 max-w-lg">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Label</FormLabel>
+                  <FormLabel>Brand Name</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Brand Name"
+                      placeholder="Brand..."
                       {...field}
                     />
                   </FormControl>
@@ -150,7 +149,34 @@ export const BrandForm = ({ initialData, billboards }) => {
                 </FormItem>
               )}
             />
-          
+            <FormField
+              control={form.control}
+              name="images"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Logo</FormLabel>
+                  <FormControl>
+                    <ImageUpload
+                      value={field.value.map((image) => image)}
+                      onChange={(newImage) => {
+                        field.onChange([newImage]);
+                      }}
+                      onRemove={(id) => {
+                        field.onChange(
+                          field.value.filter(
+                            (image, index) =>
+                              index !== id &&
+                              (!image.publicId || image.publicId !== id)
+                          )
+                        );
+                      }}
+                      disabled={loading}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}

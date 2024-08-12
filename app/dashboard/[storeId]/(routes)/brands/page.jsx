@@ -10,9 +10,11 @@ const BrandsPage = async ({ params }) => {
     },
   });
 
+
   const formattedBrands = brand.map((item) => ({
     id: item.id,
     name: item.name,
+    image: item.images[0],
     createdAt: format(new Date(item.createdAt), "MMMM do ,yyyy"),
   }));
 
