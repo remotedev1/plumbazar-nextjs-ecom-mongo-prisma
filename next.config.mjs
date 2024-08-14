@@ -1,10 +1,12 @@
 /** @type {import('next').NextConfig} */
 import withPWAInit from "@ducanh2912/next-pwa";
 
-
 const nextConfig = {
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "https", hostname: "cdn.shopify.com" },
+    ],
   },
 };
 
@@ -21,5 +23,5 @@ const withPWA = withPWAInit({
 });
 
 export default withPWA({
-    ...nextConfig,
-  })
+  ...nextConfig,
+});

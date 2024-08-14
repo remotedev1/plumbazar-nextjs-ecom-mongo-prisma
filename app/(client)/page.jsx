@@ -9,9 +9,7 @@ export const revalidate = 0;
 
 export default async function Home() {
   const billboard = await getBillboard();
-  const products = await getProducts({
-    isFeatured: true,
-  });
+  const products = await getProducts();
 
   return (
     <main className="flex min-h-[80vh] flex-col items-center justify-between py-4 text-black">

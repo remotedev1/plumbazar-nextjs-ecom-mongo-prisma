@@ -7,7 +7,7 @@ import { BottomNavbar } from "@/components/frontend/bottom-navbar";
 export default async function RootLayout({ children }) {
   const data = await auth();
   return (
-    <div>
+    <div className="bg-gray-100">
       <Navbar />
       {data?.user.role === "ADMIN" && <AdminDashLink />}
       {children}

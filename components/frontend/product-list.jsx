@@ -23,12 +23,9 @@ const ProductList = ({ title, items }) => {
         )}
         {items.length === 0 && <NoResults />}
         <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mx-auto">
-          {items.length > !0
+          {items.length === 0
             ? [1, 2, 3, 4, 5].map((item) => <SkeletonCard key={item} />)
-            : items.map((item) => (
-            
-                  <ProductCard key={item.id} data={item} />
-              ))}
+            : items.map((item) => <ProductCard key={item.id} data={item} />)}
         </div>
       </Container>
     </div>

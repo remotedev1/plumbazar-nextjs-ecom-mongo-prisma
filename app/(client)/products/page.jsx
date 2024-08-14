@@ -20,7 +20,7 @@ const Products = ({ searchParams }) => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const fetchedProducts = await getProducts({ isFeatured: true });
+      const fetchedProducts = await getProducts();
       const fetchedBrands = await getBrands();
       setProducts(fetchedProducts);
       setBrands(fetchedBrands);
@@ -151,12 +151,10 @@ const Products = ({ searchParams }) => {
           <div className="col-span-12 md:col-span-9 mx-auto">
             {products.length === 0 && <NoResults />}
             <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4 mx-auto">
-              {products.length > !0
+              {products.length === 0
                 ? [1, 2, 3, 4, 5].map((item) => <SkeletonCard key={item} />)
                 : products.map((item) => (
-                    <>
-                      <ProductCard key={item.id} data={item} />
-                    </>
+                    <ProductCard key={item.id} data={item} />
                   ))}
             </div>
           </div>
