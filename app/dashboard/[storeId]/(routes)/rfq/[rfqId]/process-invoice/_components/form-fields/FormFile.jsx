@@ -91,7 +91,7 @@ const FormFile = ({ name, label, placeholder }) => {
                 >
                   <>
                     <div className="flex flex-col items-center">
-                      <Image />
+                      {/* <Image /> */}
                       <p>{placeholder}</p>
                     </div>
                     <FormControl>

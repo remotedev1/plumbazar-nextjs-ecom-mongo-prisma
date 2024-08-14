@@ -1,4 +1,4 @@
-import { RfqForm } from "./components/rfq-form";
+import { RfqForm } from "@/app/(client)/rfq/[rfqid]/components/rfq-form";
 
 const RfqPage = async ({ params }) => {
 
