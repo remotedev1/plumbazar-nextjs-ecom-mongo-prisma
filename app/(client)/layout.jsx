@@ -9,8 +9,10 @@ export default async function RootLayout({ children }) {
   return (
     <div className="bg-gray-100">
       <Navbar />
+      <div className="mt-[3.8em] md:mt-[4.5em] ">
       {data?.user.role === "ADMIN" && <AdminDashLink />}
       {children}
+      </div>
       <Footer />
       <BottomNavbar />
     </div>

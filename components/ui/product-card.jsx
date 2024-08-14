@@ -31,19 +31,20 @@ const ProductCard = ({ data }) => {
 
   return (
     <div
-      className="relative  w-full max-w-xs overflow-hidden rounded-lg bg-white shadow-md cursor-pointer"
+      className="relative  w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-md cursor-pointer"
       onClick={handleClick}
     >
+      <div>
       <Image
         src={data?.images?.[0]}
         width={200}
         height={200}
         alt="Product Image"
-        className="h-60 w-full aspect-square object-cover rounded-md"
+        className="h-60 w-full aspect-square object-cover rounded-md p-2"
       />
-      <span className="absolute top-0 left-0 w-28 translate-y-4 -translate-x-6 -rotate-45 bg-black text-center text-sm text-white">
-        Featured
-      </span>
+      <div className="z-10 absolute uppercase left-2.5 right-2.5 md:left-4 top-4 text-white items-center font-semibold text-center rounded-full back bg-red-600  flex justify-center  w-12 h-12 text-sm">
+        71% OFF
+      </div>
       {user.status === "authenticated" && (
         <Button
           className=" z-10 bg-white w-10 h-10 p-2 rounded-full absolute top-2 right-2 shadow-lg"
@@ -57,15 +58,35 @@ const ProductCard = ({ data }) => {
           )}
         </Button>
       )}
-      <div className="mt-4 px-5 pb-5 grid gap-2">
-        <h5 className="text-xl font-semibold tracking-tight text-slate-900">
+      </div>
+      <div className="px-1 w-full flex flex-col pl-2.5 justify-start space-y-3 flex-1 pb-3">
+        <h5 className="text-md font-semibold tracking-tight text-slate-900">
           {data.name}
         </h5>
-        <div className="flex flex-col  mt-2 gap-y-2">
-          <div className="flex items-center gap-x-4">
-            <h3 className="text-2xl font-semibold text-black">
-              <Currency value={data?.price} />
-            </h3>
+
+        <div className="flex flex-col mt-1 mb-1">
+          <div className="flex flex-col mt-1 mb-1">
+            <div className="text-base flex items-start flex-wrap leading-none text-red-600 flex-row justify-between font-bold ">
+              <div>
+                <span className="flex w-full">
+                  <Currency value={data?.price} />
+                </span>
+                <span className="md:text-xs md:mt-1 mb-1 text-11 text-gray-500 font-normal">
+                  incl. GST
+                </span>
+              </div>
+            </div>
+            <div className="md:text-xs md:mt-1.5 text-11 uppercase text-gray-500">
+              <div>
+                <span className="">mrp</span>
+                <span className="ml-1 font-normal">
+                  <Currency value={data?.price} lineThrough={true} />
+                </span>
+                <span className="text-red-600 text-xs font-medium px-1 italic uppercase">
+                  (76% OFF)
+                </span>
+              </div>
+            </div>
           </div>
         </div>
         {/* <div className="mt-2.5 mb-5 flex items-center">

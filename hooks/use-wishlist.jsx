@@ -17,7 +17,9 @@ const useWishlist = create(
 
         if (existingItem) {
           // If the item already exists, show a toast message
-          return toast("Item already in wishlist.");
+          set({ items: [...get().items.filter((item) => item.id !== data.id)] }); // Filter out the item with the specified ID
+
+          return toast.success("Item removed from wishlist.");
         }
 
         // If the item is not in the wishlist, add it to the wishlist
@@ -33,7 +35,7 @@ const useWishlist = create(
       isItemInWishlist: (id) => {
         // Function to add an item to the wishlist
         const currentItems = get().items;
-        const existingItem = currentItems.find((item) => item.id === id); 
+        const existingItem = currentItems.find((item) => item.id === id);
         if (existingItem) {
           return true;
         }

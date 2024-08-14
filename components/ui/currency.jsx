@@ -20,7 +20,7 @@ const Currency = ({ value ,lineThrough=false}) => {
 
   // !-------->
 
-  return <div className={cn(lineThrough && "line-through")}>{formatter.format(Number(value))}</div>;
+  return <div className={cn("inline",lineThrough && "line-through")}>{formatter.format(Number(value))}</div>;
 };
 
 export default Currency;
