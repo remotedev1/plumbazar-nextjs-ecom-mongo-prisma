@@ -29,10 +29,11 @@ export default async function DashboardLayout({ children, params }) {
     <>
       <div className="min-h-[80vh]">
         <Navbar />
-        
+        <div className="mt-[4rem]">
         <InvoiceProvidersComponent>
         {children}
         </InvoiceProvidersComponent>
+        </div>
       </div>
       <div className="hidden flex-col md:flex"></div>
     </>

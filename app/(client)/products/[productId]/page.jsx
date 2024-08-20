@@ -2,7 +2,7 @@ import { getProduct } from "@/actions/get-product";
 import { getReview } from "@/actions/get-reviews";
 import { auth } from "@/auth";
 import Gallery from "@/components/frontend/gallery";
-import ProductAdditionalInfo from "@/components/frontend/product-additional-info";
+import ProductAdditionalInfo from "@/components/ui/product-additional-info";
 import Info from "@/components/frontend/product-info";
 import ProductRating from "@/components/frontend/product-rating";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,8 @@ const ProductPage = async ({ params }) => {
   //   categoryId: product?.category?.id,
   // });
 
+
+
   if (!product) {
     return (
       <section className="py-14 relative overflow-x-hidden min-h-[80vh]">
@@ -30,30 +32,17 @@ const ProductPage = async ({ params }) => {
       </section>
     );
   }
-
   return (
     <div className="bg-white">
       <Container>
         <div className="px-4 py-10 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
+          <div className="relative lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
             {/* Gallery */}
             <Gallery images={product.images} />
-            {/* <div class="z-10 absolute uppercase left-2.5 right-2.5 md:left-4 top-4 text-white items-center font-semibold text-center rounded-full back bg-red-600  flex justify-center  w-12 h-12 text-sm">
+            <div class="z-10 absolute uppercase left-2.5 right-2.5 md:left-4 top-4 text-white items-center font-semibold text-center rounded-full back bg-red-600  flex justify-center  w-12 h-12 text-sm">
               71% OFF
             </div>
-            {user.status === "authenticated" && (
-              <Button
-                className=" z-10 bg-white w-10 h-10 p-2 rounded-full absolute top-2 right-2 shadow-lg"
-                onClick={onAddToWishlist}
-                variant="ghost"
-              >
-                {wishlist.isItemInWishlist(data.id) ? (
-                  <FaHeart size={20} color="red" />
-                ) : (
-                  <FaRegHeart size={20} />
-                )}
-              </Button>
-            )} */}
+            
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
               {/* Info */}
               <Info data={product} />
