@@ -29,6 +29,7 @@ model User {
   Order         Order[]
   Rfq           Rfq[]
   DraftInvoice  DraftInvoice[]
+  Stockin       Stockin[]
 }
 
 type Address {
@@ -121,31 +122,31 @@ model Category {
 }
 
 model Product {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  storeId         String   @db.ObjectId
-  store           Store    @relation("StoreToProduct", fields: [storeId], references: [id])
-  brandId         String   @db.ObjectId
-  brand           Brand    @relation("BrandToProduct", fields: [brandId], references: [id])
-  categoryId      String   @db.ObjectId
-  category        Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  storeId         String      @db.ObjectId
+  store           Store       @relation("StoreToProduct", fields: [storeId], references: [id])
+  brandId         String      @db.ObjectId
+  brand           Brand       @relation("BrandToProduct", fields: [brandId], references: [id])
+  categoryId      String      @db.ObjectId
+  category        Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name            String
   price           Int
-  stock           Int @default(0) 
+  stock           Int         @default(0)
   purchasedPrice  Int?
   discountedPrice Int?
-  isFeatured      Boolean  @default(false)
-  isArchived      Boolean  @default(false)
-  images       String[]
-  reviews      Review[]
-  globalRating Int?
-  numReviews   Int?
-  features     Features[]
-  description  String?
-  orderItems   OrderItem[]
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  user         User?       @relation(fields: [userId], references: [id])
-  userId       String?     @db.ObjectId
+  isFeatured      Boolean     @default(false)
+  isArchived      Boolean     @default(false)
+  images          String[]
+  reviews         Review[]
+  globalRating    Int?
+  numReviews      Int?
+  features        Features[]
+  description     String?
+  orderItems      OrderItem[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  user            User?       @relation(fields: [userId], references: [id])
+  userId          String?     @db.ObjectId
 
   @@index([storeId])
   @@index([brandId])
@@ -237,6 +238,7 @@ model DraftInvoice {
   phone     Int
   address   Address
   products  DraftProducts
+  notes     String?
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 }
@@ -244,26 +246,35 @@ model DraftInvoice {
 type DraftProducts {
   productId     String @db.ObjectId
   quantity      Int
-  originalPrice Int
   price         Int
   PurchasePrice Int
 }
 
-
 model Vendor {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  email         String?        @unique
- 
- 
- 
- phone  Int
-  address       Address?
-  
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  
+  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
+  email String? @unique
+
+  phone   Int
+  address Address?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
+model Stockin {
+  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  inBy      String          @db.ObjectId
+  user      User            @relation(fields: [inBy], references: [id])
+  notes     String?
+  products  StockInProducts
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
 
-model 
+type StockInProducts {
+  productId     String @db.ObjectId
+  quantity      Int
+  price         Int
+  PurchasePrice Int
+}

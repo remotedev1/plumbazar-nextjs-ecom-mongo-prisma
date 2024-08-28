@@ -1,3 +1,4 @@
+import Products from "@/app/(client)/products/page";
 import * as z from "zod";
 
 export const LoginSchema = z.object({
@@ -56,6 +57,24 @@ export const ProductSchema = z.object({
 
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
+});
+
+export const StockInSchema = z.object({
+  notes: z.string().optional(),
+  products: z.array(
+    z.object({
+      productId: z.string().min(1, "Product ID is required"), // Ensures productId is a non-empty string
+      quantity: z
+        .number()
+        .int()
+        .positive("Quantity must be a positive integer"),
+      price: z.number().int().positive("Price must be a positive integer"),
+      purchasePrice: z
+        .number()
+        .int()
+        .positive("Purchase Price must be a positive integer"),
+    })
+  ),
 });
 
 export const PostReviewSchema = z.object({
