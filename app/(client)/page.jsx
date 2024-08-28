@@ -19,8 +19,8 @@ export default async function Home() {
           <div className="flex flex-col  px-4 sm:px-6 lg:px-8">
             {/* <ProductList title="Featured Products" items={products} /> */}
           </div>
-          <ProductCarousel productData={products}  title={"Featured Products"}/>
-          <ProductCarousel productData={products}  title={"Bathroom Products"}/>
+          <ProductCarousel productData={products} title={"Featured Products"} />
+          <ProductCarousel productData={products} title={"Bathroom Products"} />
           <div>
             <Testimonials />
           </div>

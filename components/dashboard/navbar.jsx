@@ -2,7 +2,6 @@
 
 import { redirect } from "next/navigation";
 import { Fragment } from "react";
-
 import { ThemeToggle } from "./theme-toggle";
 import { LogoutButton } from "../auth/logout-button";
 import { Popover, Transition } from "@headlessui/react";

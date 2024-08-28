@@ -42,9 +42,7 @@ export const ProductSchema = z.object({
   //   message: "Must be a File object",
   // }),
   price: z.number().min(0, "Price must be a positive number"),
-  purchasedPrice: z
-    .number()
-    .min(0, "Purchased price must be a positive number"),
+
   brandId: z.string().min(1, "Category is required"),
   categoryId: z.string().min(1, "Category is required"),
   discount: z.coerce.number().optional(),

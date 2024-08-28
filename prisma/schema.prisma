@@ -264,3 +264,6 @@ model Vendor {
   updatedAt     DateTime       @updatedAt
   
 }
+
+
+model 

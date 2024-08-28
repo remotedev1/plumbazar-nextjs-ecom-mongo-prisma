@@ -25,7 +25,7 @@ const ProductCarousel = ({ productData, title }) => {
         pauseOnHover
         infinite
         additionalTransfrom={0}
-        
+        itemClass="p-2"
         centerMode={false}
       >
         {product}
