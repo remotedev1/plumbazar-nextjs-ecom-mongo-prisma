@@ -1,25 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
-
-// RHF
-import { useFormContext, useWatch } from "react-hook-form";
-
-// DnD
+import { Controller, useWatch } from "react-hook-form";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-
-// ShadCn
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-// Components
-import Select from 'react-select'
-// Icons
+import Select from "react-select";
 import { ChevronDown, ChevronUp, GripVertical, Trash2 } from "lucide-react";
 import BaseButton from "@/components/dashboard/BaseButton";
-import FormInput from "../../rfq/[rfqId]/process-invoice/_components/form-fields/FormInput";
-
+import { FormLabel, FormMessage} from "@/components/ui/form";
 
 const SingleItem = ({
   name,
@@ -29,45 +19,35 @@ const SingleItem = ({
   moveFieldUp,
   moveFieldDown,
   removeField,
-  products
+  products,
+  control,
+  setValue,
+  errors
 }) => {
-  const { control, setValue } = useFormContext();
-
-  // Items
-  const itemName = useWatch({
-    name: `${name}[${index}].product`,
-    control,
-  });
-
+  // Watching fields for dynamic updates
   const purchasePrice = useWatch({
     name: `${name}[${index}].purchasePrice`,
     control,
   });
-
   const quantity = useWatch({
     name: `${name}[${index}].quantity`,
     control,
   });
-
   const total = useWatch({
     name: `${name}[${index}].total`,
     control,
   });
 
-  const handleSelectChange = (selectedOption) => {
-    setValue(`${name}[${index}].product`, selectedOption.value);
-  };
-
 
   useEffect(() => {
-    // Calculate total when rate or quantity changes
-    if (purchasePrice != undefined && quantity != undefined) {
+    // Calculate total whenever purchasePrice or quantity changes
+    if (purchasePrice !== undefined && quantity !== undefined) {
       const calculatedTotal = (purchasePrice * quantity).toFixed(2);
       setValue(`${name}[${index}].total`, calculatedTotal);
     }
-  }, [purchasePrice, quantity]);
+  }, [purchasePrice, quantity, control, index, name]);
 
-  // DnD
+  // DnD logic
   const {
     attributes,
     listeners,
@@ -96,15 +76,8 @@ const SingleItem = ({
       {...attributes}
       className={`${boxDragClasses} group flex flex-col gap-y-5 p-3 my-2 cursor-default rounded-xl bg-gray-50 dark:bg-slate-800 dark:border-gray-600`}
     >
-      {/* {isDragging && <div className="bg-blue-600 h-1 rounded-full"></div>} */}
       <div className="flex flex-wrap justify-between">
-        {itemName != "" ? (
-          <p className="font-medium">
-            #{index + 1} - {itemName}
-          </p>
-        ) : (
-          <p className="font-medium">#{index + 1} - Empty name</p>
-        )}
+        <p className="font-medium">#{index + 1}</p>
 
         <div className="flex gap-3">
           {/* Drag and Drop Button */}
@@ -141,43 +114,111 @@ const SingleItem = ({
         className="flex flex-wrap justify-between gap-y-5 gap-x-2"
         key={index}
       >
+        {/* Product Name */}
         <div className="w-full">
           <Label>Name</Label>
-          <Select
-            options={products.map((product) => ({
-              value: product.name,
-              label: product.name,
-            }))}
-            onChange={handleSelectChange}
-            value={products.find((option) => option.value === itemName)}
-            placeholder="Search and select item"
-            isSearchable
+          <Controller
+            name={`${name}[${index}].productId`}
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                options={products.map((product) => ({
+                  value: product.id,
+                  label: product.name,
+                }))}
+                onChange={(selectedOption) =>
+                  field.onChange(selectedOption?.value || "")
+                }
+                value={
+                  products.find((product) => product.id === field.value)
+                    ? {
+                        value: field.value,
+                        label: products.find(
+                          (product) => product.id === field.value
+                        )?.name,
+                      }
+                    : null
+                }
+                placeholder="Search and select item"
+                isSearchable
+                isClearable
+              />
+            )}
           />
+           {errors?.[name]?.[index]?.productId && (
+                  <FormMessage>
+                    {errors[name][index].productId.message}
+                  </FormMessage>
+                )}
         </div>
 
-        <FormInput
+        {/* Quantity */}
+        <Controller
           name={`${name}[${index}].quantity`}
-          type="number"
-          label="quantity"
-          placeholder="quantity"
-          className="w-[8rem]"
-          vertical
+          control={control}
+          render={({ field }) => (
+            <div className="inline">
+              <FormLabel>Quantity</FormLabel>
+              <Input
+                {...field}
+                type="number"
+                placeholder="Quantity"
+                className="w-[8rem]"
+              />
+                {errors?.[name]?.[index]?.quantity && (
+                <FormMessage>
+                  {errors[name][index].quantity.message}
+                </FormMessage>
+              )}
+            </div>
+          )}
         />
 
-        <FormInput
+        {/* Purchase Price */}
+        <Controller
           name={`${name}[${index}].purchasePrice`}
-          type="number"
-          label="purchasePrice"
-          labelHelper="INR"
-          placeholder="purchasePrice"
-          className="w-[8rem]"
-          vertical
+          control={control}
+          render={({ field }) => (
+            <div className="inline">
+              <FormLabel>Purchase price</FormLabel>
+              <Input
+                {...field}
+                type="number"
+                placeholder="Purchase Price"
+                className="w-[8rem]"
+              />
+                {errors?.[name]?.[index]?.purchasePrice && (
+                <FormMessage>
+                  {errors[name][index].purchasePrice.message}
+                </FormMessage>
+              )}
+            </div>
+          )}
+        />
+        {/* selling Price */}
+        <Controller
+          name={`${name}[${index}].price`}
+          control={control}
+          render={({ field }) => (
+            <div className="inline">
+              <FormLabel>Selling price</FormLabel>
+              <Input
+                {...field}
+                type="number"
+                placeholder="selling price"
+                className="w-[8rem]"
+              />
+               {errors?.[name]?.[index]?.price && (
+                <FormMessage>{errors[name][index].price.message}</FormMessage>
+              )}
+            </div>
+          )}
         />
 
+        {/* Total */}
         <div className="flex flex-col gap-2">
-          <div>
-            <Label>total</Label>
-          </div>
+          <Label>Total</Label>
           <Input
             value={`${total} INR`}
             readOnly
@@ -188,12 +229,12 @@ const SingleItem = ({
         </div>
       </div>
 
+      {/* Remove Button */}
       <div>
-        {/* Not allowing deletion for first item when there is only 1 item */}
         {fields.length > 1 && (
           <BaseButton variant="destructive" onClick={() => removeField(index)}>
             <Trash2 />
-            remove
+            Remove
           </BaseButton>
         )}
       </div>

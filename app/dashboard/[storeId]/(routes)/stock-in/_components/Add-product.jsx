@@ -55,7 +55,6 @@ export const AddProductModel = ({ brands, categories }) => {
   const [loading, setLoading] = useState(false);
 
   const title = "Create a new Product";
-  const description = "Create a new Product";
   const toastMessage = "Product created successfully";
   const action = "Create Product";
 
@@ -110,43 +109,19 @@ export const AddProductModel = ({ brands, categories }) => {
     }
   };
 
-  const onDelete = async () => {
-    try {
-      setLoading(true);
-      await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
-      router.refresh();
-      router.push(`/dashboard/${params.storeId}/products`);
-      toast.success("Product deleted successfully");
-    } catch (error) {
-      toast.error("Something went wrong.");
-    } finally {
-      setLoading(false);
-      setOpen(false);
-    }
-  };
-
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant="outline">Open Drawer</Button>
+        <Button className="w-fit bg-blue-500  hover:bg-blue-300">
+          Add a new Product
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader>
-            <DrawerTitle>Move Goal</DrawerTitle>
-            <DrawerDescription>Set your daily activity goal.</DrawerDescription>
-          </DrawerHeader>
-          <AlertModal
-            isOpen={open}
-            onClose={() => setOpen(false)}
-            onConfirm={onDelete}
-            loading={loading}
-          />
-
+        <div className="mx-auto w-full max-w-xl">
           <div className="flex items-center justify-between">
-            <Heading title={title} description={description} />
+            <Heading title={title} />
           </div>
-          <Separator />
+          <Separator className="mb-8 mt-5" />
 
           <Form {...form}>
             <form
@@ -356,15 +331,18 @@ export const AddProductModel = ({ brands, categories }) => {
                   />
                 </div>
               </div>
-              <Button disabled={loading} className="ml-auto" type="submit">
+              <Button
+                disabled={loading}
+                className="w-full bg-blue-500 hover:bg-blue-300"
+                type="submit"
+              >
                 {action}
               </Button>
             </form>
           </Form>
           <DrawerFooter>
-            <Button>Submit</Button>
             <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="destructive">Cancel</Button>
             </DrawerClose>
           </DrawerFooter>
         </div>
