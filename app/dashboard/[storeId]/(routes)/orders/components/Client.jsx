@@ -5,7 +5,7 @@ import Heading from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { columns } from "./columns";
 
-const OrderClient = ({params, data }) => {
+const OrderClient = ({ params, data }) => {
   return (
     <>
       <Heading

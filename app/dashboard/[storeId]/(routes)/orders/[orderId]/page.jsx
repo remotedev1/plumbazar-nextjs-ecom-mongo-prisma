@@ -55,7 +55,7 @@ const OrderDetails = async ({ params }) => {
                 <div className="relative h-24 w-24 rounded-md overflow-hidden ">
                   <Image
                     fill
-                    src={item.product.images[0].url}
+                    src={item.product.images[0]}
                     alt=""
                     className="object-cover object-center"
                   />
@@ -70,21 +70,10 @@ const OrderDetails = async ({ params }) => {
                         <p className="font-normal text-lg leading-8 text-gray-500 mb-3 ">
                           Category: {item.product.category.name}
                         </p>
-                        <div className="flex items-center ">
-                          <p className="font-medium text-base leading-7 text-black pr-4 mr-4 border-r border-gray-200">
-                            Size:{" "}
-                            <span className="text-gray-500">
-                              {item.size}
-                            </span>
-                          </p>
-                          <p className="font-medium text-base leading-7 text-black ">
-                            color:{" "}
-                            <div
-                              className="h-4 w-4 rounded-full border border-gray-600 inline-block"
-                              style={{ backgroundColor: item.product.color }}
-                            />
-                          </p>
-                        </div>
+                        <p className="font-normal text-lg leading-8 text-gray-500 mb-3 ">
+                          Brand: {item.product.brand.name}
+                        </p>
+                      
                       </div>
                     </div>
                     <div className="grid grid-cols-3">

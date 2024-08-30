@@ -20,7 +20,7 @@ export const getPendingAmount = async (storeId) => {
   const result = unpaidOrders.reduce(
     (accumulatedResult, order) => {
       const orderTotal = order.orderItems.reduce((orderSum, item) => {
-        return orderSum + item.product.price.toNumber();
+        return orderSum + item.product.price;
       }, 0);
 
       return {

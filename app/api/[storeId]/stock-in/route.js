@@ -37,6 +37,7 @@ export async function POST(req) {
                 increment: product.quantity, // Increment the stock quantity
               },
               purchasedPrice: product.purchasePrice, // Update the purchased price
+              price: product.price, // Update the price
             },
           })
         )

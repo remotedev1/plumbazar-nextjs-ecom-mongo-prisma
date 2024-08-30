@@ -20,16 +20,17 @@ import { useSession } from "next-auth/react";
 
 export function ShippingAddress() {
   const [isPending, startTransition] = useTransition();
-  const {
-    data: {
-      user: { address },
-    },
-  } = useSession();
+  const { data: session } = useSession();
+
+  // Ensure that default values are always defined to avoid uncontrolled to controlled warnings
   const form = useForm({
     resolver: zodResolver(shippingAddressSchema),
     defaultValues: {
-      ...address,
-      city: "bangalore",
+      address: session?.user?.address?.address || "",
+      city: session?.user?.address?.city || "",
+      state: session?.user?.address?.state || "",
+      zip: session?.user?.address?.zip || "",
+      phone: session?.user?.address?.phone || "",
     },
   });
 
@@ -68,7 +69,7 @@ export function ShippingAddress() {
             <FormItem>
               <FormLabel>City</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="city" />
+                <Input {...field} placeholder="City" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -81,7 +82,7 @@ export function ShippingAddress() {
             <FormItem>
               <FormLabel>State</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="state" />
+                <Input {...field} placeholder="State" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -94,7 +95,7 @@ export function ShippingAddress() {
             <FormItem>
               <FormLabel>Zip</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="zip" />
+                <Input {...field} placeholder="Zip Code" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -107,7 +108,7 @@ export function ShippingAddress() {
             <FormItem>
               <FormLabel>Phone</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Phone number" />
+                <Input {...field} placeholder="Phone Number" />
               </FormControl>
               <FormMessage />
             </FormItem>

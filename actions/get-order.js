@@ -11,9 +11,7 @@ export const getOrder = async (id) => {
           product: {
             include: {
               category: true,
-              color: true,
-              size: true,
-              images: true,
+              brand: true,
             },
           },
         },

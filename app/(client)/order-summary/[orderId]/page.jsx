@@ -68,21 +68,9 @@ const OrderSummary = async ({ params }) => {
                         <p className="font-normal text-lg leading-8 text-gray-500 mb-3 ">
                           Category: {item.product.category.name}
                         </p>
-                        <div className="flex items-center ">
-                          <p className="font-medium text-base leading-7 text-black pr-4 mr-4 border-r border-gray-200">
-                            Size:{" "}
-                            <span className="text-gray-500">
-                              {item.product.size}
-                            </span>
-                          </p>
-                          <p className="font-medium text-base leading-7 text-black ">
-                            color:{" "}
-                            <div
-                              className="h-4 w-4 rounded-full border border-gray-600 inline-block"
-                              style={{ backgroundColor: item.product.color }}
-                            />
-                          </p>
-                        </div>
+                        <p className="font-normal text-lg leading-8 text-gray-500 mb-3 ">
+                          Brand: {item.product.brand.name}
+                        </p>
                       </div>
                     </div>
                     <div className="grid grid-cols-5">
@@ -124,7 +112,7 @@ const OrderSummary = async ({ params }) => {
           </div>
           <div className="w-full border-t border-gray-200 px-6 flex flex-col lg:flex-row items-center justify-between ">
             <div className="flex flex-col sm:flex-row items-center max-lg:border-b border-gray-200">
-              <button className="line-through flex outline-0 py-6 sm:pr-6  sm:border-r border-gray-200 whitespace-nowrap gap-2 items-center justify-center font-semibold group text-lg text-black bg-white transition-all duration-500 hover:text-indigo-600">
+              <button className="line-through flex outline-0 py-6 sm:pr-6  sm:border-r border-gray-200 whitespace-nowrap gap-2 items-center justify-center font-semibold group text-lg text-black transition-all duration-500 hover:text-indigo-600">
                 <svg
                   className="stroke-black transition-all duration-500 group-hover:stroke-indigo-600"
                   xmlns="http://www.w3.org/2000/svg"

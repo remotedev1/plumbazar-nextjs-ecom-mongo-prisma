@@ -1,6 +1,4 @@
 import { redirect } from "next/navigation";
-
-
 import { db } from "@/lib/db";
 import { auth } from "@/auth";
 import Navbar from "@/components/dashboard/navbar";
@@ -30,9 +28,7 @@ export default async function DashboardLayout({ children, params }) {
       <div className="min-h-[80vh]">
         <Navbar />
         <div className="mt-[4rem]">
-        <InvoiceProvidersComponent>
-        {children}
-        </InvoiceProvidersComponent>
+          <InvoiceProvidersComponent>{children}</InvoiceProvidersComponent>
         </div>
       </div>
       <div className="hidden flex-col md:flex"></div>

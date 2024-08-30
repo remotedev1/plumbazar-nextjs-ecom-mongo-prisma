@@ -174,6 +174,7 @@ model Review {
 }
 
 enum DeliveryStatus {
+  PROCESSING
   PACKING
   SHIPPED
   OUT_TO_DELIVER
@@ -190,7 +191,7 @@ model Order {
   updatedAt      DateTime       @updatedAt
   userId         String         @db.ObjectId
   user           User           @relation(fields: [userId], references: [id])
-  deliveryStatus DeliveryStatus @default(PACKING)
+  deliveryStatus DeliveryStatus @default(PROCESSING)
   Rfq            Rfq[]
 
   @@index([userId])
@@ -251,11 +252,11 @@ type DraftProducts {
 }
 
 model Vendor {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
-  name  String
-  email String? @unique
-  phone   Int
-  address Address?
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String?  @unique
+  phone     Int
+  address   Address?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

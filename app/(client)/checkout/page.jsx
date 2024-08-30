@@ -1,63 +1,79 @@
 "use client";
 
-import CartItem from "../cart/components/cart-item";
+import { useMemo, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import useCart from "@/hooks/use-cart";
+import { getSession } from "next-auth/react";
+
+import CartItem from "../cart/components/cart-item";
 import { FaRupeeSign } from "react-icons/fa";
 import Currency from "@/components/ui/currency";
 import { ShippingAddress } from "./_components/shipping-address";
-import { useSession } from "next-auth/react";
-import { useTransition } from "react";
 import toast from "react-hot-toast";
 import { postOrder } from "@/actions/post-order";
-import { useRouter } from "next/navigation";
 
-export default function Home() {
+export default function Checkout() {
   const router = useRouter();
-  const {
-    data: {
-      user: { address },
-    },
-  } = useSession();
   const cart = useCart();
   const [isPending, startTransition] = useTransition();
-  const items = cart.items.map((item) => item);
-  const cartItems = cart.items.map((item) => ({
-    productId: item.id,
-    quantity: item.quantity,
-    price: item.price,
-    size: item.size,
-  }));
-  const total = items?.reduce((total, item) => {
-    return total + Number(item.price) * Number(item.quantity);
-  }, 0);
+
+  const cartItems = useMemo(
+    () =>
+      cart.items.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+        price: item.price,
+        size: item.size,
+      })),
+    [cart.items]
+  );
+
+  // Calculate total using useMemo to optimize
+  const total = useMemo(
+    () =>
+      cart.items.reduce(
+        (total, item) => total + Number(item.price) * Number(item.quantity),
+        0
+      ),
+    [cart.items]
+  );
 
   const totalPrice = total > 500 ? total : 500 + total;
 
   const removeAll = useCart((state) => state.removeAll);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    const updatedSession = await getSession(); // Get the latest session data
+
+    const updatedAddress = updatedSession?.user?.address;
+    setAddress(updatedAddress);
+
+    if (cartItems.length <= 0) {
+      toast.error("Please add items to cart to checkout");
+      return;
+    }
+
     if (
-      !address ||
-      !address.address ||
-      !address.city ||
-      !address.state ||
-      !address.zip ||
-      !address.phone
+      !updatedAddress ||
+      !updatedAddress.address ||
+      !updatedAddress.city ||
+      !updatedAddress.state ||
+      !updatedAddress.zip ||
+      !updatedAddress.phone
     ) {
       toast.error("Please select a shipping address");
       return;
     }
-    const values = { address, cartItems};
+
+    const values = { address: updatedAddress, cartItems };
+
     startTransition(() => {
       postOrder(values).then((data) => {
         if (data?.error) {
           toast.error(data.error);
-        }
-
-        if (data?.success) {
+        } else if (data?.success) {
           toast.success(data.success);
           removeAll();
-          router.refresh();
           router.push(`/order-summary/${data.order.id}`);
         }
       });

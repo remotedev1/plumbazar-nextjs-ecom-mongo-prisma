@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { StoreId } from "@/lib/variables";
 
 const onCopy = (id) => {
   navigator.clipboard.writeText(id);
@@ -97,12 +98,7 @@ export const columns = [
     },
     cell: ({ row }) => {
       const order = row.original;
-      return (
-        <div className="flex items-center">
-       
-          {order.deliveryStatus}
-        </div>
-      );
+      return <div className="flex items-center">{order.deliveryStatus}</div>;
     },
   },
   {
@@ -125,9 +121,7 @@ export const columns = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link
-                href={`/dashboard/663196b29b9314c513b1d5b1/orders/${order.id}`}
-              >
+              <Link href={`/dashboard/${StoreId}/orders/${order.id}`}>
                 <Button>View Orders</Button>
               </Link>
             </DropdownMenuItem>

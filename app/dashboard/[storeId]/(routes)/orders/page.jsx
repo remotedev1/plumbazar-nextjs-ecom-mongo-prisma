@@ -36,7 +36,6 @@ const OrdersPage = async ({ params }) => {
   const salesCount = await getSalesCount(params.storeId);
 
   const orders = await db.order.findMany({
- 
     include: {
       orderItems: {
         include: {
@@ -66,6 +65,7 @@ const OrdersPage = async ({ params }) => {
     deliveryStatus: item.deliveryStatus,
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
   }));
+  
 
   return (
     <div className="flex-col">
