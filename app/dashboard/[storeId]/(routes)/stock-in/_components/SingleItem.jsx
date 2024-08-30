@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { Controller, useWatch } from "react-hook-form";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -9,7 +9,10 @@ import { Label } from "@/components/ui/label";
 import Select from "react-select";
 import { ChevronDown, ChevronUp, GripVertical, Trash2 } from "lucide-react";
 import BaseButton from "@/components/dashboard/BaseButton";
-import { FormLabel, FormMessage} from "@/components/ui/form";
+import { FormLabel, FormMessage } from "@/components/ui/form";
+import { useDebounce } from "@/hooks/useDebounce";
+import axios from "axios";
+import { useParams } from "next/navigation";
 
 const SingleItem = ({
   name,
@@ -22,8 +25,13 @@ const SingleItem = ({
   products,
   control,
   setValue,
-  errors
+  errors,
 }) => {
+  const [inputValue, setInputValue] = useState("");
+  const [options, setOptions] = useState([]);
+  const debouncedSearch = useDebounce(inputValue, 500);
+  const params = useParams();
+
   // Watching fields for dynamic updates
   const purchasePrice = useWatch({
     name: `${name}[${index}].purchasePrice`,
@@ -38,14 +46,35 @@ const SingleItem = ({
     control,
   });
 
-
+  // Calculate total whenever purchasePrice or quantity changes
   useEffect(() => {
-    // Calculate total whenever purchasePrice or quantity changes
     if (purchasePrice !== undefined && quantity !== undefined) {
       const calculatedTotal = (purchasePrice * quantity).toFixed(2);
       setValue(`${name}[${index}].total`, calculatedTotal);
     }
-  }, [purchasePrice, quantity, control, index, name]);
+  }, [purchasePrice, quantity, setValue, name, index]);
+
+  // Fetch product options from the API
+  useEffect(() => {
+    if (debouncedSearch) {
+      const fetchProducts = async () => {
+        try {
+          const response = await axios.get(
+            `/api/${params.storeId}/products/search?query=${debouncedSearch}`
+          );
+          const products = response.data.map((product) => ({
+            label: product.name,
+            value: product.id,
+          }));
+          setOptions(products);
+        } catch (error) {
+          console.error("Error fetching products:", error);
+        }
+      };
+
+      fetchProducts();
+    }
+  }, [debouncedSearch, params.storeId]);
 
   // DnD logic
   const {
@@ -57,18 +86,40 @@ const SingleItem = ({
     isDragging,
   } = useSortable({ id: field.id });
 
-  const style = {
-    transition,
-    transform: CSS.Transform.toString(transform),
-  };
+  const style = useMemo(
+    () => ({
+      transition,
+      transform: CSS.Transform.toString(transform),
+    }),
+    [transition, transform]
+  );
 
-  const boxDragClasses = isDragging
-    ? "border-2 bg-gray-200 border-blue-600 dark:bg-slate-900 z-10"
-    : "border";
+  const boxDragClasses = useMemo(
+    () =>
+      isDragging
+        ? "border-2 bg-gray-200 border-blue-600 dark:bg-slate-900 z-10"
+        : "border",
+    [isDragging]
+  );
 
-  const gripDragClasses = isDragging
-    ? "opacity-0 group-hover:opacity-100 transition-opacity cursor-grabbing"
-    : "cursor-grab";
+  const gripDragClasses = useMemo(
+    () =>
+      isDragging
+        ? "opacity-0 group-hover:opacity-100 transition-opacity cursor-grabbing"
+        : "cursor-grab",
+    [isDragging]
+  );
+
+  const handleInputChange = useCallback((newValue) => {
+    setInputValue(newValue);
+  }, []);
+
+  const handleSelectChange = useCallback(
+    (selectedOption) => {
+      setValue(`${name}[${index}].productId`, selectedOption?.value || "");
+    },
+    [setValue, name, index]
+  );
 
   return (
     <div
@@ -123,22 +174,12 @@ const SingleItem = ({
             render={({ field }) => (
               <Select
                 {...field}
-                options={products.map((product) => ({
-                  value: product.id,
-                  label: product.name,
-                }))}
-                onChange={(selectedOption) =>
-                  field.onChange(selectedOption?.value || "")
-                }
+                options={options}
+                onInputChange={handleInputChange}
+                onChange={handleSelectChange}
                 value={
-                  products.find((product) => product.id === field.value)
-                    ? {
-                        value: field.value,
-                        label: products.find(
-                          (product) => product.id === field.value
-                        )?.name,
-                      }
-                    : null
+                  options.find((product) => product.value === field.value) ||
+                  null
                 }
                 placeholder="Search and select item"
                 isSearchable
@@ -146,11 +187,9 @@ const SingleItem = ({
               />
             )}
           />
-           {errors?.[name]?.[index]?.productId && (
-                  <FormMessage>
-                    {errors[name][index].productId.message}
-                  </FormMessage>
-                )}
+          {errors?.[name]?.[index]?.productId && (
+            <FormMessage>{errors[name][index].productId.message}</FormMessage>
+          )}
         </div>
 
         {/* Quantity */}
@@ -162,11 +201,12 @@ const SingleItem = ({
               <FormLabel>Quantity</FormLabel>
               <Input
                 {...field}
+                onChange={(e) => field.onChange(parseFloat(e.target.value))}
                 type="number"
                 placeholder="Quantity"
                 className="w-[8rem]"
               />
-                {errors?.[name]?.[index]?.quantity && (
+              {errors?.[name]?.[index]?.quantity && (
                 <FormMessage>
                   {errors[name][index].quantity.message}
                 </FormMessage>
@@ -184,11 +224,12 @@ const SingleItem = ({
               <FormLabel>Purchase price</FormLabel>
               <Input
                 {...field}
+                onChange={(e) => field.onChange(parseFloat(e.target.value))}
                 type="number"
                 placeholder="Purchase Price"
                 className="w-[8rem]"
               />
-                {errors?.[name]?.[index]?.purchasePrice && (
+              {errors?.[name]?.[index]?.purchasePrice && (
                 <FormMessage>
                   {errors[name][index].purchasePrice.message}
                 </FormMessage>
@@ -196,7 +237,8 @@ const SingleItem = ({
             </div>
           )}
         />
-        {/* selling Price */}
+
+        {/* Selling Price */}
         <Controller
           name={`${name}[${index}].price`}
           control={control}
@@ -205,11 +247,12 @@ const SingleItem = ({
               <FormLabel>Selling price</FormLabel>
               <Input
                 {...field}
+                onChange={(e) => field.onChange(parseFloat(e.target.value))}
                 type="number"
-                placeholder="selling price"
+                placeholder="Selling price"
                 className="w-[8rem]"
               />
-               {errors?.[name]?.[index]?.price && (
+              {errors?.[name]?.[index]?.price && (
                 <FormMessage>{errors[name][index].price.message}</FormMessage>
               )}
             </div>

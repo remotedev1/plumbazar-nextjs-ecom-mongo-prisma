@@ -31,7 +31,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FormMessage } from "@/components/ui/form";
 
-export const AddStock = ({ products }) => {
+export const AddStock = () => {
   const params = useParams();
   const router = useRouter();
 
@@ -117,10 +117,10 @@ export const AddStock = ({ products }) => {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      await axios.post(`/api/${params.storeId}/products`, data);
+      await axios.post(`/api/${params.storeId}/stock-in`, data);
       toast.success(toastMessage);
-      reset(); // Optionally reset the form after successful submission
-      router.push(`/dashboard/${params.storeId}/products`);
+      reset(); 
+      router.push(`/dashboard/${params.storeId}/stock-in`);
     } catch (error) {
       toast.error(error.response?.data || "An error occurred");
     } finally {
@@ -164,7 +164,6 @@ export const AddStock = ({ products }) => {
               moveFieldUp={moveFieldUp}
               moveFieldDown={moveFieldDown}
               removeField={removeField}
-              products={products}
               control={control}
               setValue={setValue}
               errors={errors}
@@ -207,7 +206,11 @@ export const AddStock = ({ products }) => {
           {errors.notes && <FormMessage>{errors.notes.message}</FormMessage>}
         </div>
       </div>
-      <Button disabled={loading} className="ml-auto" type="submit">
+      <Button
+        disabled={loading}
+        className="ml-auto bg-blue-500 hover:bg-blue-300"
+        type="submit"
+      >
         {action}
       </Button>
     </form>

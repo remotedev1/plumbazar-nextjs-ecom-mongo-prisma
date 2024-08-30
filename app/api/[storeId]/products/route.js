@@ -33,10 +33,7 @@ export async function POST(req, { params }) {
     if (!price) {
       return new NextResponse("Price is required", { status: 400 });
     }
-    if (!purchasedPrice) {
-      return new NextResponse("purchased price is required", { status: 400 });
-    }
-
+ 
     if (!brandId) {
       return new NextResponse("Brand id is required", { status: 400 });
     }

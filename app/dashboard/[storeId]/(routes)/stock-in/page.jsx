@@ -12,7 +12,6 @@ import Container from "@/components/ui/container";
 const StockInPage = async () => {
   const brands = await getBrands();
   const categories = await getCategories();
-  const products = await getProducts();
 
   const title = "Add Stock";
   const description = "Handle stock and inventory";
@@ -25,7 +24,7 @@ const StockInPage = async () => {
         </div>
         <Separator className="my-6" />
         <AddProductModel brands={brands} categories={categories} />
-        <AddStock products={products} />
+        <AddStock  />
       </Container>
     </div>
   );
