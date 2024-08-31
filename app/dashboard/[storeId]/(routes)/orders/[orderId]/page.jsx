@@ -5,9 +5,10 @@ import Image from "next/image";
 import { ChangePaymentStatus } from "../components/change-payment-status";
 import { ChangeDeliveryStatus } from "../components/change-delivery-status";
 import { db } from "@/lib/db";
+import OrderActions from "../components/order-actions";
 
 const OrderDetails = async ({ params }) => {
-  const { orderId } = params;
+  const { orderId, storeId } = params;
   const order = await getOrder(orderId.split("%20")[0]);
 
   if (!order) {
@@ -40,7 +41,7 @@ const OrderDetails = async ({ params }) => {
   const productComparison = order.orderItems.map((item) => {
     const stock = productStockMap[item.productId];
     const canBeFulfilled = stock >= item.quantity;
-  
+
     return {
       id: item.productId,
       name: item.product.name,
@@ -49,7 +50,6 @@ const OrderDetails = async ({ params }) => {
       canBeFulfilled: canBeFulfilled,
     };
   });
-
 
   return (
     <section className="py-14 relative min-h-[80vh]">
@@ -78,9 +78,6 @@ const OrderDetails = async ({ params }) => {
                 Delivery status : &nbsp; <ChangeDeliveryStatus order={order} />
               </div>
             </div>
-            {/* <button className="rounded-full py-3 px-7 font-semibold text-sm leading-7 text-white bg-indigo-600 max-lg:mt-5 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-700 hover:shadow-indigo-400">
-              Track Your Order
-            </button> */}
           </div>
           <div className="w-full px-3 min-[400px]:px-6">
             {order.orderItems.map((item) => (
@@ -170,23 +167,38 @@ const OrderDetails = async ({ params }) => {
             </div>
           </div>
         </div>
-        {/* //process the order */}
+        {/* Process the order */}
         <div className="p-2 mt-8">
-          {/* Display product stock comparison */}
-          <h3 className="text-lg font-semibold mb-4">Product Stock Comparison</h3>
+          <h3 className="text-lg font-semibold mb-4">
+            Product Stock Comparison
+          </h3>
           <div className="border border-gray-200 rounded-lg p-4 bg-white">
             <ul>
-            {productComparison.map(({ id, name, stock, quantityOrdered, canBeFulfilled }) => (
-                <li key={id} className="flex justify-between mb-2">
-                  <span className="font-medium">{name}</span>
-                  <span className={`text-gray-500 ${canBeFulfilled ? 'text-green-500' : 'text-red-500'}`}>
-                    Stock: {stock} / Ordered: {quantityOrdered} 
-                    {canBeFulfilled ? ' (Can be fulfilled)' : ' (Cannot be fulfilled)'}
-                  </span>
-                </li>
-              ))}
+              {productComparison.map(
+                ({ id, name, stock, quantityOrdered, canBeFulfilled }) => (
+                  <li key={id} className="flex justify-between mb-2">
+                    <span className="font-medium">{name}</span>
+                    <span
+                      className={`text-gray-500 ${
+                        canBeFulfilled ? "text-green-500" : "text-red-500"
+                      }`}
+                    >
+                      Stock: {stock} / Ordered: {quantityOrdered}
+                      {canBeFulfilled
+                        ? " (Can be fulfilled)"
+                        : " (Cannot be fulfilled)"}
+                    </span>
+                  </li>
+                )
+              )}
             </ul>
           </div>
+          <OrderActions
+            orderId={order.id}
+            orderCommitted={order.clearedBy}
+            storeId={storeId}
+            productComparison={productComparison}
+          />
         </div>
       </div>
     </section>

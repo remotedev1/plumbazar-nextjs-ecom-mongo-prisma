@@ -2,7 +2,6 @@ import { AddProductModel } from "./_components/Add-product";
 import { getBrands } from "@/actions/get-brands";
 import { getCategories } from "@/actions/get-categories";
 import { AddStock } from "./_components/AddStock";
-import { getProducts } from "@/actions/get-products";
 
 //components
 import Heading from "@/components/ui/heading";

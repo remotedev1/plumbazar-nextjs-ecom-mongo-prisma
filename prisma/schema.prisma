@@ -148,8 +148,7 @@ model Product {
   user            User?       @relation(fields: [userId], references: [id])
   userId          String?     @db.ObjectId
 
-  @@index([storeId])
-  @@index([brandId])
+  @@index([storeId, brandId, categoryId])
 }
 
 type Features {
@@ -182,18 +181,19 @@ enum DeliveryStatus {
 }
 
 model Order {
-  id             String         @id @default(auto()) @map("_id") @db.ObjectId
-  total          Int
-  orderItems     OrderItem[]
-  isPaid         Boolean        @default(false)
-  address        Address
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  userId         String         @db.ObjectId
-  user           User           @relation(fields: [userId], references: [id])
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  total      Int
+  orderItems OrderItem[]
+  isPaid     Boolean     @default(false)
+  address    Address
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  userId     String      @db.ObjectId
+  clearedBy  String?     @db.ObjectId
+  user       User        @relation(fields: [userId], references: [id])
   deliveryStatus DeliveryStatus @default(PROCESSING)
   Rfq            Rfq[]
-  stockVerified  Boolean @default(false)       
+
   @@index([userId])
 }
 
@@ -206,8 +206,7 @@ model OrderItem {
   quantity  Int
   price     Int
 
-  @@index([orderId])
-  @@index([productId])
+  @@index([orderId, productId])
 }
 
 model Rfq {
