@@ -4,10 +4,12 @@ import { convertTimestampToFormattedDate } from "@/lib/utils";
 import Image from "next/image";
 import { ChangePaymentStatus } from "../components/change-payment-status";
 import { ChangeDeliveryStatus } from "../components/change-delivery-status";
+import { db } from "@/lib/db";
 
 const OrderDetails = async ({ params }) => {
   const { orderId } = params;
   const order = await getOrder(orderId.split("%20")[0]);
+
   if (!order) {
     return (
       <div className="flex items-center justify-center font-extrabold text-5xl min-h-[80vh]">
@@ -15,6 +17,40 @@ const OrderDetails = async ({ params }) => {
       </div>
     );
   }
+
+  // Extract product IDs from the order
+  const productIds = order.orderItems.map((item) => item.productId);
+
+  // Fetch the products based on these IDs
+  const products = await db.product.findMany({
+    where: {
+      id: {
+        in: productIds,
+      },
+    },
+  });
+
+  // Create a mapping of product ID to stock
+  const productStockMap = products.reduce((map, product) => {
+    map[product.id] = product.stock; // Assuming 'stock' is a field in your product model
+    return map;
+  }, {});
+
+  // Create the array showing id, name, stock, and order quantity
+  const productComparison = order.orderItems.map((item) => {
+    const stock = productStockMap[item.productId];
+    const canBeFulfilled = stock >= item.quantity;
+  
+    return {
+      id: item.productId,
+      name: item.product.name,
+      stock: stock,
+      quantityOrdered: item.quantity,
+      canBeFulfilled: canBeFulfilled,
+    };
+  });
+
+
   return (
     <section className="py-14 relative min-h-[80vh]">
       <div className="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto">
@@ -40,7 +76,7 @@ const OrderDetails = async ({ params }) => {
               </div>
               <div className=" flex font-semibold text-base leading-7 text-black mt-4">
                 Delivery status : &nbsp; <ChangeDeliveryStatus order={order} />
-                </div>
+              </div>
             </div>
             {/* <button className="rounded-full py-3 px-7 font-semibold text-sm leading-7 text-white bg-indigo-600 max-lg:mt-5 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-700 hover:shadow-indigo-400">
               Track Your Order
@@ -73,7 +109,6 @@ const OrderDetails = async ({ params }) => {
                         <p className="font-normal text-lg leading-8 text-gray-500 mb-3 ">
                           Brand: {item.product.brand.name}
                         </p>
-                      
                       </div>
                     </div>
                     <div className="grid grid-cols-3">
@@ -133,6 +168,24 @@ const OrderDetails = async ({ params }) => {
                 <Currency value={order.total} />
               </span>
             </div>
+          </div>
+        </div>
+        {/* //process the order */}
+        <div className="p-2 mt-8">
+          {/* Display product stock comparison */}
+          <h3 className="text-lg font-semibold mb-4">Product Stock Comparison</h3>
+          <div className="border border-gray-200 rounded-lg p-4 bg-white">
+            <ul>
+            {productComparison.map(({ id, name, stock, quantityOrdered, canBeFulfilled }) => (
+                <li key={id} className="flex justify-between mb-2">
+                  <span className="font-medium">{name}</span>
+                  <span className={`text-gray-500 ${canBeFulfilled ? 'text-green-500' : 'text-red-500'}`}>
+                    Stock: {stock} / Ordered: {quantityOrdered} 
+                    {canBeFulfilled ? ' (Can be fulfilled)' : ' (Cannot be fulfilled)'}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>

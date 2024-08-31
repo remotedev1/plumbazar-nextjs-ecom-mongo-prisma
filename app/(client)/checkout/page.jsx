@@ -46,7 +46,6 @@ export default function Checkout() {
     const updatedSession = await getSession(); // Get the latest session data
 
     const updatedAddress = updatedSession?.user?.address;
-    setAddress(updatedAddress);
 
     if (cartItems.length <= 0) {
       toast.error("Please add items to cart to checkout");

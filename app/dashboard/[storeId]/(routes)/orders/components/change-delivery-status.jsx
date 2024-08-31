@@ -19,7 +19,7 @@ export const ChangeDeliveryStatus = ({ order }) => {
     });
   };
 
-  const Status = ["PACKING", "SHIPPED", "OUT_TO_DELIVER", "DELIVERED"];
+  const Status = ["PROCESSING","PACKING", "SHIPPED", "OUT_TO_DELIVER", "DELIVERED"];
 
   return (
     <div>
