@@ -107,6 +107,12 @@ export const RfqSchema = z.object({
 });
 
 //invoice schemas start
+const DATE_OPTIONS = {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+};
+
 // TODO: Refactor some of the validators. Ex: name and zipCode or address and country have same rules
 // Field Validators
 const fieldValidators = {
@@ -141,6 +147,8 @@ const fieldValidators = {
     .max(50, {
       message: "Must be between 1 and 50 characters",
     }),
+
+ 
 
   // Dates
   date: z
@@ -189,7 +197,7 @@ const CustomInputSchema = z.object({
 const InvoiceReceiverSchema = z.object({
   name: fieldValidators.name,
   address: fieldValidators.address,
-  zipCode: fieldValidators.zipCode,
+  zip: fieldValidators.zipCode,
   city: fieldValidators.city,
   country: fieldValidators.country,
   email: fieldValidators.email,

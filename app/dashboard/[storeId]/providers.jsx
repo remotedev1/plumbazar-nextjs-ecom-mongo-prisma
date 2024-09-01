@@ -13,6 +13,8 @@ export default function InvoiceProvidersComponent({ children, params }) {
     defaultValues: FORM_DEFAULT_VALUES,
   });
 
+  
+
   return (
     <FormProvider {...form}>
       <InvoiceContextProvider>

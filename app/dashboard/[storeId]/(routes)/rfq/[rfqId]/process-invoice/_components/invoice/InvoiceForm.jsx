@@ -32,7 +32,7 @@ const InvoiceForm = () => {
 
   // Get invoice number variable
   const invoiceNumber = useWatch({
-    name: "details.invoiceNumber",
+    name: "invoiceNumber",
     control,
   });
 
