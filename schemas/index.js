@@ -106,12 +106,8 @@ export const RfqSchema = z.object({
   notes: z.string().optional(),
 });
 
-//invoice schemas start
-const DATE_OPTIONS = {
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-};
+// Define date formatting options
+const DATE_OPTIONS = { year: "numeric", month: "long", day: "numeric" };
 
 // TODO: Refactor some of the validators. Ex: name and zipCode or address and country have same rules
 // Field Validators
@@ -147,8 +143,6 @@ const fieldValidators = {
     .max(50, {
       message: "Must be between 1 and 50 characters",
     }),
-
- 
 
   // Dates
   date: z
@@ -239,7 +233,6 @@ const ShippingDetailsSchema = z.object({
 const InvoiceDetailsSchema = z.object({
   invoiceNumber: fieldValidators.stringMin1,
   invoiceDate: fieldValidators.date,
-  dueDate: fieldValidators.date,
   purchaseOrderNumber: fieldValidators.stringOptional,
   items: z.array(ItemSchema),
   paymentInformation: PaymentInformationSchema.optional(),

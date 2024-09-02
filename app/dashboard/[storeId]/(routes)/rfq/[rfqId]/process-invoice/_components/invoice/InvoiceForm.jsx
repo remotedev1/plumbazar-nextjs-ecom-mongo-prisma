@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 
 // RHF
 import { useFormContext, useWatch } from "react-hook-form";
@@ -25,24 +25,30 @@ import InvoiceDetails from "./form/sections/InvoiceDetails";
 import PaymentInformation from "./form/sections/PaymentInformation";
 import InvoiceSummary from "./form/sections/InvoiceSummary";
 import Items from "./form/sections/Items";
-
+import { generateInvoiceNumber } from "@/lib/variables";
 
 const InvoiceForm = () => {
   const { control } = useFormContext();
 
-  // Get invoice number variable
-  const invoiceNumber = useWatch({
-    name: "invoiceNumber",
-    control,
-  });
+  const { setValue, getValues } = useFormContext();
 
-  const invoiceNumberLabel = useMemo(() => {
-    if (invoiceNumber) {
-      return `#${invoiceNumber}`;
-    } else {
-      return "form.newInvBadge";
-    }
-  }, [invoiceNumber]);
+  // Set the default value for invoiceNumber when the component mounts
+  useEffect(() => {
+    const invoiceNumber = generateInvoiceNumber();
+    setValue("details.invoiceNumber", invoiceNumber);
+    setValue("details.invoiceDate", new Date());
+  }, []);
+
+  // Get invoice number variable
+  const invoiceNumber = getValues("details.invoiceNumber");
+
+  // const invoiceNumberLabel = useMemo(() => {
+  //   if (invoiceNumber) {
+  //     return `#${invoiceNumber}`;
+  //   } else {
+  //     return "form.newInvBadge";
+  //   }
+  // }, [invoiceNumber]);
 
   return (
     <div className={`xl:w-[55%]`}>
@@ -53,7 +59,7 @@ const InvoiceForm = () => {
               <span className="uppercase">Invoice</span>
             </CardTitle>
             <Badge variant="secondary" className="w-fit">
-              <p style={{ fontSize: "14px" }}>{invoiceNumberLabel}</p>
+              <p style={{ fontSize: "14px" }}>{invoiceNumber}</p>
             </Badge>
           </div>
           <CardDescription>Create RFQ response</CardDescription>
@@ -63,7 +69,6 @@ const InvoiceForm = () => {
             <Wizard>
               <WizardStep>
                 <div className="flex flex-wrap gap-x-20 gap-y-10">
-
                   <BillToSection />
                 </div>
               </WizardStep>

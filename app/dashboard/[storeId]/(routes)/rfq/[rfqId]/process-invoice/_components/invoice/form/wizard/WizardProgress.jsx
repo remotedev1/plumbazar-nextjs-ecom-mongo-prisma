@@ -17,14 +17,12 @@ const WizardProgress = ({ wizard }) => {
   const step1Valid = !errors.sender && !errors.receiver;
   const step2Valid =
     !errors.details?.invoiceNumber &&
-    !errors.details?.dueDate &&
-    !errors.details?.invoiceDate &&
-    !errors.details?.currency;
+    !errors.details?.invoiceDate
 
   const step3Valid = !errors.details?.items;
   const step4Valid = !errors.details?.paymentInformation;
   const step5Valid =
-    !errors.details?.paymentTerms &&
+    !errors.details?.paymentDue &&
     !errors.details?.subTotal &&
     !errors.details?.totalAmount &&
     !errors.details?.discountDetails?.amount &&
