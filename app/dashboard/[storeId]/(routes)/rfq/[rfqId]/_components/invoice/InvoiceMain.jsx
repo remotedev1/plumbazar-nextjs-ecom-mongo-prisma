@@ -1,7 +1,7 @@
 "use client";
 
 // RHF
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useForm } from "react-hook-form";
 
 // ShadCn
 import { Form } from "@/components/ui/form";
@@ -10,22 +10,32 @@ import { Form } from "@/components/ui/form";
 import InvoiceActions from "./InvoiceActions";
 
 // Context
-
-// Types
 import { useInvoiceContext } from "@/providers/invoice-provider";
 import InvoiceForm from "./InvoiceForm";
 import { useEffect } from "react";
 
-const InvoiceMain = ({ rfq }) => {
-  const { handleSubmit, setValue } = useFormContext();
+const InvoiceMain = ({ rfq, draftInvoiceData }) => {
+  const { handleSubmit, setValue, reset } = useFormContext();
+  const { onFormSubmit,formValues  } = useInvoiceContext();
 
-  // Get the needed values from invoice context
-  const { onFormSubmit, formValues } = useInvoiceContext();
+  console.log(formValues)
+
+  // Set default values when draftInvoiceData is available
   useEffect(() => {
-    if (rfq?.user?.address) {
-      const { name, email } = rfq.user;
+    if (draftInvoiceData) {
+      reset({
+        receiver: draftInvoiceData.receiver,
+        details: draftInvoiceData.details,
+      });
+    }
+  }, [draftInvoiceData, reset]);
+
+  useEffect(() => {
+    if (!draftInvoiceData && rfq?.user?.address) {
+      const { id,name, email } = rfq.user;
       const { address, zip, city, phone } = rfq.user.address;
 
+      if (name) setValue("receiver.id", id);
       if (name) setValue("receiver.name", name);
       if (address) setValue("receiver.address", address);
       if (zip) setValue("receiver.zip", zip);
@@ -34,9 +44,7 @@ const InvoiceMain = ({ rfq }) => {
       if (phone) setValue("receiver.phone", phone);
       setValue("receiver.country", "India");
     }
-  }, [rfq, setValue]);
-
-  console.log(formValues);
+  }, [rfq, setValue, draftInvoiceData]);
 
   return (
     <>

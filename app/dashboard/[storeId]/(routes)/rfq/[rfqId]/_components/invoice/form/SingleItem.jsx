@@ -1,18 +1,28 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from "react";
-import { Controller, useWatch } from "react-hook-form";
+import { useCallback, useEffect, useState } from "react";
+
+// RHF
+import { Controller, useFormContext, useWatch } from "react-hook-form";
+
+// DnD
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+
+// ShadCn
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Select from "react-select";
+
+// Components
+
+// Icons
 import { ChevronDown, ChevronUp, GripVertical, Trash2 } from "lucide-react";
-import BaseButton from "@/components/dashboard/BaseButton";
+import BaseButton from "../../BaseButton";
+import Select from "react-select";
 import { FormLabel, FormMessage } from "@/components/ui/form";
 import { useDebounce } from "@/hooks/useDebounce";
-import axios from "axios";
 import { useParams } from "next/navigation";
+import axios from "axios";
 
 const SingleItem = ({
   name,
@@ -22,35 +32,41 @@ const SingleItem = ({
   moveFieldUp,
   moveFieldDown,
   removeField,
-  control,
-  setValue,
-  errors,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
   const debouncedSearch = useDebounce(inputValue, 500);
   const params = useParams();
 
-  // Watching fields for dynamic updates
-    const itemName = useWatch({
-      name: `${name}[${index}].name`,
-      control,
-    });
+  const { control, setValue, errors } = useFormContext();
 
+  // Items
+  const itemName = useWatch({
+    name: `${name}[${index}].name`,
+    control,
+  });
+
+  // Watching fields for dynamic updates
   const purchasePrice = useWatch({
     name: `${name}[${index}].purchasePrice`,
     control,
   });
+
   const quantity = useWatch({
     name: `${name}[${index}].quantity`,
     control,
   });
+
   const total = useWatch({
     name: `${name}[${index}].total`,
     control,
   });
 
-  console.log(itemName, total)
+  // Currency
+  const currency = useWatch({
+    name: `details.currency`,
+    control,
+  });
 
   // Calculate total whenever purchasePrice or quantity changes
   useEffect(() => {
@@ -71,7 +87,7 @@ const SingleItem = ({
           const products = response.data.map((product) => ({
             label: product.name,
             value: product.id,
-            price: product.price, 
+            price: product.price,
             purchasePrice: product.purchasePrice,
           }));
           setOptions(products);
@@ -84,7 +100,7 @@ const SingleItem = ({
     }
   }, [debouncedSearch, params.storeId]);
 
-  // DnD logic
+  // DnD
   const {
     attributes,
     listeners,
@@ -94,29 +110,18 @@ const SingleItem = ({
     isDragging,
   } = useSortable({ id: field.id });
 
-  const style = useMemo(
-    () => ({
-      transition,
-      transform: CSS.Transform.toString(transform),
-    }),
-    [transition, transform]
-  );
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
 
-  const boxDragClasses = useMemo(
-    () =>
-      isDragging
-        ? "border-2 bg-gray-200 border-blue-600 dark:bg-slate-900 z-10"
-        : "border",
-    [isDragging]
-  );
+  const boxDragClasses = isDragging
+    ? "border-2 bg-gray-200 border-blue-600 dark:bg-slate-900 z-10"
+    : "border";
 
-  const gripDragClasses = useMemo(
-    () =>
-      isDragging
-        ? "opacity-0 group-hover:opacity-100 transition-opacity cursor-grabbing"
-        : "cursor-grab",
-    [isDragging]
-  );
+  const gripDragClasses = isDragging
+    ? "opacity-0 group-hover:opacity-100 transition-opacity cursor-grabbing"
+    : "cursor-grab";
 
   const handleInputChange = useCallback((newValue) => {
     setInputValue(newValue);
@@ -124,11 +129,11 @@ const SingleItem = ({
 
   const handleSelectChange = useCallback(
     (selectedOption) => {
-      console.log(selectedOption)
       setValue(`${name}[${index}].productId`, selectedOption?.value || "");
-      setValue(`${name}[${index}].name`, selectedOption?.label || "");
       if (selectedOption) {
         setValue(`${name}[${index}].price`, selectedOption.price || 0); // Update price
+        setValue(`${name}[${index}].name`, selectedOption?.label || "");
+
         setValue(
           `${name}[${index}].purchasePrice`,
           selectedOption.purchasePrice || 0
@@ -144,8 +149,9 @@ const SingleItem = ({
       {...attributes}
       className={`${boxDragClasses} group flex flex-col gap-y-5 p-3 my-2 cursor-default rounded-xl bg-gray-50 dark:bg-slate-800 dark:border-gray-600`}
     >
+      {/* {isDragging && <div className="bg-blue-600 h-1 rounded-full"></div>} */}
       <div className="flex flex-wrap justify-between">
-       {itemName != "" ? (
+        {itemName != "" ? (
           <p className="font-medium">
             #{index + 1} - {itemName}
           </p>
@@ -196,18 +202,18 @@ const SingleItem = ({
             control={control}
             render={({ field }) => (
               <Select
-              {...field}
-              options={options}
-              onInputChange={handleInputChange}
-              onChange={handleSelectChange}
-              value={
-                options.find((product) => product.value === field.value) ||
-                null
-              }
-              placeholder="Search and select item"
-              isSearchable
-              isClearable
-            />
+                {...field}
+                options={options}
+                onInputChange={handleInputChange}
+                onChange={handleSelectChange}
+                value={
+                  options.find((product) => product.value === field.value) ||
+                  null
+                }
+                placeholder="Search and select item"
+                isSearchable
+                isClearable
+              />
             )}
           />
           {errors?.[name]?.[index]?.productId && (
@@ -282,11 +288,12 @@ const SingleItem = ({
           )}
         />
 
-        {/* Total */}
         <div className="flex flex-col gap-2">
-          <Label>Total</Label>
+          <div>
+            <Label>total</Label>
+          </div>
           <Input
-            value={`${total} INR`}
+            value={`${total} ${currency}`}
             readOnly
             placeholder="Item total"
             className="border-none font-medium text-lg bg-transparent"
@@ -295,12 +302,12 @@ const SingleItem = ({
         </div>
       </div>
 
-      {/* Remove Button */}
       <div>
+        {/* Not allowing deletion for first item when there is only 1 item */}
         {fields.length > 1 && (
           <BaseButton variant="destructive" onClick={() => removeField(index)}>
             <Trash2 />
-            Remove
+            remove
           </BaseButton>
         )}
       </div>

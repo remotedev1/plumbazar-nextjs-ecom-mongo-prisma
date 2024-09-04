@@ -13,7 +13,6 @@ import ChargeInput from "../../form-fields/ChargeInput";
 // context
 import { useChargesContext } from "@/providers/charges-provider";
 
-
 // Helpers
 import { formatNumberWithCommas } from "@/lib/helpers";
 
@@ -29,12 +28,7 @@ const Charges = () => {
     setTaxSwitch,
     shippingSwitch,
     setShippingSwitch,
-    discountType,
-    setDiscountType,
-    taxType,
-    setTaxType,
-    shippingType,
-    setShippingType,
+
     totalInWordsSwitch,
     setTotalInWordsSwitch,
     currency,
@@ -42,13 +36,6 @@ const Charges = () => {
     totalAmount,
   } = useChargesContext();
 
-  const switchAmountType = (type, setType) => {
-    if (type == "amount") {
-      setType("percentage");
-    } else {
-      setType("amount");
-    }
-  };
   return (
     <>
       {/* Charges */}
@@ -112,10 +99,7 @@ const Charges = () => {
           {discountSwitch && (
             <ChargeInput
               label="discount"
-              name="details.discountDetails.amount"
-              switchAmountType={switchAmountType}
-              type={discountType}
-              setType={setDiscountType}
+              name="details.discountAmount"
               currency={currency}
             />
           )}
@@ -123,10 +107,7 @@ const Charges = () => {
           {taxSwitch && (
             <ChargeInput
               label="tax"
-              name="details.taxDetails.amount"
-              switchAmountType={switchAmountType}
-              type={taxType}
-              setType={setTaxType}
+              name="details.taxAmount"
               currency={currency}
             />
           )}
@@ -134,10 +115,7 @@ const Charges = () => {
           {shippingSwitch && (
             <ChargeInput
               label="shipping"
-              name="details.shippingDetails.cost"
-              switchAmountType={switchAmountType}
-              type={shippingType}
-              setType={setShippingType}
+              name="details.shippingAmount"
               currency={currency}
             />
           )}

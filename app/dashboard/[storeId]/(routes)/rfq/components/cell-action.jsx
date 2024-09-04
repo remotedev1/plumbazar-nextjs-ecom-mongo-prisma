@@ -38,9 +38,7 @@ export const CellAction = ({ data }) => {
 
   const onProcess = async () => {
     try {
-      router.push(`/dashboard/${params.storeId}/rfq/${data.id}/process-invoice`, {
-        rfqid: data.id,
-      });
+      router.push(`/dashboard/${params.storeId}/rfq/${data.id}`);
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     }

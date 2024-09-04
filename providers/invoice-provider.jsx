@@ -209,6 +209,51 @@ export const InvoiceContextProvider = ({ children }) => {
   /**
    * Saves the invoice data to local storage.
    */
+  // const saveInvoice = () => {
+  //   if (invoicePdf) {
+  //     // If get values function is provided, allow to save the invoice
+  //     if (getValues) {
+  //       // Retrieve the existing array from local storage or initialize an empty array
+  //       const savedInvoicesJSON = localStorage.getItem("savedInvoices");
+  //       const savedInvoices = savedInvoicesJSON
+  //         ? JSON.parse(savedInvoicesJSON)
+  //         : [];
+
+  //       const updatedDate = new Date().toLocaleDateString(
+  //         "en-US",
+  //         SHORT_DATE_OPTIONS
+  //       );
+
+  //       const formValues = getValues();
+  //       formValues.details.updatedAt = updatedDate;
+
+  //       const existingInvoiceIndex = savedInvoices.findIndex((invoice) => {
+  //         return (
+  //           invoice.details.invoiceNumber === formValues.details.invoiceNumber
+  //         );
+  //       });
+
+  //       // If invoice already exists
+  //       if (existingInvoiceIndex !== -1) {
+  //         savedInvoices[existingInvoiceIndex] = formValues;
+
+  //         // Toast
+  //         modifiedInvoiceSuccess();
+  //       } else {
+  //         // Add the form values to the array
+  //         savedInvoices.push(formValues);
+
+  //         // Toast
+  //         saveInvoiceSuccess();
+  //       }
+
+  //       localStorage.setItem("savedInvoices", JSON.stringify(savedInvoices));
+
+  //       setSavedInvoices(savedInvoices);
+  //     }
+  //   }
+  // };
+ 
   const saveInvoice = () => {
     if (invoicePdf) {
       // If get values function is provided, allow to save the invoice

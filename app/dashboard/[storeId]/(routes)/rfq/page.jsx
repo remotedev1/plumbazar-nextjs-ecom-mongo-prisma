@@ -7,7 +7,7 @@ import axios from "axios";
 import RfqClient from "./components/Client";
 
 const RfqPage = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   const [isPending, startTransition] = useTransition();
   const {
     data: { user },
@@ -23,7 +23,7 @@ const RfqPage = () => {
   return (
     <div className="bg-white min-h-[80vh] py-14">
       <Container>
-        <RfqClient data={data} />
+        <RfqClient data={data} isPending={isPending}/>
       </Container>
     </div>
   );

@@ -28,7 +28,6 @@ import Items from "./form/sections/Items";
 import { generateInvoiceNumber } from "@/lib/variables";
 
 const InvoiceForm = () => {
-  const { control } = useFormContext();
 
   const { setValue, getValues } = useFormContext();
 

@@ -202,7 +202,7 @@ const InvoiceReceiverSchema = z.object({
 const ItemSchema = z.object({
   name: fieldValidators.stringMin1,
   quantity: fieldValidators.quantity,
-  // unitPrice: fieldValidators.unitPrice,
+  purchasePrice: fieldValidators.unitPrice,
   unitPrice: fieldValidators.unitPrice,
   total: fieldValidators.stringToNumber,
 });

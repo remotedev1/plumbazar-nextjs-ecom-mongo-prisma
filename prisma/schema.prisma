@@ -178,22 +178,28 @@ enum DeliveryStatus {
   SHIPPED
   OUT_TO_DELIVER
   DELIVERED
+  CANCELED
 }
 
 model Order {
-  id         String      @id @default(auto()) @map("_id") @db.ObjectId
-  total      Int
-  orderItems OrderItem[]
-  isPaid     Boolean     @default(false)
-  address    Address
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  userId     String      @db.ObjectId
-  clearedBy  String?     @db.ObjectId
-  user       User        @relation(fields: [userId], references: [id])
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  total          Int
+  phone          String
+  orderItems     OrderItem[]
+  isPaid         Boolean        @default(false)
+  address        Address
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  userId         String         @db.ObjectId
+  clearedBy      String?        @db.ObjectId
+  user           User           @relation(fields: [userId], references: [id])
   deliveryStatus DeliveryStatus @default(PROCESSING)
   Rfq            Rfq[]
-  notes String?  
+  paymentId      String?        @db.ObjectId
+  payment        Payment?       @relation(fields: [paymentId], references: [id])
+  notes          String?
+  DraftInvoice   DraftInvoice[]
+
   @@index([userId])
 }
 
@@ -210,17 +216,19 @@ model OrderItem {
 }
 
 model Rfq {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String    @db.ObjectId
-  user      User      @relation(fields: [userId], references: [id])
-  phone     Int
+  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String        @db.ObjectId
+  user      User          @relation(fields: [userId], references: [id])
+  phone     String
   notes     String?
   images    String[]
-  order     Order?    @relation(fields: [orderId], references: [id])
-  status    RfqStatus @default(REQUESTED)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  orderId   String?   @db.ObjectId
+  draftId   String?       @db.ObjectId
+  draft     DraftInvoice? @relation(fields: [draftId], references: [id])
+  status    RfqStatus     @default(REQUESTED)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  Order     Order?        @relation(fields: [orderId], references: [id])
+  orderId   String?       @db.ObjectId
 }
 
 enum RfqStatus {
@@ -231,33 +239,71 @@ enum RfqStatus {
 }
 
 model DraftInvoice {
-  id        String        @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String        @db.ObjectId
-  user      User          @relation(fields: [userId], references: [id])
-  customer  String        @db.ObjectId
-  phone     Int
-  address   Address
-  products  DraftProducts
-  notes     String?
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  receiver  Receiver
+  details   Details
+  orderId   String?  @db.ObjectId
+  order     Order?   @relation(fields: [orderId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  rfqId     String   @db.ObjectId
+  Rfq       Rfq[]
+}
+
+type Receiver {
+  customerId   String @db.ObjectId
+  name         String
+  address      Json
+  zip          String
+  city         String
+  country      String
+  email        String
+  phone        String
+  customInputs Json   @default("[]") 
+}
+
+type Details {
+  invoiceNumber      String
+  invoiceDate        DateTime
+  items              DraftProducts[]
+  currency           String          @default("INR")
+  taxAmount          Int
+  discountAmount     Int
+  shippingAmount     Int
+  additionalNotes    String
+  paymentDue         DateTime
+  totalAmountInWords String
+  subTotal           Float
+  totalAmount        Float
 }
 
 type DraftProducts {
   productId     String @db.ObjectId
   quantity      Int
   price         Int
-  PurchasePrice Int
+  purchasePrice Int
 }
 
-model Vendor {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  email     String?  @unique
-  phone     Int
-  address   Address?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Payment {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  method        String
+  status        PaymentStatus
+  transactionId String?
+  amount        Float
+  currency      String        @default("rupee")
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  Order         Order[]
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+  CANCELED
 }
 
 model StockIn {

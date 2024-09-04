@@ -12,8 +12,7 @@ import XLSX from "xlsx";
 // Helpers
 import { flattenObject } from "@/lib/helpers";
 
-// Types
-import { ExportTypes } from "@/types";
+
 
 /**
  * Export an invoice in selected format.
@@ -27,7 +26,7 @@ export async function exportInvoiceService(req) {
 
     try {
         switch (format) {
-            case ExportTypes.JSON:
+            case "JSON":
                 const jsonData = JSON.stringify(body);
                 return new NextResponse(jsonData, {
                     headers: {
@@ -37,7 +36,7 @@ export async function exportInvoiceService(req) {
                     },
                     status: 200,
                 });
-            case ExportTypes.CSV:
+            case "CSV":
                 //? Can pass specific fields to async parser. Empty = All
                 const parser = new AsyncParser();
                 const csv = await parser.parse(body).promise();
@@ -48,7 +47,7 @@ export async function exportInvoiceService(req) {
                             "attachment; filename=invoice.csv",
                     },
                 });
-            case ExportTypes.XML:
+            case "XML":
                 // Convert JSON to XML
                 const builder = new Builder();
                 const xml = builder.buildObject(body);
@@ -59,7 +58,7 @@ export async function exportInvoiceService(req) {
                             "attachment; filename=invoice.xml",
                     },
                 });
-            // case ExportTypes.XLSX:
+            // case "XLSX":
             //     const flattenedData = flattenObject(body);
 
             //     // Create a new worksheet and add the data

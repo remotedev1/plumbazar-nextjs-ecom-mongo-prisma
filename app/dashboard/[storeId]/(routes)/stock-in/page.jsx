@@ -16,8 +16,8 @@ const StockInPage = async () => {
   const description = "Handle stock and inventory";
 
   return (
-    <div className="bg-white min-h-[80vh]  py-14">
-      <Container>
+    <div className="bg-white min-h-[80vh]  py-14 px-4">
+      <Container >
         <div className="flex items-center justify-between">
           <Heading title={title} description={description} />
         </div>
