@@ -38,12 +38,13 @@ const Items = () => {
     name: ITEMS_NAME,
   });
 
+
   const addNewField = () => {
     append({
       name: "",
       description: "",
-      quantity: 0,
-      unitPrice: 0,
+      quantity: null,
+      price: null,
       total: 0,
     });
   };
@@ -82,6 +83,7 @@ const Items = () => {
     },
     [fields, setValue]
   );
+
 
   return (
     <section className="flex flex-col gap-2 w-full">

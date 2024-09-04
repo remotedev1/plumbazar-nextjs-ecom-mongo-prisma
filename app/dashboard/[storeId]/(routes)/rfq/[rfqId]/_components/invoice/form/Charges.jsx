@@ -28,7 +28,6 @@ const Charges = () => {
     setTaxSwitch,
     shippingSwitch,
     setShippingSwitch,
-
     totalInWordsSwitch,
     setTotalInWordsSwitch,
     currency,

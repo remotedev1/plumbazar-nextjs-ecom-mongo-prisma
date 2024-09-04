@@ -13,7 +13,6 @@ const WizardProgress = ({ wizard }) => {
     formState: { errors },
   } = useFormContext();
 
-
   const step1Valid = !errors.sender && !errors.receiver;
   const step2Valid =
     !errors.details?.invoiceNumber &&

@@ -16,8 +16,7 @@ import { useEffect } from "react";
 
 const InvoiceMain = ({ rfq, draftInvoiceData }) => {
   const { handleSubmit, setValue, reset } = useFormContext();
-  const { onFormSubmit,formValues  } = useInvoiceContext();
-
+  const { onFormSubmit, formValues } = useInvoiceContext();
 
   // Set default values when draftInvoiceData is available
   useEffect(() => {
@@ -31,16 +30,16 @@ const InvoiceMain = ({ rfq, draftInvoiceData }) => {
 
   useEffect(() => {
     if (!draftInvoiceData && rfq?.user?.address) {
-      const { id,name, email } = rfq.user;
+      const { id, name, email } = rfq.user;
       const { address, zip, city, phone } = rfq.user.address;
-
-      if (name) setValue("receiver.id", id);
+      if (name) setValue("receiver.customerId", id);
       if (name) setValue("receiver.name", name);
       if (address) setValue("receiver.address", address);
       if (zip) setValue("receiver.zip", zip);
       if (city) setValue("receiver.city", city);
       if (email) setValue("receiver.email", email);
       if (phone) setValue("receiver.phone", phone);
+      setValue("details.rfqId", rfq.id);
       setValue("receiver.country", "India");
     }
   }, [rfq, setValue, draftInvoiceData]);

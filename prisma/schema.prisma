@@ -261,7 +261,7 @@ type Receiver {
   country      String
   email        String
   phone        String
-  customInputs Json   @default("[]") 
+  customInputs Json   @default("[]")
 }
 
 type Details {
@@ -273,14 +273,13 @@ type Details {
   discountAmount     Int
   shippingAmount     Int
   additionalNotes    String
-  paymentDue         DateTime
   totalAmountInWords String
   subTotal           Float
   totalAmount        Float
 }
 
 type DraftProducts {
-  productId     String @db.ObjectId
+  id            String
   quantity      Int
   price         Int
   purchasePrice Int

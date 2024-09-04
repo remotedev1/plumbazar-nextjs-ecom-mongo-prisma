@@ -189,6 +189,7 @@ const CustomInputSchema = z.object({
 });
 
 const InvoiceReceiverSchema = z.object({
+  customerId: fieldValidators.stringMin1,
   name: fieldValidators.name,
   address: fieldValidators.address,
   zip: fieldValidators.zipCode,
@@ -200,10 +201,11 @@ const InvoiceReceiverSchema = z.object({
 });
 
 const ItemSchema = z.object({
+  id: fieldValidators.stringMin1,
   name: fieldValidators.stringMin1,
   quantity: fieldValidators.quantity,
   purchasePrice: fieldValidators.unitPrice,
-  unitPrice: fieldValidators.unitPrice,
+  price: fieldValidators.stringToNumberWithMax,
   total: fieldValidators.stringToNumber,
 });
 
@@ -212,39 +214,26 @@ const PaymentInformationSchema = z.object({
   accountName: fieldValidators.stringOptional,
   accountNumber: fieldValidators.stringOptional,
   transactionId: fieldValidators.stringOptional,
+  // paymentDueDate: fieldValidators.date,
 });
 
-const DiscountDetailsSchema = z.object({
-  amount: fieldValidators.stringToNumberWithMax,
-  amountType: fieldValidators.string,
-});
 
-const TaxDetailsSchema = z.object({
-  amount: fieldValidators.stringToNumberWithMax,
-  taxID: fieldValidators.string,
-  amountType: fieldValidators.string,
-});
-
-const ShippingDetailsSchema = z.object({
-  cost: fieldValidators.stringToNumberWithMax,
-  costType: fieldValidators.string,
-});
 
 const InvoiceDetailsSchema = z.object({
   invoiceNumber: fieldValidators.stringMin1,
+  rfqId: fieldValidators.stringMin1,
   invoiceDate: fieldValidators.date,
   purchaseOrderNumber: fieldValidators.stringOptional,
   items: z.array(ItemSchema),
   paymentInformation: PaymentInformationSchema.optional(),
-  taxDetails: TaxDetailsSchema.optional(),
-  discountDetails: DiscountDetailsSchema.optional(),
-  shippingDetails: ShippingDetailsSchema.optional(),
+  taxAmount: fieldValidators.stringToNumberWithMax,
+  discountAmount:  fieldValidators.stringToNumberWithMax,
+  shippingAmount: fieldValidators.stringToNumberWithMax,
   subTotal: fieldValidators.nonNegativeNumber,
   totalAmount: fieldValidators.nonNegativeNumber,
   totalAmountInWords: fieldValidators.string,
   additionalNotes: fieldValidators.stringOptional,
   updatedAt: fieldValidators.stringOptional,
-  pdfTemplate: z.number(),
 });
 
 const InvoiceSchema = z.object({

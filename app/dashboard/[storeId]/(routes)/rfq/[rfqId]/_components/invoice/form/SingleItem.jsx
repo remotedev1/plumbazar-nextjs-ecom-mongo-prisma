@@ -137,11 +137,11 @@ const SingleItem = ({
 
   const handleSelectChange = useCallback(
     (selectedOption) => {
-      setValue(`${name}[${index}].productId`, selectedOption?.value || "");
       if (selectedOption) {
+        setValue(`${name}[${index}].id`, selectedOption?.value || "");
         setValue(`${name}[${index}].name`, selectedOption?.label || "");
         setValue(`${name}[${index}].stock`, selectedOption?.stock || 0);
-        setValue(`${name}[${index}].price`, selectedOption.price || 0); // Update price
+        setValue(`${name}[${index}].price`, selectedOption.price || 0);
         setValue(
           `${name}[${index}].purchasePrice`,
           selectedOption.purchasePrice || 0
@@ -150,7 +150,6 @@ const SingleItem = ({
     },
     [setValue, name, index]
   );
-
 
   return (
     <div
@@ -207,7 +206,7 @@ const SingleItem = ({
         <div className="w-full">
           <Label>Name</Label>
           <Controller
-            name={`${name}[${index}].productId`}
+            name={`${name}[${index}].id`}
             control={control}
             render={({ field }) => (
               <Select
@@ -225,8 +224,10 @@ const SingleItem = ({
               />
             )}
           />
-          {errors?.details?.items?.[index]?.name && (
-            <FormMessage>{errors?.details?.items?.[index].name.message}</FormMessage>
+          {errors?.details?.items?.[index]?.id && (
+            <FormMessage>
+              {errors?.details?.items?.[index].id.message}
+            </FormMessage>
           )}
         </div>
 
@@ -291,7 +292,9 @@ const SingleItem = ({
                 className="w-[8rem]"
               />
               {errors?.details?.items?.[index]?.price && (
-                <FormMessage>{errors?.details?.items?.[index].price.message}</FormMessage>
+                <FormMessage>
+                  {errors?.details?.items?.[index].price.message}
+                </FormMessage>
               )}
             </div>
           )}

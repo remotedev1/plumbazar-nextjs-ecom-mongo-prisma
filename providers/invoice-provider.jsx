@@ -28,6 +28,8 @@ import {
 } from "@/lib/variables";
 
 import useToasts from "@/hooks/useToasts";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const defaultInvoiceContext = {
   invoicePdf: new Blob(),
@@ -103,7 +105,8 @@ export const InvoiceContextProvider = ({ children }) => {
    */
   const onFormSubmit = (data) => {
     // Call generate pdf method
-    generatePdf(data);
+    saveInvoice(data);
+    // generatePdf(data);
   };
 
   /**
@@ -142,7 +145,6 @@ export const InvoiceContextProvider = ({ children }) => {
         // Toast
         pdfGenerationSuccess();
       }
-
     } catch (err) {
       console.log(err);
     } finally {
@@ -205,97 +207,18 @@ export const InvoiceContextProvider = ({ children }) => {
     }
   };
 
-  // TODO: Change function name. (saveInvoiceData maybe?)
-  /**
-   * Saves the invoice data to local storage.
-   */
-  // const saveInvoice = () => {
-  //   if (invoicePdf) {
-  //     // If get values function is provided, allow to save the invoice
-  //     if (getValues) {
-  //       // Retrieve the existing array from local storage or initialize an empty array
-  //       const savedInvoicesJSON = localStorage.getItem("savedInvoices");
-  //       const savedInvoices = savedInvoicesJSON
-  //         ? JSON.parse(savedInvoicesJSON)
-  //         : [];
-
-  //       const updatedDate = new Date().toLocaleDateString(
-  //         "en-US",
-  //         SHORT_DATE_OPTIONS
-  //       );
-
-  //       const formValues = getValues();
-  //       formValues.details.updatedAt = updatedDate;
-
-  //       const existingInvoiceIndex = savedInvoices.findIndex((invoice) => {
-  //         return (
-  //           invoice.details.invoiceNumber === formValues.details.invoiceNumber
-  //         );
-  //       });
-
-  //       // If invoice already exists
-  //       if (existingInvoiceIndex !== -1) {
-  //         savedInvoices[existingInvoiceIndex] = formValues;
-
-  //         // Toast
-  //         modifiedInvoiceSuccess();
-  //       } else {
-  //         // Add the form values to the array
-  //         savedInvoices.push(formValues);
-
-  //         // Toast
-  //         saveInvoiceSuccess();
-  //       }
-
-  //       localStorage.setItem("savedInvoices", JSON.stringify(savedInvoices));
-
-  //       setSavedInvoices(savedInvoices);
-  //     }
-  //   }
-  // };
- 
-  const saveInvoice = () => {
-    if (invoicePdf) {
-      // If get values function is provided, allow to save the invoice
-      if (getValues) {
-        // Retrieve the existing array from local storage or initialize an empty array
-        const savedInvoicesJSON = localStorage.getItem("savedInvoices");
-        const savedInvoices = savedInvoicesJSON
-          ? JSON.parse(savedInvoicesJSON)
-          : [];
-
-        const updatedDate = new Date().toLocaleDateString(
-          "en-US",
-          SHORT_DATE_OPTIONS
-        );
-
-        const formValues = getValues();
-        formValues.details.updatedAt = updatedDate;
-
-        const existingInvoiceIndex = savedInvoices.findIndex((invoice) => {
-          return (
-            invoice.details.invoiceNumber === formValues.details.invoiceNumber
-          );
-        });
-
-        // If invoice already exists
-        if (existingInvoiceIndex !== -1) {
-          savedInvoices[existingInvoiceIndex] = formValues;
-
-          // Toast
-          modifiedInvoiceSuccess();
-        } else {
-          // Add the form values to the array
-          savedInvoices.push(formValues);
-
-          // Toast
-          saveInvoiceSuccess();
-        }
-
-        localStorage.setItem("savedInvoices", JSON.stringify(savedInvoices));
-
-        setSavedInvoices(savedInvoices);
-      }
+  const saveInvoice = async (data) => {
+    try {
+      const response = await axios.post(
+        `/api/rfq/${data.details.rfqId}/save`,
+        data
+      );
+      saveInvoiceSuccess();
+      return response.data;
+    } catch (error) {
+      console.error("Error saving invoice:", error);
+      toast.error("Error saving invoice");
+      // throw new Error(error.response?.data?.error || "Failed to save invoice");
     }
   };
 

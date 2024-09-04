@@ -15,7 +15,6 @@ const defaultChargesContext = {
   setTaxSwitch: (newValue) => {},
   shippingSwitch: false,
   setShippingSwitch: (newValue) => {},
-
   totalInWordsSwitch: true,
   setTotalInWordsSwitch: (newValue) => {},
   currency: "USD",

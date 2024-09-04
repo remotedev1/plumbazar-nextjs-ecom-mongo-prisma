@@ -20,14 +20,15 @@ import {
 // Contexts
 
 // Icons
-import { FileInput, FolderUp, Import, Plus, Save } from "lucide-react";
+import { FileInput, Import, Save } from "lucide-react";
 import { useInvoiceContext } from "@/providers/invoice-provider";
 import BaseButton from "../BaseButton";
 import PdfViewer from "./actions/PdfViewer";
 import InvoiceExportModal from "./actions/InvoiceExportModel";
 
 const InvoiceActions = () => {
-  const { invoicePdfLoading, saveInvoice, generateInvoice } = useInvoiceContext();
+  const { invoicePdfLoading, saveInvoice, generateInvoice } =
+    useInvoiceContext();
 
   return (
     <div className={`xl:w-[45%]`}>
@@ -79,7 +80,7 @@ const InvoiceActions = () => {
 
             {/* Generate pdf button */}
             <BaseButton
-            onClick={generateInvoice}
+              onClick={generateInvoice}
               tooltipLabel="Generate your invoice"
               loading={invoicePdfLoading}
               loadingText="Generating your invoice"
