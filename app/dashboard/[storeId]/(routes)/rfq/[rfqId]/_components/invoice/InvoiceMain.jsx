@@ -18,7 +18,6 @@ const InvoiceMain = ({ rfq, draftInvoiceData }) => {
   const { handleSubmit, setValue, reset } = useFormContext();
   const { onFormSubmit,formValues  } = useInvoiceContext();
 
-  console.log(formValues)
 
   // Set default values when draftInvoiceData is available
   useEffect(() => {
@@ -51,7 +50,7 @@ const InvoiceMain = ({ rfq, draftInvoiceData }) => {
       <Form {...useFormContext()}>
         <form
           onSubmit={handleSubmit(onFormSubmit, (err) => {
-            console.log(err);
+            // console.log(err);
           })}
         >
           <div className="flex flex-wrap">

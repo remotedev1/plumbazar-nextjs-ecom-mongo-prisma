@@ -19,6 +19,7 @@ import {
   TouchSensor,
   useSensor,
   useSensors,
+  DragOverlay,
 } from "@dnd-kit/core";
 
 import {
@@ -170,6 +171,16 @@ export const AddStock = () => {
             />
           ))}
         </SortableContext>
+        <DragOverlay
+          dropAnimation={{
+            duration: 500,
+            easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
+          }}
+        >
+          <div className="w-[10rem]">
+            <p>Click to drop</p>
+          </div>
+        </DragOverlay>
       </DndContext>
       <Button
         onClick={addNewField}

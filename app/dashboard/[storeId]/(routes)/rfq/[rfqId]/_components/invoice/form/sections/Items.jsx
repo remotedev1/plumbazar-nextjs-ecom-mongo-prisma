@@ -31,8 +31,7 @@ import SingleItem from "../SingleItem";
 import BaseButton from "../../../BaseButton";
 
 const Items = () => {
-  const { control, setValue } = useFormContext();
-
+  const { control, setValue, formState: { errors } } = useFormContext();
   const ITEMS_NAME = "details.items";
   const { fields, append, remove, move } = useFieldArray({
     control: control,
@@ -104,22 +103,23 @@ const Items = () => {
               index={index}
               fields={fields}
               field={field}
+              errors={errors}
               moveFieldUp={moveFieldUp}
               moveFieldDown={moveFieldDown}
               removeField={removeField}
             />
           ))}
         </SortableContext>
-        {/* <DragOverlay
-                    dropAnimation={{
-                        duration: 500,
-                        easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
-                    }}
-                >
-                    <div className="w-[10rem]">
-                        <p>Click to drop</p>
-                    </div>
-                </DragOverlay> */}
+        <DragOverlay
+          dropAnimation={{
+            duration: 500,
+            easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
+          }}
+        >
+          <div className="w-[10rem]">
+            <p>Click to drop</p>
+          </div>
+        </DragOverlay>
       </DndContext>
       <BaseButton
         tooltipLabel="Add a new item to the list"

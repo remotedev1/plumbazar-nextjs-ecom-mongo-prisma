@@ -23,6 +23,7 @@ import { FormLabel, FormMessage } from "@/components/ui/form";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useParams } from "next/navigation";
 import axios from "axios";
+import { cn } from "@/lib/utils";
 
 const SingleItem = ({
   name,
@@ -32,13 +33,14 @@ const SingleItem = ({
   moveFieldUp,
   moveFieldDown,
   removeField,
+  errors,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
   const debouncedSearch = useDebounce(inputValue, 500);
   const params = useParams();
 
-  const { control, setValue, errors } = useFormContext();
+  const { control, setValue } = useFormContext();
 
   // Items
   const itemName = useWatch({
@@ -59,6 +61,11 @@ const SingleItem = ({
 
   const total = useWatch({
     name: `${name}[${index}].total`,
+    control,
+  });
+
+  const stock = useWatch({
+    name: `${name}[${index}].stock`,
     control,
   });
 
@@ -89,6 +96,7 @@ const SingleItem = ({
             value: product.id,
             price: product.price,
             purchasePrice: product.purchasePrice,
+            stock: product.stock,
           }));
           setOptions(products);
         } catch (error) {
@@ -131,17 +139,18 @@ const SingleItem = ({
     (selectedOption) => {
       setValue(`${name}[${index}].productId`, selectedOption?.value || "");
       if (selectedOption) {
-        setValue(`${name}[${index}].price`, selectedOption.price || 0); // Update price
         setValue(`${name}[${index}].name`, selectedOption?.label || "");
-
+        setValue(`${name}[${index}].stock`, selectedOption?.stock || 0);
+        setValue(`${name}[${index}].price`, selectedOption.price || 0); // Update price
         setValue(
           `${name}[${index}].purchasePrice`,
           selectedOption.purchasePrice || 0
-        ); // Update purchase price
+        );
       }
     },
     [setValue, name, index]
   );
+
 
   return (
     <div
@@ -149,14 +158,14 @@ const SingleItem = ({
       {...attributes}
       className={`${boxDragClasses} group flex flex-col gap-y-5 p-3 my-2 cursor-default rounded-xl bg-gray-50 dark:bg-slate-800 dark:border-gray-600`}
     >
-      {/* {isDragging && <div className="bg-blue-600 h-1 rounded-full"></div>} */}
+      {isDragging && <div className="bg-blue-600 h-1 rounded-full"></div>}
       <div className="flex flex-wrap justify-between">
         {itemName != "" ? (
           <p className="font-medium">
             #{index + 1} - {itemName}
           </p>
         ) : (
-          <p className="font-medium">#{index + 1} - Empty name</p>
+          <p className="font-medium">#{index + 1} -</p>
         )}
 
         <div className="flex gap-3">
@@ -216,8 +225,8 @@ const SingleItem = ({
               />
             )}
           />
-          {errors?.[name]?.[index]?.productId && (
-            <FormMessage>{errors[name][index].productId.message}</FormMessage>
+          {errors?.details?.items?.[index]?.name && (
+            <FormMessage>{errors?.details?.items?.[index].name.message}</FormMessage>
           )}
         </div>
 
@@ -235,9 +244,9 @@ const SingleItem = ({
                 placeholder="Quantity"
                 className="w-[8rem]"
               />
-              {errors?.[name]?.[index]?.quantity && (
+              {errors?.details?.items?.[index]?.quantity && (
                 <FormMessage>
-                  {errors[name][index].quantity.message}
+                  {errors?.details?.items?.[index].quantity.message}
                 </FormMessage>
               )}
             </div>
@@ -258,9 +267,9 @@ const SingleItem = ({
                 placeholder="Purchase Price"
                 className="w-[8rem]"
               />
-              {errors?.[name]?.[index]?.purchasePrice && (
+              {errors?.details?.items?.[index]?.purchasePrice && (
                 <FormMessage>
-                  {errors[name][index].purchasePrice.message}
+                  {errors?.details?.items?.[index].purchasePrice.message}
                 </FormMessage>
               )}
             </div>
@@ -281,12 +290,25 @@ const SingleItem = ({
                 placeholder="Selling price"
                 className="w-[8rem]"
               />
-              {errors?.[name]?.[index]?.price && (
-                <FormMessage>{errors[name][index].price.message}</FormMessage>
+              {errors?.details?.items?.[index]?.price && (
+                <FormMessage>{errors?.details?.items?.[index].price.message}</FormMessage>
               )}
             </div>
           )}
         />
+
+        {/* in stock */}
+        <div className="inline">
+          <FormLabel>In stock</FormLabel>
+          <p
+            className={cn(
+              "text-left font-bold text-lg",
+              stock <= 0 ? "text-destructive" : "text-green-500"
+            )}
+          >
+            {stock}
+          </p>
+        </div>
 
         <div className="flex flex-col gap-2">
           <div>
