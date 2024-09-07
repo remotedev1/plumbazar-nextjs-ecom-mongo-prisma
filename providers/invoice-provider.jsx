@@ -68,7 +68,11 @@ export const InvoiceContextProvider = ({ children }) => {
   } = useToasts();
 
   // Get form values and methods from form context
-  const { getValues, reset } = useFormContext();
+  const {
+    getValues,
+    reset,
+    formState: { errors },
+  } = useFormContext();
 
   // Variables
   const [invoicePdf, setInvoicePdf] = useState(new Blob());
@@ -207,24 +211,36 @@ export const InvoiceContextProvider = ({ children }) => {
   };
 
   const saveInvoice = async () => {
-    const data = getValues();
-    try {
-      const response = await axios.post(
-        `/api/rfq/${data.details.rfqId}/save`,
-        data
-      );
-      toast.success("Invoice saved successfully");
-      //TODO
-      router.push(`/api/rfq/${data.details.rfqId}`);
+    console.log(errors);
+
+    if (errors.details || errors.receiver) {
+      toast.error("Validation errors. Please correct and resubmit.");
+
       return;
-    } catch (error) {
-      console.error("Error saving invoice:", error);
-      toast.error("Error saving invoice");
-      // throw new Error(error.response?.data?.error || "Failed to save invoice");
     }
+    const data = getValues();
+    // try {
+    //   const response = await axios.post(
+    //     `/api/rfq/${data.details.rfqId}/save`,
+    //     data
+    //   );
+    //   toast.success("Invoice saved successfully");
+    //   //TODO
+    //   router.push(`/api/rfq/${data.details.rfqId}`);
+    //   return;
+    // } catch (error) {
+    //   console.error("Error saving invoice:", error);
+    //   toast.error("Error saving invoice");
+    //   // throw new Error(error.response?.data?.error || "Failed to save invoice");
+    // }
   };
 
   const updateInvoice = async (draftId) => {
+    if (errors) {
+      toast.error("Validation errors. Please correct and resubmit.");
+
+      return;
+    }
     const data = getValues();
 
     try {

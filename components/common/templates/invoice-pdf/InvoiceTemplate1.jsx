@@ -15,7 +15,6 @@ import InvoiceLayout from "./InvoiceLayout";
 const InvoiceTemplate = (data) => {
     const { receiver, details } = data;
 
-
     return (
         <InvoiceLayout data={data}>
             <div className="flex justify-between">
@@ -32,7 +31,7 @@ const InvoiceTemplate = (data) => {
                 </div>
                 <div className="text-right">
                     <h2 className="text-2xl md:text-3xl font-semibold text-gray-800">
-                        Invoice #
+                        Proforma #
                     </h2>
                     <span className="mt-1 block text-gray-500">
                         {details.invoiceNumber}
@@ -60,7 +59,7 @@ const InvoiceTemplate = (data) => {
                     <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
                         <dl className="grid sm:grid-cols-6 gap-x-3">
                             <dt className="col-span-3 font-semibold text-gray-800">
-                                Invoice date:
+                                Created date:
                             </dt>
                             <dd className="col-span-3 text-gray-500">
                                 {new Date(
@@ -101,7 +100,7 @@ const InvoiceTemplate = (data) => {
                     </div>
                     <div className="hidden sm:block border-b border-gray-200"></div>
                     <div className="grid grid-cols-3 sm:grid-cols-5 gap-y-1">
-                        {details.items.map((item, index) => (
+                        {details.items?.map((item, index) => (
                             <React.Fragment key={index}>
                                 <div className="col-span-full sm:col-span-2 border-b border-gray-300">
                                     <p className="font-medium text-gray-800">

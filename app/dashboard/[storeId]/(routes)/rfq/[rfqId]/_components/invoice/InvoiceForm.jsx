@@ -55,7 +55,7 @@ const InvoiceForm = () => {
         <CardHeader>
           <div className="flex gap-3">
             <CardTitle className="flex items-center gap-3">
-              <span className="uppercase">Invoice</span>
+              <span className="uppercase">Proforma</span>
             </CardTitle>
             <Badge variant="secondary" className="w-fit">
               <p style={{ fontSize: "14px" }}>{invoiceNumber}</p>

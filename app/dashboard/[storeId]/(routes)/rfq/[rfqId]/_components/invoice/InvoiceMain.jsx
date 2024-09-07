@@ -17,36 +17,31 @@ import { useEffect } from "react";
 const InvoiceMain = ({ rfq, draftInvoiceData }) => {
   const { handleSubmit, setValue, reset } = useFormContext();
   const { onFormSubmit, formValues } = useInvoiceContext();
-  // Set default values when draftInvoiceData is available
+
   useEffect(() => {
-    if (draftInvoiceData) {
+    if (!draftInvoiceData) {
+      // Reset the form with draftInvoiceData if it exists
       reset({
         receiver: draftInvoiceData.receiver,
         details: { ...draftInvoiceData.details, rfqId: rfq.id },
       });
-    }
-  }, [draftInvoiceData, reset]);
-
-
-
-
-  useEffect(() => {
-    if (!draftInvoiceData && rfq?.user?.address) {
+    } else if (rfq?.user?.address) {
+      // If no draftInvoiceData, but rfq.user.address exists, set form values based on user info
       const { id, name, email, address } = rfq.user;
-      if (address) {
-        const { address: addr, zip, city, phone } = address;
-        setValue("receiver.customerId", id);
-        setValue("receiver.name", name || '');
-        setValue("receiver.address", addr || '');
-        setValue("receiver.zip", zip || '');
-        setValue("receiver.city", city || '');
-        setValue("receiver.email", email || '');
-        setValue("receiver.phone", phone || '');
-        setValue("receiver.country", "India");
-      }
+      const { address: addr, zip, city, phone } = address;
+
+      setValue("receiver.customerId", id);
+      setValue("receiver.name", name || "");
+      setValue("receiver.address", addr || "");
+      setValue("receiver.zip", zip || "");
+      setValue("receiver.city", city || "");
+      setValue("receiver.email", email || "");
+      setValue("receiver.phone", phone || "");
+      setValue("receiver.country", "India");
       setValue("details.rfqId", rfq.id);
     }
-  }, [rfq, setValue, draftInvoiceData]);
+  }, [draftInvoiceData, rfq, reset, setValue]);
+
   return (
     <>
       <Form {...useFormContext()}>
@@ -57,7 +52,7 @@ const InvoiceMain = ({ rfq, draftInvoiceData }) => {
         >
           <div className="flex flex-wrap">
             <InvoiceForm />
-            <InvoiceActions draftInvoiceData={draftInvoiceData} />
+            <InvoiceActions draftInvoiceData={draftInvoiceData} rfq={rfq} />
           </div>
         </form>
       </Form>

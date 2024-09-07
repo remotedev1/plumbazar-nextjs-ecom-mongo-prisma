@@ -25,8 +25,9 @@ import { useInvoiceContext } from "@/providers/invoice-provider";
 import BaseButton from "../BaseButton";
 import PdfViewer from "./actions/PdfViewer";
 import InvoiceExportModal from "./actions/InvoiceExportModel";
+import { Button } from "@/components/ui/button";
 
-const InvoiceActions = ({ draftInvoiceData }) => {
+const InvoiceActions = ({ draftInvoiceData, rfq }) => {
   const {
     invoicePdfLoading,
     saveInvoice,
@@ -43,9 +44,8 @@ const InvoiceActions = ({ draftInvoiceData }) => {
         </CardHeader>
 
         <div className="flex flex-col flex-wrap items-center gap-2">
-          <div className="flex flex-wrap gap-3">
-            {/* Load modal button */}
-            {/* <InvoiceLoaderModal>
+          {/* Load modal button */}
+          {/* <InvoiceLoaderModal>
                             <BaseButton
                                 variant="outline"
                                 tooltipLabel="Open load invoice menu"
@@ -55,19 +55,6 @@ const InvoiceActions = ({ draftInvoiceData }) => {
                                 Load Invoice
                             </BaseButton>
                         </InvoiceLoaderModal> */}
-
-            {/* Export modal button */}
-            <InvoiceExportModal>
-              <BaseButton
-                variant="outline"
-                tooltipLabel="Open load invoice menu"
-                disabled={invoicePdfLoading}
-              >
-                <Import />
-                Export Invoice
-              </BaseButton>
-            </InvoiceExportModal>
-          </div>
 
           <div className="flex flex-wrap gap-3">
             {/* New invoice button */}
@@ -82,53 +69,68 @@ const InvoiceActions = ({ draftInvoiceData }) => {
                             </BaseButton>
                         </NewInvoiceAlert> */}
             {/* Generate pdf button */}
-            <BaseButton
-              type="submit"
-              onClick={generateInvoice}
-              tooltipLabel="Generate your invoice"
-              loading={invoicePdfLoading}
-              loadingText="Generating your invoice"
-            >
-              <FileInput />
-              Generate PDF
-            </BaseButton>
-            {draftInvoiceData && !draftInvoiceData.orderId  ? (
-              draftInvoiceData.id ? (
-                <>
+
+            {!!draftInvoiceData.status === "APPROVED" ? (
+              <div className="flex flex-wrap gap-3">
+                {/* Export modal button */}
+                <InvoiceExportModal>
                   <BaseButton
-                    tooltipLabel="update your invoice"
+                    variant="outline"
+                    tooltipLabel="Open load invoice menu"
                     disabled={invoicePdfLoading}
-                    onClick={() => updateInvoice(draftInvoiceData.id)}
-                    loadingText="updating your invoice"
-                    className="bg-blue-500"
                   >
-                    <Save />
-                    Update
+                    <Import />
+                    Export Invoice
                   </BaseButton>
-                  <BaseButton
-                    tooltipLabel="move to orders"
-                    disabled={invoicePdfLoading}
-                    onClick={() => commitOrder(draftInvoiceData.id)}
-                    loadingText="Committing your order"
-                    className="bg-orange-500"
-                  >
-                    <Save />
-                    order commit
-                  </BaseButton>
-                </>
-              ) : (
+                </InvoiceExportModal>
                 <BaseButton
-                  tooltipLabel="save your invoice"
-                  disabled={invoicePdfLoading}
-                  onClick={() => saveInvoice()}
-                  loadingText="saving your invoice"
-                  className="bg-blue-500"
+                  onClick={generateInvoice}
+                  tooltipLabel="Generate your invoice"
+                  loading={invoicePdfLoading}
+                  loadingText="Generating your invoice"
                 >
-                  <Save />
-                  Save
+                  <FileInput />
+                  Generate PDF
                 </BaseButton>
-              )
+              </div>
             ) : null}
+
+            {draftInvoiceData.id ? (
+              <BaseButton
+                type="submit"
+                tooltipLabel="update your invoice"
+                disabled={invoicePdfLoading}
+                onClick={() => updateInvoice(draftInvoiceData.id)}
+                loadingText="updating your invoice"
+                className="bg-blue-500"
+              >
+                <Save />
+                Update
+              </BaseButton>
+            ) : (
+              <BaseButton
+                type="submit"
+                tooltipLabel="save your invoice"
+                disabled={invoicePdfLoading}
+                onClick={() => saveInvoice()}
+                loadingText="saving your invoice"
+                className="bg-blue-500"
+              >
+                <Save />
+                Save
+              </BaseButton>
+            )}
+
+            {/* <BaseButton
+              tooltipLabel="move to orders"
+              disabled={invoicePdfLoading}
+              onClick={() => commitOrder(draftInvoiceData.id)}
+              loadingText="Committing your order"
+              className="bg-orange-500"
+            >
+              <Save />
+              order commit
+            </BaseButton> */}
           </div>
 
           <div className="w-full">

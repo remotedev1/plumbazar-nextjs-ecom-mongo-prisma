@@ -238,17 +238,25 @@ enum RfqStatus {
 }
 
 model DraftInvoice {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
+  id        String             @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String             @db.ObjectId
+  user      User               @relation(fields: [userId], references: [id])
   receiver  Receiver
   details   Details
-  orderId   String?  @db.ObjectId
-  order     Order?   @relation(fields: [orderId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  rfqId     String   @unique @db.ObjectId
+  orderId   String?            @db.ObjectId
+  order     Order?             @relation(fields: [orderId], references: [id])
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  rfqId     String             @unique @db.ObjectId
+  status    DraftInvoiceStatus @default(CREATED)
   rfq       Rfq[]
+}
+
+enum DraftInvoiceStatus {
+  CREATED
+  WAITING
+  APPROVED
+  COMMITTED
 }
 
 type Receiver {
@@ -264,17 +272,16 @@ type Receiver {
 }
 
 type Details {
-  invoiceNumber      String
-  invoiceDate        DateTime
-  items              Json
-  currency           String   @default("INR")
-  taxAmount          Int
-  discountAmount     Int
-  shippingAmount     Int
-  additionalNotes    String
-  totalAmountInWords String
-  subTotal           Float
-  totalAmount        Float
+  invoiceNumber   String
+  invoiceDate     DateTime
+  items           Json
+  currency        String   @default("INR")
+  taxAmount       Int
+  discountAmount  Int
+  shippingAmount  Int
+  additionalNotes String
+  subTotal        Float
+  totalAmount     Float
 }
 
 model Payment {
