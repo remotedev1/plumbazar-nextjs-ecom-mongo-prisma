@@ -129,7 +129,7 @@ const SingleItem = ({
 
   const handleSelectChange = useCallback(
     (selectedOption) => {
-      setValue(`${name}[${index}].productId`, selectedOption?.value || "");
+      setValue(`${name}[${index}].id`, selectedOption?.value || "");
       if (selectedOption) {
         setValue(`${name}[${index}].name`, selectedOption?.label || "");
         setValue(`${name}[${index}].stock`, selectedOption?.stock || 0);

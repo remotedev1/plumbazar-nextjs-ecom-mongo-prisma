@@ -32,31 +32,35 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FormMessage } from "@/components/ui/form";
 
-export const AddStock = () => {
+export const AddStock = ({
+  items = [
+    {
+      id: "",
+      name:"",
+      quantity: 0,
+      purchasePrice: 0,
+      price: 0,
+      total: 0,
+    },
+  ],
+}) => {
   const params = useParams();
   const router = useRouter();
-
   const [loading, setLoading] = useState(false);
 
   const toastMessage = "Stock added successfully";
-  const action = "Save Changes";
+  const action = "Stock in";
 
   // Form initialization
   const form = useForm({
     resolver: zodResolver(StockInSchema),
     defaultValues: {
       notes: "",
-      products: [
-        {
-          productId: "",
-          quantity: 0,
-          purchasePrice: 0,
-          price: 0,
-          total: 0,
-        },
-      ],
+      products: items,
     },
   });
+
+
 
   const {
     control,
@@ -74,7 +78,8 @@ export const AddStock = () => {
 
   const addNewField = () => {
     append({
-      productId: "",
+      id: "",
+      name:"",
       quantity: 0,
       purchasePrice: 0,
       price: 0,
@@ -120,8 +125,8 @@ export const AddStock = () => {
       setLoading(true);
       await axios.post(`/api/${params.storeId}/stock-in`, data);
       toast.success(toastMessage);
-      reset(); 
-      router.push(`/dashboard/${params.storeId}/stock-in`);
+      reset();
+      router.refresh();
     } catch (error) {
       toast.error(error.response?.data || "An error occurred");
     } finally {
@@ -219,7 +224,7 @@ export const AddStock = () => {
       </div>
       <Button
         disabled={loading}
-        className="ml-auto bg-blue-500 hover:bg-blue-300"
+        className="w-full ml-auto bg-blue-500 hover:bg-blue-300"
         type="submit"
       >
         {action}

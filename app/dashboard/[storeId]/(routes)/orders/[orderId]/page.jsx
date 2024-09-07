@@ -46,6 +46,7 @@ const OrderDetails = async ({ params }) => {
       id: item.productId,
       name: item.product.name,
       stock: stock,
+      price: item.price,
       quantityOrdered: item.quantity,
       canBeFulfilled: canBeFulfilled,
     };

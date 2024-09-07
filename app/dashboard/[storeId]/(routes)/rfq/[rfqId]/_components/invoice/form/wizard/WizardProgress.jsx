@@ -24,9 +24,9 @@ const WizardProgress = ({ wizard }) => {
     !errors.details?.paymentDue &&
     !errors.details?.subTotal &&
     !errors.details?.totalAmount &&
-    !errors.details?.discountDetails?.amount &&
-    !errors.details?.taxDetails?.amount &&
-    !errors.details?.shippingDetails?.cost;
+    !errors.details?.discountAmount &&
+    !errors.details?.taxAmount &&
+    !errors.details?.shippingAmount;
 
   /**
    * Determines the button variant based on the given WizardStepType.

@@ -3,7 +3,7 @@
 import React from "react";
 
 // ShadCn
-import { Button, ButtonProps } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
     Tooltip,
     TooltipContent,

@@ -63,7 +63,7 @@ export const StockInSchema = z.object({
   notes: z.string().optional(),
   products: z.array(
     z.object({
-      productId: z.string().min(1, "Product must be selected"), // Ensures productId is a non-empty string
+      id: z.string().min(1, "Product must be selected"), // Ensures productId is a non-empty string
       quantity: z
         .number()
         .int()
@@ -223,7 +223,6 @@ const InvoiceDetailsSchema = z.object({
   invoiceNumber: fieldValidators.stringMin1,
   rfqId: fieldValidators.stringMin1,
   invoiceDate: fieldValidators.date,
-  purchaseOrderNumber: fieldValidators.stringOptional,
   items: z.array(ItemSchema),
   paymentInformation: PaymentInformationSchema.optional(),
   taxAmount: fieldValidators.stringToNumberWithMax,
@@ -231,9 +230,7 @@ const InvoiceDetailsSchema = z.object({
   shippingAmount: fieldValidators.stringToNumberWithMax,
   subTotal: fieldValidators.nonNegativeNumber,
   totalAmount: fieldValidators.nonNegativeNumber,
-  totalAmountInWords: fieldValidators.string,
   additionalNotes: fieldValidators.stringOptional,
-  updatedAt: fieldValidators.stringOptional,
 });
 
 const InvoiceSchema = z.object({

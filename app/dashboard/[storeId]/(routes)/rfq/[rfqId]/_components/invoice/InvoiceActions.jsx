@@ -26,10 +26,14 @@ import BaseButton from "../BaseButton";
 import PdfViewer from "./actions/PdfViewer";
 import InvoiceExportModal from "./actions/InvoiceExportModel";
 
-const InvoiceActions = () => {
-  const { invoicePdfLoading, saveInvoice, generateInvoice } =
-    useInvoiceContext();
-
+const InvoiceActions = ({ draftInvoiceData }) => {
+  const {
+    invoicePdfLoading,
+    saveInvoice,
+    updateInvoice,
+    commitOrder,
+    generateInvoice,
+  } = useInvoiceContext();
   return (
     <div className={`xl:w-[45%]`}>
       <Card className="h-auto sticky top-0 px-2">
@@ -77,9 +81,9 @@ const InvoiceActions = () => {
                                 New Invoice
                             </BaseButton>
                         </NewInvoiceAlert> */}
-
             {/* Generate pdf button */}
             <BaseButton
+              type="submit"
               onClick={generateInvoice}
               tooltipLabel="Generate your invoice"
               loading={invoicePdfLoading}
@@ -88,15 +92,43 @@ const InvoiceActions = () => {
               <FileInput />
               Generate PDF
             </BaseButton>
-            <BaseButton
-              type="submit"
-              tooltipLabel="Generate your invoice"
-              disabled={invoicePdfLoading}
-              loadingText="Generating your invoice"
-            >
-              <Save />
-              Save
-            </BaseButton>
+            {draftInvoiceData && !draftInvoiceData.orderId  ? (
+              draftInvoiceData.id ? (
+                <>
+                  <BaseButton
+                    tooltipLabel="update your invoice"
+                    disabled={invoicePdfLoading}
+                    onClick={() => updateInvoice(draftInvoiceData.id)}
+                    loadingText="updating your invoice"
+                    className="bg-blue-500"
+                  >
+                    <Save />
+                    Update
+                  </BaseButton>
+                  <BaseButton
+                    tooltipLabel="move to orders"
+                    disabled={invoicePdfLoading}
+                    onClick={() => commitOrder(draftInvoiceData.id)}
+                    loadingText="Committing your order"
+                    className="bg-orange-500"
+                  >
+                    <Save />
+                    order commit
+                  </BaseButton>
+                </>
+              ) : (
+                <BaseButton
+                  tooltipLabel="save your invoice"
+                  disabled={invoicePdfLoading}
+                  onClick={() => saveInvoice()}
+                  loadingText="saving your invoice"
+                  className="bg-blue-500"
+                >
+                  <Save />
+                  Save
+                </BaseButton>
+              )
+            ) : null}
           </div>
 
           <div className="w-full">

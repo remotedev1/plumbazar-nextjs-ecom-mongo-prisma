@@ -20,20 +20,18 @@ const RfqInvoice = async ({ params }) => {
   });
 
 
-  if (rfq.draftId !== null) {
-    var draftInvoiceData = await db.draftInvoice.findUnique({
+  if (rfq.draftId) {
+    var draftInvoiceData = await db.draftInvoice.findFirst({
       where: {
         id: rfq.draftId,
       },
     });
   }
-
-
   return (
     <div className="bg-white min-h-[80vh] py-14">
       <Container>
         <div className="flex flex-col space-y-5">
-          <InvoiceMain rfq={rfq} draftInvoiceData={draftInvoiceData}/>
+          <InvoiceMain rfq={rfq} draftInvoiceData={{...draftInvoiceData}}/>
         </div>
       </Container>
     </div>

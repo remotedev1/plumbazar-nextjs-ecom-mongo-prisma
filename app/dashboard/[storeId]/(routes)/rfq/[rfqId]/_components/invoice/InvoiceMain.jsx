@@ -17,33 +17,36 @@ import { useEffect } from "react";
 const InvoiceMain = ({ rfq, draftInvoiceData }) => {
   const { handleSubmit, setValue, reset } = useFormContext();
   const { onFormSubmit, formValues } = useInvoiceContext();
-
   // Set default values when draftInvoiceData is available
   useEffect(() => {
     if (draftInvoiceData) {
       reset({
         receiver: draftInvoiceData.receiver,
-        details: draftInvoiceData.details,
+        details: { ...draftInvoiceData.details, rfqId: rfq.id },
       });
     }
   }, [draftInvoiceData, reset]);
 
+
+
+
   useEffect(() => {
     if (!draftInvoiceData && rfq?.user?.address) {
-      const { id, name, email } = rfq.user;
-      const { address, zip, city, phone } = rfq.user.address;
-      if (name) setValue("receiver.customerId", id);
-      if (name) setValue("receiver.name", name);
-      if (address) setValue("receiver.address", address);
-      if (zip) setValue("receiver.zip", zip);
-      if (city) setValue("receiver.city", city);
-      if (email) setValue("receiver.email", email);
-      if (phone) setValue("receiver.phone", phone);
+      const { id, name, email, address } = rfq.user;
+      if (address) {
+        const { address: addr, zip, city, phone } = address;
+        setValue("receiver.customerId", id);
+        setValue("receiver.name", name || '');
+        setValue("receiver.address", addr || '');
+        setValue("receiver.zip", zip || '');
+        setValue("receiver.city", city || '');
+        setValue("receiver.email", email || '');
+        setValue("receiver.phone", phone || '');
+        setValue("receiver.country", "India");
+      }
       setValue("details.rfqId", rfq.id);
-      setValue("receiver.country", "India");
     }
   }, [rfq, setValue, draftInvoiceData]);
-
   return (
     <>
       <Form {...useFormContext()}>
@@ -54,7 +57,7 @@ const InvoiceMain = ({ rfq, draftInvoiceData }) => {
         >
           <div className="flex flex-wrap">
             <InvoiceForm />
-            <InvoiceActions />
+            <InvoiceActions draftInvoiceData={draftInvoiceData} />
           </div>
         </form>
       </Form>

@@ -112,7 +112,7 @@ export const ChargesContextProvider = ({ children }) => {
     // at the beginning of subTotal caused by toFixed(2) in item.total in single item
     // Reason: toFixed(2) returns string, not a number instance
     const totalSum = itemsArray.reduce(
-      (sum, item) => sum + Number(item.total),
+      (sum, item) => sum + Number(item.quantity * item.price),
       0
     );
 
@@ -128,19 +128,19 @@ export const ChargesContextProvider = ({ children }) => {
     if (!isNaN(discountAmount)) {
       total -= discountAmount;
 
-      setValue("details.discountDetails.amount", discountAmount);
+      setValue("details.discountAmount", discountAmount);
     }
 
     if (!isNaN(taxAmount)) {
       total += taxAmount;
 
-      setValue("details.taxDetails.amount", taxAmount);
+      setValue("details.taxAmount", taxAmount);
     }
 
     if (!isNaN(shippingCost)) {
       total += shippingCost;
 
-      setValue("details.shippingDetails.cost", shippingCost);
+      setValue("details.shippingAmount", shippingCost);
     }
 
     setTotalAmount(total);

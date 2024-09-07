@@ -11,46 +11,116 @@ export async function POST(req, { params }) {
     }
     const { receiver, details } = body;
 
-    // Create the DraftInvoice with relations
-    const draftInvoice = await db.draftInvoice.create({
+    await db.$transaction(async (transaction) => {
+      // Create the DraftInvoice with relations
+      const createdDraftInvoice = await transaction.draftInvoice.create({
+        data: {
+          userId: user.id,
+          receiver: {
+            set: {
+              customerId: receiver.customerId,
+              name: receiver.name,
+              address: receiver.address,
+              zip: receiver.zip,
+              city: receiver.city,
+              country: receiver.country,
+              email: receiver.email,
+              phone: receiver.phone,
+              customInputs: receiver.customInputs || [],
+            },
+          },
+          details: {
+            set: {
+              invoiceNumber: details.invoiceNumber,
+              invoiceDate: new Date(details.invoiceDate),
+              items: details.items.map((item) => ({
+                id: item.id,
+                name: item.name,
+                quantity: item.quantity,
+                price: item.price,
+                purchasePrice: item.purchasePrice,
+              })),
+              currency: details.currency || "INR",
+              taxAmount: parseFloat(details.taxAmount),
+              discountAmount: parseFloat(details.discountAmount),
+              shippingAmount: parseFloat(details.shippingAmount),
+              additionalNotes: details.additionalNotes,
+              subTotal: details.subTotal,
+              totalAmount: details.totalAmount,
+            },
+          },
+          rfqId: params.rfqId,
+        },
+      });
+
+      // Update the RFQ with the draft invoice ID
+      await transaction.rfq.update({
+        where: { id: params.rfqId },
+        data: {
+          draftId: createdDraftInvoice.id,
+        },
+      });
+      // Return the created draft invoice
+      return createdDraftInvoice;
+    });
+
+    return NextResponse.json({ status: 201 });
+  } catch (error) {
+    console.error("Error creating draft invoice:", error);
+    return NextResponse.json(
+      { error: "Something went wrong" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(req, { params }) {
+  try {
+    const body = await req.json();
+    const { user } = await auth();
+
+    const { receiver, details,draftId } = body;
+
+    // Update the DraftInvoice with new data
+    const updatedDraftInvoice = await db.draftInvoice.update({
+      where: { id: draftId }, 
       data: {
         userId: user.id,
         receiver: {
-          customerId: receiver.customerId,
-          name: receiver.name,
-          address: receiver.address,
-          zip: receiver.zip,
-          city: receiver.city,
-          country: receiver.country,
-          email: receiver.email,
-          phone: receiver.phone,
-          customInputs: receiver.customInputs || [],
+          update: {
+            name: receiver.name,
+            address: receiver.address,
+            zip: receiver.zip,
+            city: receiver.city,
+            country: receiver.country,
+            email: receiver.email,
+            phone: receiver.phone,
+            customInputs: receiver.customInputs || [],
+          },
         },
         details: {
-          invoiceNumber: details.invoiceNumber,
-          invoiceDate: new Date(details.invoiceDate),
-          items: details.items.map((item) => ({
-            id: item.id,
-            quantity: item.quantity,
-            price: item.price,
-            purchasePrice: item.purchasePrice,
-          })),
-          currency: details.currency || "INR",
-          taxAmount: details.taxAmount,
-          discountAmount: details.discountAmount,
-          shippingAmount: details.shippingAmount,
-          additionalNotes: details.additionalNotes,
-          totalAmountInWords: details.totalAmountInWords,
-          subTotal: details.subTotal,
-          totalAmount: details.totalAmount,
+          update: {
+            items: details.items.map((item) => ({
+              id: item.id,
+              name: item.name,
+              quantity: item.quantity,
+              price: item.price,
+              purchasePrice: item.purchasePrice,
+            })),
+            taxAmount: parseFloat(details.taxAmount),
+            discountAmount: parseFloat(details.discountAmount),
+            shippingAmount: parseFloat(details.shippingAmount),
+            additionalNotes: details.additionalNotes,
+            subTotal: details.subTotal,
+            totalAmount: details.totalAmount,
+          },
         },
-        rfqId: params.rfqId,
       },
     });
 
-    return NextResponse.json(draftInvoice, { status: 201 });
+    return NextResponse.json(updatedDraftInvoice, { status: 200 });
   } catch (error) {
-    console.error("Error creating draft invoice:", error);
+    console.error("Error updating draft invoice:", error);
     return NextResponse.json(
       { error: "Something went wrong" },
       { status: 500 }

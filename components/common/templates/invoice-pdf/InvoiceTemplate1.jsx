@@ -107,9 +107,7 @@ const InvoiceTemplate = (data) => {
                                     <p className="font-medium text-gray-800">
                                         {item.name}
                                     </p>
-                                    <p className="text-xs text-gray-600">
-                                        {item.description}
-                                    </p>
+                                   
                                 </div>
                                 <div className="border-b border-gray-300">
                                     <p className="text-gray-800">
@@ -118,12 +116,12 @@ const InvoiceTemplate = (data) => {
                                 </div>
                                 <div className="border-b border-gray-300">
                                     <p className="text-gray-800">
-                                        {item.unitPrice} {details.currency}
+                                        {item.price} {details.currency}
                                     </p>
                                 </div>
                                 <div className="border-b border-gray-300">
                                     <p className="sm:text-right text-gray-800">
-                                        {item.total} {details.currency}
+                                        {item.quantity * item.price} {details.currency}
                                     </p>
                                 </div>
                             </React.Fragment>
@@ -147,45 +145,37 @@ const InvoiceTemplate = (data) => {
                                 {details.currency}
                             </dd>
                         </dl>
-                        {details.discountDetails?.amount != undefined &&
-                            details.discountDetails?.amount > 0 && (
+                        {details.discountAmount != undefined &&
+                            details.discountAmount > 0 && (
                                 <dl className="grid sm:grid-cols-5 gap-x-3">
                                     <dt className="col-span-3 font-semibold text-gray-800">
-                                        Discount:
+                                        Discount: 
                                     </dt>
                                     <dd className="col-span-2 text-gray-500">
-                                        {details.discountDetails.amountType ===
-                                        "amount"
-                                            ? `- ${details.discountDetails.amount} ${details.currency}`
-                                            : `- ${details.discountDetails.amount}%`}
+                                    {details.discountAmount} {details.currency}
+
                                     </dd>
                                 </dl>
                             )}
-                        {details.taxDetails?.amount != undefined &&
-                            details.taxDetails?.amount > 0 && (
+                        {details.taxAmount != undefined &&
+                            details.taxAmount > 0 && (
                                 <dl className="grid sm:grid-cols-5 gap-x-3">
                                     <dt className="col-span-3 font-semibold text-gray-800">
                                         Tax:
                                     </dt>
                                     <dd className="col-span-2 text-gray-500">
-                                        {details.taxDetails.amountType ===
-                                        "amount"
-                                            ? `+ ${details.taxDetails.amount} ${details.currency}`
-                                            : `+ ${details.taxDetails.amount}%`}
+                                    {details.taxAmount} {details.currency}
                                     </dd>
                                 </dl>
                             )}
-                        {details.shippingDetails?.cost != undefined &&
-                            details.shippingDetails?.cost > 0 && (
+                        {details.shippingAmount != undefined &&
+                            details.shippingAmount > 0 && (
                                 <dl className="grid sm:grid-cols-5 gap-x-3">
                                     <dt className="col-span-3 font-semibold text-gray-800">
                                         Shipping:
                                     </dt>
                                     <dd className="col-span-2 text-gray-500">
-                                        {details.shippingDetails.costType ===
-                                        "amount"
-                                            ? `+ ${details.shippingDetails.cost} ${details.currency}`
-                                            : `+ ${details.shippingDetails.cost}%`}
+                                    {details.shippingAmount}  {details.currency}
                                     </dd>
                                 </dl>
                             )}

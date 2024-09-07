@@ -184,7 +184,6 @@ enum DeliveryStatus {
 model Order {
   id             String         @id @default(auto()) @map("_id") @db.ObjectId
   total          Int
-  phone          String
   orderItems     OrderItem[]
   isPaid         Boolean        @default(false)
   address        Address
@@ -227,7 +226,7 @@ model Rfq {
   status    RfqStatus     @default(REQUESTED)
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
-  Order     Order?        @relation(fields: [orderId], references: [id])
+  order     Order?        @relation(fields: [orderId], references: [id])
   orderId   String?       @db.ObjectId
 }
 
@@ -248,8 +247,8 @@ model DraftInvoice {
   order     Order?   @relation(fields: [orderId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  rfqId     String   @db.ObjectId
-  Rfq       Rfq[]
+  rfqId     String   @unique @db.ObjectId
+  rfq       Rfq[]
 }
 
 type Receiver {
@@ -267,8 +266,8 @@ type Receiver {
 type Details {
   invoiceNumber      String
   invoiceDate        DateTime
-  items              DraftProducts[]
-  currency           String          @default("INR")
+  items              Json
+  currency           String   @default("INR")
   taxAmount          Int
   discountAmount     Int
   shippingAmount     Int
@@ -276,13 +275,6 @@ type Details {
   totalAmountInWords String
   subTotal           Float
   totalAmount        Float
-}
-
-type DraftProducts {
-  id            String
-  quantity      Int
-  price         Int
-  purchasePrice Int
 }
 
 model Payment {

@@ -9,7 +9,7 @@ import React, {
   useState,
 } from "react";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 // RHF
 import { useFormContext } from "react-hook-form";
@@ -24,7 +24,6 @@ import {
   FORM_DEFAULT_VALUES,
   GENERATE_PDF_API,
   SEND_PDF_API,
-  SHORT_DATE_OPTIONS,
 } from "@/lib/variables";
 
 import useToasts from "@/hooks/useToasts";
@@ -57,7 +56,7 @@ export const useInvoiceContext = () => {
 
 export const InvoiceContextProvider = ({ children }) => {
   const router = useRouter();
-
+  const params = useParams();
   // Toasts
   const {
     newInvoiceSuccess,
@@ -105,11 +104,11 @@ export const InvoiceContextProvider = ({ children }) => {
    */
   const onFormSubmit = (data) => {
     // Call generate pdf method
-    saveInvoice(data);
+    // saveInvoice(data);
     // generatePdf(data);
   };
 
-  /**
+  /**s
    * Generates a new invoice.
    */
   const newInvoice = () => {
@@ -207,17 +206,61 @@ export const InvoiceContextProvider = ({ children }) => {
     }
   };
 
-  const saveInvoice = async (data) => {
+  const saveInvoice = async () => {
+    const data = getValues();
     try {
       const response = await axios.post(
         `/api/rfq/${data.details.rfqId}/save`,
         data
       );
-      saveInvoiceSuccess();
-      return response.data;
+      toast.success("Invoice saved successfully");
+      //TODO
+      router.push(`/api/rfq/${data.details.rfqId}`);
+      return;
     } catch (error) {
       console.error("Error saving invoice:", error);
       toast.error("Error saving invoice");
+      // throw new Error(error.response?.data?.error || "Failed to save invoice");
+    }
+  };
+
+  const updateInvoice = async (draftId) => {
+    const data = getValues();
+
+    try {
+      const response = await axios.patch(
+        `/api/rfq/${data.details.rfqId}/save`,
+        {
+          ...data,
+          draftId: draftId,
+        }
+      );
+      toast.success("invoice updated successfully");
+
+      return response.data;
+    } catch (error) {
+      console.error("Error updating invoice:", error);
+      toast.error("Error updating invoice");
+      // throw new Error(error.response?.data?.error || "Failed to save invoice");
+    }
+  };
+
+  const commitOrder = async (draftId) => {
+    const data = getValues();
+    //TODO - update the invoice and commit order
+    try {
+      const response = await axios.post(
+        `/api/${params.storeId}/orders/order-process`,
+        {
+          draftId: draftId,
+          data,
+        }
+      );
+      toast.success("invoice updated successfully");
+      router.refresh();
+    } catch (error) {
+      console.error("Error updating invoice:", error);
+      toast.error("Error updating invoice");
       // throw new Error(error.response?.data?.error || "Failed to save invoice");
     }
   };
@@ -301,6 +344,8 @@ export const InvoiceContextProvider = ({ children }) => {
         downloadPdf,
         printPdf,
         previewPdfInTab,
+        updateInvoice,
+        commitOrder,
         saveInvoice,
         deleteInvoice,
         sendPdfToMail,
