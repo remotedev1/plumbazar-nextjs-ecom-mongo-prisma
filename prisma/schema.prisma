@@ -233,7 +233,7 @@ model Rfq {
 enum RfqStatus {
   REQUESTED
   PROCESSING
-  FINALIZED
+  PROCESSED
   CANCELED
 }
 

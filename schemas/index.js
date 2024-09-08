@@ -217,16 +217,15 @@ const PaymentInformationSchema = z.object({
   // paymentDueDate: fieldValidators.date,
 });
 
-
-
 const InvoiceDetailsSchema = z.object({
   invoiceNumber: fieldValidators.stringMin1,
   rfqId: fieldValidators.stringMin1,
+  draftId: fieldValidators.stringOptional,
   invoiceDate: fieldValidators.date,
   items: z.array(ItemSchema),
   paymentInformation: PaymentInformationSchema.optional(),
   taxAmount: fieldValidators.stringToNumberWithMax,
-  discountAmount:  fieldValidators.stringToNumberWithMax,
+  discountAmount: fieldValidators.stringToNumberWithMax,
   shippingAmount: fieldValidators.stringToNumberWithMax,
   subTotal: fieldValidators.nonNegativeNumber,
   totalAmount: fieldValidators.nonNegativeNumber,

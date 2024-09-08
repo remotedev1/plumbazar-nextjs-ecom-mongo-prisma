@@ -18,12 +18,13 @@ const InvoiceMain = ({ rfq, draftInvoiceData }) => {
   const { handleSubmit, setValue, reset } = useFormContext();
   const { onFormSubmit, formValues } = useInvoiceContext();
 
+
   useEffect(() => {
-    if (!draftInvoiceData) {
+    if (draftInvoiceData) {
       // Reset the form with draftInvoiceData if it exists
       reset({
         receiver: draftInvoiceData.receiver,
-        details: { ...draftInvoiceData.details, rfqId: rfq.id },
+        details: { ...draftInvoiceData.details, rfqId: rfq.id, draftId: draftInvoiceData.id },
       });
     } else if (rfq?.user?.address) {
       // If no draftInvoiceData, but rfq.user.address exists, set form values based on user info

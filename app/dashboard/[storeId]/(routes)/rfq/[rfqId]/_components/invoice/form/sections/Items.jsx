@@ -49,6 +49,7 @@ const Items = () => {
     });
   };
 
+
   const removeField = (index) => {
     remove(index);
   };

@@ -39,6 +39,7 @@ export async function POST(req, { params }) {
                 quantity: item.quantity,
                 price: item.price,
                 purchasePrice: item.purchasePrice,
+                total: item.quantity * item.price,
               })),
               currency: details.currency || "INR",
               taxAmount: parseFloat(details.taxAmount),
@@ -58,6 +59,7 @@ export async function POST(req, { params }) {
         where: { id: params.rfqId },
         data: {
           draftId: createdDraftInvoice.id,
+          status: "PROCESSING",
         },
       });
       // Return the created draft invoice
@@ -79,11 +81,11 @@ export async function PATCH(req, { params }) {
     const body = await req.json();
     const { user } = await auth();
 
-    const { receiver, details,draftId } = body;
+    const { receiver, details } = body;
 
     // Update the DraftInvoice with new data
     const updatedDraftInvoice = await db.draftInvoice.update({
-      where: { id: draftId }, 
+      where: { id: details.draftId }, 
       data: {
         userId: user.id,
         receiver: {
@@ -106,6 +108,7 @@ export async function PATCH(req, { params }) {
               quantity: item.quantity,
               price: item.price,
               purchasePrice: item.purchasePrice,
+              total: item.quantity * item.price,
             })),
             taxAmount: parseFloat(details.taxAmount),
             discountAmount: parseFloat(details.discountAmount),

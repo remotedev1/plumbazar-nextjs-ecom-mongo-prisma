@@ -25,16 +25,10 @@ import { useInvoiceContext } from "@/providers/invoice-provider";
 import BaseButton from "../BaseButton";
 import PdfViewer from "./actions/PdfViewer";
 import InvoiceExportModal from "./actions/InvoiceExportModel";
-import { Button } from "@/components/ui/button";
 
 const InvoiceActions = ({ draftInvoiceData, rfq }) => {
-  const {
-    invoicePdfLoading,
-    saveInvoice,
-    updateInvoice,
-    commitOrder,
-    generateInvoice,
-  } = useInvoiceContext();
+  const { invoicePdfLoading, commitOrder, getApproval, generateInvoice } =
+    useInvoiceContext();
   return (
     <div className={`xl:w-[45%]`}>
       <Card className="h-auto sticky top-0 px-2">
@@ -70,9 +64,10 @@ const InvoiceActions = ({ draftInvoiceData, rfq }) => {
                         </NewInvoiceAlert> */}
             {/* Generate pdf button */}
 
-            {!!draftInvoiceData.status === "APPROVED" ? (
+            {draftInvoiceData && draftInvoiceData?.status === "APPROVED" ? (
               <div className="flex flex-wrap gap-3">
                 {/* Export modal button */}
+                <h2>Approved by admin</h2>
                 <InvoiceExportModal>
                   <BaseButton
                     variant="outline"
@@ -95,42 +90,44 @@ const InvoiceActions = ({ draftInvoiceData, rfq }) => {
               </div>
             ) : null}
 
-            {draftInvoiceData.id ? (
-              <BaseButton
-                type="submit"
-                tooltipLabel="update your invoice"
-                disabled={invoicePdfLoading}
-                onClick={() => updateInvoice(draftInvoiceData.id)}
-                loadingText="updating your invoice"
-                className="bg-blue-500"
-              >
-                <Save />
-                Update
-              </BaseButton>
-            ) : (
-              <BaseButton
-                type="submit"
-                tooltipLabel="save your invoice"
-                disabled={invoicePdfLoading}
-                onClick={() => saveInvoice()}
-                loadingText="saving your invoice"
-                className="bg-blue-500"
-              >
-                <Save />
-                Save
-              </BaseButton>
-            )}
+{draftInvoiceData?.id && draftInvoiceData?.status === "CREATED" ? (
+  <>
+    <BaseButton
+      type="submit"
+      tooltipLabel="Update your invoice"
+      disabled={invoicePdfLoading}
+      loadingText="Updating your invoice"
+      className="bg-blue-500"
+    >
+      <Save />
+      Update
+    </BaseButton>
+    <BaseButton
+      tooltipLabel="Get approval for your invoice"
+      disabled={invoicePdfLoading}
+      onClick={() => getApproval(draftInvoiceData?.id)}
+      loadingText="Updating your invoice"
+      className="bg-orange-600"
+    >
+      <Save />
+      Get Approval
+    </BaseButton>
+  </>
+) : draftInvoiceData?.status === "WAITING" ? (
+  <h2>Waiting for approval</h2>
+) : draftInvoiceData?.status !== "APPROVED" ? (
+  <BaseButton
+    type="submit"
+    tooltipLabel="Save your invoice"
+    disabled={invoicePdfLoading}
+    loadingText="Saving your invoice"
+    className="bg-blue-500"
+  >
+    <Save />
+    Save
+  </BaseButton>
+) : null}
 
-            {/* <BaseButton
-              tooltipLabel="move to orders"
-              disabled={invoicePdfLoading}
-              onClick={() => commitOrder(draftInvoiceData.id)}
-              loadingText="Committing your order"
-              className="bg-orange-500"
-            >
-              <Save />
-              order commit
-            </BaseButton> */}
           </div>
 
           <div className="w-full">
