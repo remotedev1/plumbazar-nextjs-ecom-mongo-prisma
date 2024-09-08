@@ -90,7 +90,7 @@ const InvoiceActions = ({ draftInvoiceData, rfq }) => {
               </div>
             ) : null}
 
-{draftInvoiceData?.id && draftInvoiceData?.status === "CREATED" ? (
+{draftInvoiceData?.status === "CREATED" ? (
   <>
     <BaseButton
       type="submit"
