@@ -79,7 +79,6 @@ export const BillboardForm = ({ initialData, categories }) => {
       }
 
       router.refresh();
-      router.push(`/dashboard/${params.storeId}/billboards`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");

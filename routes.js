@@ -26,6 +26,15 @@ export const authRoutes = [
 ];
 
 /**
+ * An array of routes that are used for authenticationS
+ * These routes will redirect logged in users
+ * @type {string[]}
+ */
+export const salesRoutes = [
+  "/rfq",
+];
+
+/**
  * The prefix for API authentication routes
  * Routes that start with this prefix are used for API authentication purposes
  * @type {string}

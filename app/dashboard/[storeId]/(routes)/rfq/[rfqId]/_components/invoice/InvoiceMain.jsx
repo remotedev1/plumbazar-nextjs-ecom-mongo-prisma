@@ -18,7 +18,6 @@ const InvoiceMain = ({ rfq, draftInvoiceData }) => {
   const { handleSubmit, setValue, reset } = useFormContext();
   const { onFormSubmit, formValues } = useInvoiceContext();
 
-
   useEffect(() => {
     if (draftInvoiceData) {
       // Reset the form with draftInvoiceData if it exists
@@ -41,6 +40,7 @@ const InvoiceMain = ({ rfq, draftInvoiceData }) => {
       setValue("receiver.country", "India");
       setValue("details.rfqId", rfq.id);
     }
+
   }, [draftInvoiceData, rfq, reset, setValue]);
 
   return (

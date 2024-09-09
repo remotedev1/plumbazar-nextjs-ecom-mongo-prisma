@@ -124,23 +124,17 @@ export const ChargesContextProvider = ({ children }) => {
     let shippingCost = parseFloat(shipping && shipping.toString()) || 0;
 
     let total = totalSum;
-
+    //discount & percentage
     if (!isNaN(discountAmount)) {
-      total -= discountAmount;
-
-      setValue("details.discountAmount", discountAmount);
+      total -= total * (discountAmount / 100);
     }
 
     if (!isNaN(taxAmount)) {
-      total += taxAmount;
-
-      setValue("details.taxAmount", taxAmount);
+      total += total * (taxAmount / 100);
     }
 
     if (!isNaN(shippingCost)) {
       total += shippingCost;
-
-      setValue("details.shippingAmount", shippingCost);
     }
 
     setTotalAmount(total);

@@ -23,7 +23,7 @@ import { Percent, RefreshCw } from "lucide-react";
 const ChargeInput = ({
   label,
   name,
-
+type,
   currency,
 }) => {
   const { control } = useFormContext();
@@ -32,7 +32,6 @@ const ChargeInput = ({
     <>
       <div className="flex justify-between items-center">
         <div>{label}</div>
-
         <div className="flex items-center gap-1">
           <FormField
             control={control}
@@ -47,7 +46,7 @@ const ChargeInput = ({
                       placeholder={label}
                       type="number"
                       min="0"
-                      max="1000000"
+                      max={type && 100}
                     />
                   </FormControl>
                 </div>
@@ -55,7 +54,8 @@ const ChargeInput = ({
               </FormItem>
             )}
           />
-          <div>{currency}</div>
+       
+        <div className="flex items-center gap-1">{type ==="percent" ? <Percent/> :currency }</div>
         </div>
       </div>
     </>

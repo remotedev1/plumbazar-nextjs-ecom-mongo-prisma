@@ -80,7 +80,7 @@ export const CategoryForm = ({ initialData }) => {
       }
 
       router.refresh();
-      router.push(`/dashboard/${params.storeId}/categories`);
+
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");

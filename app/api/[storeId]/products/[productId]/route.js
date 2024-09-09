@@ -42,7 +42,9 @@ export async function PATCH(req, { params }) {
     const name = formData.get("name");
     const price = formData.get("price");
     const purchasedPrice = formData.get("purchasedPrice");
+    const gst = formData.get("gst");
     const brandId = formData.get("brandId");
+    const description = formData.get("description");
     const categoryId = formData.get("categoryId");
     const isFeatured = formData.get("isFeatured") === "true";
     const isArchived = formData.get("isArchived") === "true";
@@ -59,6 +61,10 @@ export async function PATCH(req, { params }) {
 
     if (!storeByUser) {
       return new NextResponse("Unauthorized", { status: 403 });
+    }
+
+    if (!gst) {
+      return new NextResponse("gst is required", { status: 400 });
     }
 
     if (!name) {
@@ -144,6 +150,8 @@ export async function PATCH(req, { params }) {
         isFeatured,
         isArchived,
         brandId,
+        description,
+        gst,
         categoryId,
         storeId: params.storeId,
         images: finalImages,

@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-import { AlertModal } from "@/components/models/alert-modal";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -40,16 +40,12 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
 export const AddProductModel = ({ brands, categories }) => {
   const params = useParams();
-  const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -61,7 +57,10 @@ export const AddProductModel = ({ brands, categories }) => {
   const defaultValues = {
     name: "",
     images: [],
-    price: 0,
+    price: null,
+    purchasedPrice: null,
+    gst: 18,
+    description: "",
     brandId: "",
     categoryId: "",
     isFeatured: false,
@@ -79,7 +78,10 @@ export const AddProductModel = ({ brands, categories }) => {
       const formData = new FormData();
       formData.append("name", data.name);
       formData.append("price", data.price);
+      formData.append("purchasedPrice", data.purchasedPrice);
       formData.append("brandId", data.brandId);
+      formData.append("description", data.description);
+      formData.append("gst", data.gst);
       formData.append("categoryId", data.categoryId);
       formData.append("isFeatured", data.isFeatured ? "true" : "false");
       formData.append("isArchived", data.isArchived ? "true" : "false");
@@ -126,7 +128,7 @@ export const AddProductModel = ({ brands, categories }) => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 w-full"
+              className="space-y-8  max-w-5xl mx-auto"
             >
               <FormField
                 control={form.control}
@@ -156,7 +158,7 @@ export const AddProductModel = ({ brands, categories }) => {
                   </FormItem>
                 )}
               />
-              <div className="grid grid-cols-3 gap-8">
+              <div className="grid md:grid-cols-2 gap-8">
                 <FormField
                   control={form.control}
                   name="name"
@@ -174,6 +176,7 @@ export const AddProductModel = ({ brands, categories }) => {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="price"
@@ -184,9 +187,9 @@ export const AddProductModel = ({ brands, categories }) => {
                         <Input
                           type="number"
                           disabled={loading}
-                          placeholder="0.00"
+                          placeholder="price"
                           {...field}
-                          value={field.value || 0}
+                          value={field.value}
                           onChange={(e) =>
                             field.onChange(parseFloat(e.target.value))
                           }
@@ -264,7 +267,56 @@ export const AddProductModel = ({ brands, categories }) => {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          disabled={loading}
+                          placeholder="Product description"
+                          {...field}
+                          value={field.value || ""}
+                          onChange={(e) => field.onChange(e.target.value)}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <div>
+                  <FormField
+                    control={form.control}
+                    name="gst"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>GST</FormLabel>
+                        <Select
+                          disabled={loading}
+                          onValueChange={(value) => field.onChange(value)}
+                          value={field.value?.toString()}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a GST" />
+                            </SelectTrigger>
+                          </FormControl>
+
+                          <SelectContent>
+                            {[0, 5, 12, 18, 28].map((gst) => (
+                              <SelectItem key={gst} value={gst.toString()}>
+                                {gst}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name="isFeatured"
@@ -331,9 +383,10 @@ export const AddProductModel = ({ brands, categories }) => {
                   />
                 </div>
               </div>
+
               <Button
                 disabled={loading}
-                className="w-full bg-blue-500 hover:bg-blue-300"
+                className="ml-auto w-full bg-blue-500"
                 type="submit"
               >
                 {action}
@@ -342,7 +395,9 @@ export const AddProductModel = ({ brands, categories }) => {
           </Form>
           <DrawerFooter>
             <DrawerClose asChild>
-              <Button variant="destructive">Cancel</Button>
+              <Button variant="destructive" className="w-fit">
+                Cancel
+              </Button>
             </DrawerClose>
           </DrawerFooter>
         </div>

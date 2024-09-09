@@ -29,6 +29,7 @@ import { getTotalRevenue } from "@/actions/get-total-revenue";
 import { getSalesCount } from "@/actions/get-sales-count";
 
 const OrdersPage = async ({ params }) => {
+  
   const totalRevenue = await getTotalRevenue(params.storeId);
   const { numberOfUnpaidOrders, totalUnpaidAmount } = await getPendingAmount(
     params.storeId

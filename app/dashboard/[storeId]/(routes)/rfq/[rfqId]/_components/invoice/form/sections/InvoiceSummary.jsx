@@ -9,18 +9,22 @@ const InvoiceSummary = () => {
   return (
     <section>
       <Subheading>Summary:</Subheading>
-      <div className="flex flex-wrap gap-x-5 gap-y-10">
-        <div className="flex flex-col gap-3">
+      <div className="p-5 max-w-lg mx-auto ">
+        <div className="flex flex-col gap-5 ">
+          {/* Final charges */}
+          <Charges />
           {/* Additional notes & Payment terms */}
           <FormTextarea
             name="details.additionalNotes"
-            label="additionalNotes"
+            label="Additional notes"
             placeholder="Your additional notes"
           />
+          <FormTextarea
+            name="details.tc"
+            label="Terms & conditions"
+            placeholder="Terms & conditions"
+          />
         </div>
-
-        {/* Final charges */}
-        <Charges />
       </div>
     </section>
   );

@@ -8,6 +8,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+//hooks
+import { useInvoiceContext } from "@/providers/invoice-provider";
+import { useSession } from "next-auth/react";
+
 // Components
 // import {
 //     // PdfViewer,
@@ -21,14 +25,19 @@ import {
 
 // Icons
 import { FileInput, Import, Save } from "lucide-react";
-import { useInvoiceContext } from "@/providers/invoice-provider";
+
 import BaseButton from "../BaseButton";
 import PdfViewer from "./actions/PdfViewer";
 import InvoiceExportModal from "./actions/InvoiceExportModel";
 
 const InvoiceActions = ({ draftInvoiceData, rfq }) => {
-  const { invoicePdfLoading, commitOrder, getApproval, generateInvoice } =
+  const { invoicePdfLoading, generatePdf, getApproval, generateInvoice } =
     useInvoiceContext();
+  const {
+    data: { user },
+  } = useSession();
+
+
   return (
     <div className={`xl:w-[45%]`}>
       <Card className="h-auto sticky top-0 px-2">
@@ -79,9 +88,8 @@ const InvoiceActions = ({ draftInvoiceData, rfq }) => {
                   </BaseButton>
                 </InvoiceExportModal>
                 <BaseButton
-                  onClick={generateInvoice}
+                  onClick={generatePdf}
                   tooltipLabel="Generate your invoice"
-                  loading={invoicePdfLoading}
                   loadingText="Generating your invoice"
                 >
                   <FileInput />
@@ -90,44 +98,53 @@ const InvoiceActions = ({ draftInvoiceData, rfq }) => {
               </div>
             ) : null}
 
-{draftInvoiceData?.status === "CREATED" ? (
-  <>
-    <BaseButton
-      type="submit"
-      tooltipLabel="Update your invoice"
-      disabled={invoicePdfLoading}
-      loadingText="Updating your invoice"
-      className="bg-blue-500"
-    >
-      <Save />
-      Update
-    </BaseButton>
-    <BaseButton
-      tooltipLabel="Get approval for your invoice"
-      disabled={invoicePdfLoading}
-      onClick={() => getApproval(draftInvoiceData?.id)}
-      loadingText="Updating your invoice"
-      className="bg-orange-600"
-    >
-      <Save />
-      Get Approval
-    </BaseButton>
-  </>
-) : draftInvoiceData?.status === "WAITING" ? (
-  <h2>Waiting for approval</h2>
-) : draftInvoiceData?.status !== "APPROVED" ? (
-  <BaseButton
-    type="submit"
-    tooltipLabel="Save your invoice"
-    disabled={invoicePdfLoading}
-    loadingText="Saving your invoice"
-    className="bg-blue-500"
-  >
-    <Save />
-    Save
-  </BaseButton>
-) : null}
+            <>
+              {(draftInvoiceData?.status === "CREATED" ||
+                (draftInvoiceData?.status === "WAITING" &&
+                  user.role !== "SALES")) && (
+                <BaseButton
+                  type="submit"
+                  tooltipLabel="Update your invoice"
+                  disabled={invoicePdfLoading}
+                  loadingText="Updating your invoice"
+                  className="bg-blue-500"
+                >
+                  <Save />
+                  Update
+                </BaseButton>
+              )}
 
+              {draftInvoiceData?.status === "CREATED" &&
+              user?.role === "SALES" ? (
+                <BaseButton
+                  tooltipLabel="Get approval for your invoice"
+                  disabled={invoicePdfLoading}
+                  onClick={() => getApproval(draftInvoiceData?.id)}
+                  loadingText="Updating your invoice"
+                  className="bg-orange-600"
+                >
+                  <Save />
+                  Get Approval
+                </BaseButton>
+              ) : null}
+              {draftInvoiceData?.status === "WAITING" && (
+                <h2>Waiting for approval</h2>
+              )}
+            </>
+
+            {/* Save button */}
+            {!draftInvoiceData?.status && (
+              <BaseButton
+                type="submit"
+                tooltipLabel="Save your invoice"
+                disabled={invoicePdfLoading}
+                loadingText="Saving your invoice"
+                className="bg-blue-500"
+              >
+                <Save />
+                Save
+              </BaseButton>
+            )}
           </div>
 
           <div className="w-full">

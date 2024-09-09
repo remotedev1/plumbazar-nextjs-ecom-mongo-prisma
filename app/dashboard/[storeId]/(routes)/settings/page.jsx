@@ -4,9 +4,13 @@ import React from "react";
 import { SettingsForm } from "./components/settings-form";
 import { db } from "@/lib/db";
 import { auth } from "@/auth";
+import Unauthorized from "@/components/auth/un-authorized";
 
 const SettingsPage = async ({ params }) => {
   const { user } = await auth();
+  if (user.role !== "SUPERADMIN" && user.role !== "ADMIN") {
+    return <Unauthorized />;
+  }
 
   if (!user) {
     redirect("/auth/login");

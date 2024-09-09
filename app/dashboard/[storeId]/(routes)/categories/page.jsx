@@ -4,6 +4,7 @@ import CategoryClient from "./components/Client";
 import { db } from "@/lib/db";
 
 const CategoriesPage = async ({ params }) => {
+
   const categories = await db.category.findMany({
     orderBy: {
       createdAt: "desc",

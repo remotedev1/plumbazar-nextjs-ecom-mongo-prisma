@@ -1,7 +1,13 @@
+import { auth } from "@/auth";
 import { CategoryForm } from "./components/category-form";
 import { db } from "@/lib/db";
+import Unauthorized from "@/components/auth/un-authorized";
 
 const CategoryPage = async ({ params }) => {
+  const { user } = await auth();
+  if (user.role !== "SUPERADMIN" && user.role !== "ADMIN") {
+    return <Unauthorized />;
+  }
   if (params.categoryId !== "new") {
     var category = await db.category.findFirst({
       where: {

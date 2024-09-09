@@ -6,8 +6,14 @@ import { ChangePaymentStatus } from "../components/change-payment-status";
 import { ChangeDeliveryStatus } from "../components/change-delivery-status";
 import { db } from "@/lib/db";
 import OrderActions from "../components/order-actions";
+import { auth } from "@/auth";
+import Unauthorized from "@/components/auth/un-authorized";
 
 const OrderDetails = async ({ params }) => {
+  const { user } = await auth();
+  if (user.role !== "SUPERADMIN" && user.role !== "ADMIN") {
+    return <Unauthorized />;
+  }
   const { orderId, storeId } = params;
   const order = await getOrder(orderId.split("%20")[0]);
 

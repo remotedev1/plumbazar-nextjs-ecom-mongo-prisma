@@ -100,6 +100,7 @@ const Charges = () => {
               label="discount"
               name="details.discountAmount"
               currency={currency}
+              type="percent"
             />
           )}
 
@@ -108,6 +109,7 @@ const Charges = () => {
               label="tax"
               name="details.taxAmount"
               currency={currency}
+              type="percent"
             />
           )}
 

@@ -136,7 +136,6 @@ export const InvoiceContextProvider = ({ children }) => {
    */
   const generatePdf = useCallback(async (data) => {
     setInvoicePdfLoading(true);
-
     try {
       const response = await fetch(GENERATE_PDF_API, {
         method: "POST",

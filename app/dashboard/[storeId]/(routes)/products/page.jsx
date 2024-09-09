@@ -5,7 +5,9 @@ import { rupeeFormatter } from "@/lib/utils";
 import ProductsClient from "./components/Client";
 import { db } from "@/lib/db";
 
+
 const ProductsPage = async ({ params }) => {
+
   const products = await db.product.findMany({
     include: {
       brand: true,

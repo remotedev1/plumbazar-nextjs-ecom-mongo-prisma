@@ -76,7 +76,6 @@ export const BrandForm = ({ initialData }) => {
       }
 
       router.refresh();
-      router.push(`/dashboard/${params.storeId}/brands`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");

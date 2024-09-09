@@ -7,8 +7,14 @@ import { AddStock } from "./_components/AddStock";
 import Heading from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import Container from "@/components/ui/container";
+import Unauthorized from "@/components/auth/un-authorized";
+import { auth } from "@/auth";
 
 const StockInPage = async () => {
+  const { user } = await auth();
+  if (user.role !== "SUPERADMIN" && user.role !== "ADMIN") {
+    return <Unauthorized />;
+  }
   const brands = await getBrands();
   const categories = await getCategories();
 

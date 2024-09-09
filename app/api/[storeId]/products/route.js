@@ -15,7 +15,9 @@ export async function POST(req, { params }) {
     const name = formData.get("name");
     const price = formData.get("price");
     const purchasedPrice = formData.get("purchasedPrice");
+    const gst = formData.get("gst");
     const brandId = formData.get("brandId");
+    const description = formData.get("description");
     const categoryId = formData.get("categoryId");
     const isFeatured = formData.get("isFeatured") === "true";
     const isArchived = formData.get("isArchived") === "true";
@@ -24,6 +26,10 @@ export async function POST(req, { params }) {
 
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
+    }
+
+    if (!gst) {
+      return new NextResponse("gst is required", { status: 400 });
     }
 
     if (!images || !images.length) {
@@ -78,7 +84,9 @@ export async function POST(req, { params }) {
         purchasedPrice: Number(purchasedPrice),
         isFeatured,
         isArchived,
+        gst,
         brandId,
+        description,
         categoryId,
         storeId: params.storeId,
         images: uploadedImages.map((img) => img.url),

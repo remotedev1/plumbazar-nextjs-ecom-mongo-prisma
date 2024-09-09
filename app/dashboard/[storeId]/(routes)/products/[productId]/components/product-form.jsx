@@ -38,8 +38,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ProductSchema } from "@/schemas";
+import { Textarea } from "@/components/ui/textarea";
 
-export const ProductForm = ({ initialData, brands,categories }) => {
+export const ProductForm = ({ initialData, brands, categories }) => {
   const params = useParams();
   const router = useRouter();
 
@@ -59,9 +60,11 @@ export const ProductForm = ({ initialData, brands,categories }) => {
     ? {
         name: initialData.name || "",
         images: initialData.images || [],
-        price: parseFloat(String(initialData.price || 0)),
-        purchasedPrice: parseFloat(String(initialData.purchasedPrice || 0)),
+        price: parseFloat(String(initialData.price)),
+        purchasedPrice: parseFloat(String(initialData.purchasedPrice)),
         brandId: initialData.brandId || "",
+        description: initialData.description || "",
+        gst: initialData?.gst,
         categoryId: initialData.categoryId || "",
         isFeatured: initialData.isFeatured || false,
         isArchived: initialData.isArchived || false,
@@ -69,8 +72,10 @@ export const ProductForm = ({ initialData, brands,categories }) => {
     : {
         name: "",
         images: [],
-        price: 0,
-        purchasedPrice: 0,
+        price: null,
+        purchasedPrice: null,
+        gst: 18,
+        description: "",
         brandId: "",
         categoryId: "",
         isFeatured: false,
@@ -90,6 +95,8 @@ export const ProductForm = ({ initialData, brands,categories }) => {
       formData.append("price", data.price);
       formData.append("purchasedPrice", data.purchasedPrice);
       formData.append("brandId", data.brandId);
+      formData.append("description", data.description);
+      formData.append("gst", data.gst);
       formData.append("categoryId", data.categoryId);
       formData.append("isFeatured", data.isFeatured ? "true" : "false");
       formData.append("isArchived", data.isArchived ? "true" : "false");
@@ -119,7 +126,6 @@ export const ProductForm = ({ initialData, brands,categories }) => {
       }
 
       router.refresh();
-      router.push(`/dashboard/${params.storeId}/products`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error(error.response?.data);
@@ -170,7 +176,7 @@ export const ProductForm = ({ initialData, brands,categories }) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full"
+          className="space-y-8  max-w-5xl mx-auto"
         >
           <FormField
             control={form.control}
@@ -200,7 +206,7 @@ export const ProductForm = ({ initialData, brands,categories }) => {
               </FormItem>
             )}
           />
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8">
             <FormField
               control={form.control}
               name="name"
@@ -218,28 +224,7 @@ export const ProductForm = ({ initialData, brands,categories }) => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="purchasedPrice"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Purchased Price</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      disabled={loading}
-                      placeholder="0.00"
-                      {...field}
-                      value={field.value || 0}
-                      onChange={(e) =>
-                        field.onChange(parseFloat(e.target.value))
-                      }
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          
             <FormField
               control={form.control}
               name="price"
@@ -250,9 +235,9 @@ export const ProductForm = ({ initialData, brands,categories }) => {
                     <Input
                       type="number"
                       disabled={loading}
-                      placeholder="0.00"
+                      placeholder="price"
                       {...field}
-                      value={field.value || 0}
+                      value={field.value}
                       onChange={(e) =>
                         field.onChange(parseFloat(e.target.value))
                       }
@@ -296,7 +281,7 @@ export const ProductForm = ({ initialData, brands,categories }) => {
                 </FormItem>
               )}
             />
-  <FormField
+            <FormField
               control={form.control}
               name="categoryId"
               render={({ field }) => (
@@ -330,7 +315,56 @@ export const ProductForm = ({ initialData, brands,categories }) => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      disabled={loading}
+                      placeholder="Product description"
+                      {...field}
+                      value={field.value || ""}
+                      onChange={(e) => field.onChange(e.target.value)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div>
+            <FormField
+  control={form.control}
+  name="gst"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>GST</FormLabel>
+      <Select
+        disabled={loading}
+        onValueChange={(value) => field.onChange(value)} 
+        value={field.value?.toString()} 
+      >
+        <FormControl>
+          <SelectTrigger>
+            <SelectValue placeholder="Select a GST" />
+          </SelectTrigger>
+        </FormControl>
+
+        <SelectContent>
+          {[0, 5, 12, 18, 28].map((gst) => (
+            <SelectItem key={gst} value={gst.toString()}>
+              {gst}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      <FormMessage />
+    </FormItem>
+  )}
+/>
               <FormField
                 control={form.control}
                 name="isFeatured"

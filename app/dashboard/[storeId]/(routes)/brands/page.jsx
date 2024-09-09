@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import BrandClient from "./components/Client";
 
 const BrandsPage = async ({ params }) => {
+
   const brand = await db.brand.findMany({
     orderBy: {
       createdAt: "desc",

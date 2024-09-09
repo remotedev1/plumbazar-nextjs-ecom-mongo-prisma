@@ -1,7 +1,13 @@
 import { db } from "@/lib/db";
 import { ProductForm } from "./components/product-form";
+import { auth } from "@/auth";
+import Unauthorized from "@/components/auth/un-authorized";
 
 const ProductPage = async ({ params }) => {
+  const { user } = await auth();
+  if (user.role !== "SUPERADMIN" && user.role !== "ADMIN") {
+    return <Unauthorized />;
+  }
   let product = null;
   if (params.productId !== "new") {
     product = await db.product.findFirst({

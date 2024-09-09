@@ -23,7 +23,6 @@ export const newPasswordSchema = z.object({
 export const billboardSchema = z.object({
   label: z.string().min(3, { message: "Label is required" }),
   imageUrl: z.string().url(),
-  brand: z.string().min(1),
 });
 
 export const BrandSchema = z.object({
@@ -54,7 +53,7 @@ export const ProductSchema = z.object({
     })
     .optional(),
   description: z.string().optional(),
-
+  gst: z.string(),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
 });

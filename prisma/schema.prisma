@@ -10,6 +10,8 @@ datasource db {
 enum UserRole {
   ADMIN
   USER
+  SUPERADMIN
+  SALES
 }
 
 model User {
@@ -90,13 +92,15 @@ model Store {
 }
 
 model Billboard {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  label      String
-  imageUrl   String
-  brand      Brand     @relation(fields: [brandId], references: [id])
-  brandId    String    @db.ObjectId
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  label    String
+  imageUrl String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Brand      Brand?    @relation(fields: [brandId], references: [id])
+  brandId    String?   @db.ObjectId
   Category   Category? @relation(fields: [categoryId], references: [id])
   categoryId String?   @db.ObjectId
 }
@@ -142,6 +146,7 @@ model Product {
   numReviews      Int?
   features        Features[]
   description     String?
+  gst             String      @default("18")
   orderItems      OrderItem[]
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
@@ -249,6 +254,7 @@ model DraftInvoice {
   updatedAt DateTime           @updatedAt
   rfqId     String             @unique @db.ObjectId
   status    DraftInvoiceStatus @default(CREATED)
+  tc        String?
   rfq       Rfq[]
 }
 
@@ -290,7 +296,7 @@ model Payment {
   status        PaymentStatus
   transactionId String?
   amount        Float
-  currency      String        @default("rupee")
+  ptc           String?
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   Order         Order[]
