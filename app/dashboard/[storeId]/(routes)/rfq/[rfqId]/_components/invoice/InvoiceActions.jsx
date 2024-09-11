@@ -39,7 +39,7 @@ const InvoiceActions = ({ draftInvoiceData, rfq }) => {
 
 
   return (
-    <div className={`xl:w-[45%]`}>
+    <div className="w-[85%]">
       <Card className="h-auto sticky top-0 px-2">
         <CardHeader>
           <CardTitle>ACTIONS</CardTitle>
@@ -99,6 +99,9 @@ const InvoiceActions = ({ draftInvoiceData, rfq }) => {
             ) : null}
 
             <>
+            {draftInvoiceData?.status === "WAITING" && (
+                <h2>Waiting for approval</h2>
+              )}
               {(draftInvoiceData?.status === "CREATED" ||
                 (draftInvoiceData?.status === "WAITING" &&
                   user.role !== "SALES")) && (
@@ -127,9 +130,7 @@ const InvoiceActions = ({ draftInvoiceData, rfq }) => {
                   Get Approval
                 </BaseButton>
               ) : null}
-              {draftInvoiceData?.status === "WAITING" && (
-                <h2>Waiting for approval</h2>
-              )}
+             
             </>
 
             {/* Save button */}
@@ -143,6 +144,17 @@ const InvoiceActions = ({ draftInvoiceData, rfq }) => {
               >
                 <Save />
                 Save
+              </BaseButton>
+            )}
+            { user?.role !== "SALES" && draftInvoiceData?.status === "WAITING" && (
+              <BaseButton
+                tooltipLabel="Approve your invoice"
+                disabled={invoicePdfLoading}
+                loadingText="Approve your invoice"
+                className="bg-blue-500"
+              >
+                <Save />
+                Approve
               </BaseButton>
             )}
           </div>

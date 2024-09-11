@@ -17,13 +17,16 @@ import { useEffect } from "react";
 const InvoiceMain = ({ rfq, draftInvoiceData }) => {
   const { handleSubmit, setValue, reset } = useFormContext();
   const { onFormSubmit, formValues } = useInvoiceContext();
-
   useEffect(() => {
     if (draftInvoiceData) {
       // Reset the form with draftInvoiceData if it exists
       reset({
         receiver: draftInvoiceData.receiver,
-        details: { ...draftInvoiceData.details, rfqId: rfq.id, draftId: draftInvoiceData.id },
+        details: {
+          ...draftInvoiceData.details,
+          rfqId: rfq.id,
+          draftId: draftInvoiceData.id,
+        },
       });
     } else if (rfq?.user?.address) {
       // If no draftInvoiceData, but rfq.user.address exists, set form values based on user info
@@ -40,7 +43,6 @@ const InvoiceMain = ({ rfq, draftInvoiceData }) => {
       setValue("receiver.country", "India");
       setValue("details.rfqId", rfq.id);
     }
-
   }, [draftInvoiceData, rfq, reset, setValue]);
 
   return (
@@ -51,7 +53,7 @@ const InvoiceMain = ({ rfq, draftInvoiceData }) => {
             // console.log(err);
           })}
         >
-          <div className="flex flex-wrap">
+          <div className="flex flex-wrap justify-center gap-5">
             <InvoiceForm />
             <InvoiceActions draftInvoiceData={draftInvoiceData} rfq={rfq} />
           </div>

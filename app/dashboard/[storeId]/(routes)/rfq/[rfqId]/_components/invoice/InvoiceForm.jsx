@@ -25,7 +25,7 @@ import InvoiceDetails from "./form/sections/InvoiceDetails";
 import PaymentInformation from "./form/sections/PaymentInformation";
 import InvoiceSummary from "./form/sections/InvoiceSummary";
 import Items from "./form/sections/Items";
-import { generateInvoiceNumber } from "@/lib/variables";
+import { generateInvoiceNumber } from "@/lib/helpers";
 
 const InvoiceForm = () => {
 
@@ -50,12 +50,12 @@ const InvoiceForm = () => {
   // }, [invoiceNumber]);
 
   return (
-    <div className={`xl:w-[55%]`}>
+    <div className="w-[85%]">
       <Card>
         <CardHeader>
           <div className="flex gap-3">
             <CardTitle className="flex items-center gap-3">
-              <span className="uppercase">Proforma</span>
+              <span className="uppercase">ESTIMATE</span>
             </CardTitle>
             <Badge variant="secondary" className="w-fit">
               <p style={{ fontSize: "14px" }}>{invoiceNumber}</p>

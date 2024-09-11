@@ -2,6 +2,7 @@
 
 // Components
 import FormInput from "../../../form-fields/FormInput";
+import FormTextarea from "../../../form-fields/FormTextarea";
 import Subheading from "../../../Subheading";
 
 const PaymentInformation = () => {
@@ -33,6 +34,11 @@ const PaymentInformation = () => {
           placeholder="Transaction Id"
           vertical
         />
+          <FormTextarea
+            name="details.paymentInformation.ptc"
+            label="Payments Terms & conditions"
+            placeholder="Payments Terms & conditions"
+          />
       </div>
     </section>
   );

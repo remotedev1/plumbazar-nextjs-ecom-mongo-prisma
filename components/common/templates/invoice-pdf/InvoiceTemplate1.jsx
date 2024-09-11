@@ -9,6 +9,8 @@ import { formatNumberWithCommas } from "@/lib/helpers";
 // Variables
 import { DATE_OPTIONS } from "@/lib/variables";
 import InvoiceLayout from "./InvoiceLayout";
+import Image from "next/image";
+import { Separator } from "@/components/ui/separator";
 
 const InvoiceTemplate = (data) => {
   const { receiver, details } = data;
@@ -19,100 +21,150 @@ const InvoiceTemplate = (data) => {
 
   return (
     <InvoiceLayout data={data}>
-      <div className="flex justify-between">
-        <div>
-          {details.invoiceLogo && (
-            <img
-              src={details.invoiceLogo}
-              width={140}
-              height={100}
-              alt={`Logo of ${sender.name}`}
-            />
-          )}
-        </div>
-        <div className="text-right">
-          <h2 className="text-2xl md:text-3xl font-semibold text-gray-800">
-            Proforma #
+      <div className="flex flex-col items-center">
+        <Image alt="plumbazar" src="/light-logo.png" width={75} height={75} />
+        <Separator className="my-2 bg-gray-400" />
+        <div className="flex flex-col w-full justify-start">
+          <h2 className="text-xl md:text-1xl font-semibold text-blue-800 text-uppercase">
+            ESTIMATE
           </h2>
           <span className="mt-1 block text-gray-500">
-            {details.invoiceNumber}
+            Order No:{" "}
+            <span className="font-semibold">{details.invoiceNumber}</span>
           </span>
         </div>
+        <Separator className="my-2 bg-gray-400" />
       </div>
 
-      <div className="mt-6 grid sm:grid-cols-2 gap-3">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800">Bill to:</h3>
-          <h3 className="text-lg font-semibold text-gray-800">
-            {receiver.name}
-          </h3>
-          <address className="mt-2 not-italic text-gray-500">
-            {receiver.address}, {receiver.zipCode}
-            <br />
-            {receiver.city}, {receiver.country}
-            <br />
-          </address>
+      <div className="mt-6 grid sm:grid-cols-2 gap-5">
+        <div className="border p-2">
+          <div className="flex">
+            <h3 className="flex-1 text-gray-800">Bill to:</h3>
+            <h3 className="flex-1 font-semibold  text-gray-800">
+              {receiver.name}
+            </h3>
+          </div>
+          <div className="flex">
+            <h3 className="flex-1 text-gray-800">Email:</h3>
+            <h3 className="flex-1  font-semibold text-gray-800">
+              {receiver.email}
+            </h3>
+          </div>
+          <div className="flex">
+            <h3 className="flex-1 text-gray-800">Phone:</h3>
+            <h3 className="flex-1  font-semibold text-gray-800">
+              {receiver.phone}
+            </h3>
+          </div>
+          <div className="flex">
+            <h3 className="flex-1 text-gray-800">GSTIN:</h3>
+            <h3 className="flex-1 font-semibold  text-gray-800">
+              {receiver.gstin}
+            </h3>
+          </div>
+          <div className="flex">
+            <h3 className="flex-1   text-gray-800">PAN:</h3>
+            <h3 className="flex-1 font-semibold  text-gray-800">
+              {receiver.pan}
+            </h3>
+          </div>
         </div>
-        <div className="sm:text-right space-y-2">
-          <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
-            <dl className="grid sm:grid-cols-6 gap-x-3">
-              <dt className="col-span-3 font-semibold text-gray-800">
-                Created date:
-              </dt>
-              <dd className="col-span-3 text-gray-500">
+        <div className="">
+          <h3 className="font-semibold mb-3">Plumbazar .....</h3>
+
+          <div className="border p-2">
+            <div className="flex">
+              <h3 className="flex-1 text-gray-800">Estimated date:</h3>
+              <h3 className="flex-1 font-semibold  text-gray-800">
                 {new Date(details.invoiceDate).toLocaleDateString(
                   "en-US",
                   DATE_OPTIONS
                 )}
-              </dd>
-            </dl>
-            <dl className="grid sm:grid-cols-6 gap-x-3">
-              <dt className="col-span-3 font-semibold text-gray-800">
-                Due date:
-              </dt>
-              <dd className="col-span-3 text-gray-500">
-                {new Date(details.dueDate).toLocaleDateString(
-                  "en-US",
-                  DATE_OPTIONS
-                )}
-              </dd>
-            </dl>
+              </h3>
+            </div>
+            <div className="flex">
+              <h3 className="flex-1 text-gray-800">Email:</h3>
+              <h3 className="flex-1  font-semibold text-gray-800">
+                {receiver.email}
+              </h3>
+            </div>
+            <div className="flex">
+              <h3 className="flex-1 text-gray-800">TIN:</h3>
+              <h3 className="flex-1  font-semibold text-gray-800">xyz</h3>
+            </div>
+            <div className="flex">
+              <h3 className="flex-1   text-gray-800">PAN:</h3>
+              <h3 className="flex-1 font-semibold  text-gray-800">xyz</h3>
+            </div>
+            <div className="flex">
+              <h3 className="flex-1 text-gray-800">GSTIN:</h3>
+              <h3 className="flex-1 font-semibold  text-gray-800">xyz</h3>
+            </div>
           </div>
         </div>
       </div>
+      <div className="mt-6 grid sm:grid-cols-2 gap-5">
+        <div>
+          <h3 className="font-semibold mb-3">Company Address</h3>
+          <span>
+            Akshya Nagar 1st Block 1st Cross,
+            <br /> Rammurthy nagar,
+            <br />
+            Bangalore-560016
+          </span>
+        </div>
+        <div>
+          <h3 className="font-semibold mb-3">Billing Address</h3>
+          <span>
+            Akshya Nagar 1st Block 1st Cross,
+            <br /> Rammurthy nagar,
+            <br />
+            Bangalore-560016
+          </span>
+        </div>
+      </div>
 
-      <div className="mt-3">
-        <div className="border border-gray-200 p-1 rounded-lg space-y-1">
-          <div className="hidden sm:grid sm:grid-cols-5">
-            <div className="sm:col-span-2 text-xs font-medium text-gray-500 uppercase">
+      <div className="mt-5">
+        <div className="border border-gray-200 p-3 space-y-1">
+          <div className="hidden sm:grid grid-cols-6 text-blue-500">
+            <div className="col-span-2 text-xs font-medium  uppercase">
               Item
             </div>
-            <div className="text-left text-xs font-medium text-gray-500 uppercase">
-              Qty
+            <div className="text-left text-xs font-medium  uppercase">
+              Cost/Unit
             </div>
-            <div className="text-left text-xs font-medium text-gray-500 uppercase">
-              Rate
-            </div>
-            <div className="text-right text-xs font-medium text-gray-500 uppercase">
+            <div className="text-left text-xs font-medium  uppercase">Qty</div>
+            <div className="text-left text-xs font-medium  uppercase">GST</div>
+            <div className="text-right text-xs font-medium  uppercase">
               Amount
             </div>
           </div>
           <div className="hidden sm:block border-b border-gray-200"></div>
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-y-1">
+          <div className="grid grid-cols-6 gap-2">
             {details.items?.map((item, index) => (
               <React.Fragment key={index}>
-                <div className="col-span-full sm:col-span-2 border-b border-gray-300">
+                <div className=" col-span-2 border-b border-gray-300">
                   <p className="font-medium text-gray-800">{item.name}</p>
                 </div>
+
+                <div className="border-b border-gray-300">
+                  <p className="text-gray-800">
+                    {item.price && item.price + " " + details.currency}
+                  </p>
+                </div>
+
                 <div className="border-b border-gray-300">
                   <p className="text-gray-800">{item.quantity}</p>
                 </div>
                 <div className="border-b border-gray-300">
                   <p className="text-gray-800">
-                    {item.price} {details.currency}
+                     {((item.price * item.quantity) / 100) * (18 / 100) +
+                      " " +
+                      details.currency}
+                       {("(18%)")}
                   </p>
                 </div>
-                <div className="border-b border-gray-300">
+                <div className="border-b border-gray-300">  
                   <p className="sm:text-right text-gray-800">
                     {item.quantity * item.price} {details.currency}
                   </p>

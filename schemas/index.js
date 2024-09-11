@@ -213,7 +213,7 @@ const PaymentInformationSchema = z.object({
   accountName: fieldValidators.stringOptional,
   accountNumber: fieldValidators.stringOptional,
   transactionId: fieldValidators.stringOptional,
-  // paymentDueDate: fieldValidators.date,
+  ptc: fieldValidators.stringOptional,
 });
 
 const InvoiceDetailsSchema = z.object({
@@ -229,6 +229,7 @@ const InvoiceDetailsSchema = z.object({
   subTotal: fieldValidators.nonNegativeNumber,
   totalAmount: fieldValidators.nonNegativeNumber,
   additionalNotes: fieldValidators.stringOptional,
+  tc: fieldValidators.stringOptional,
 });
 
 const InvoiceSchema = z.object({

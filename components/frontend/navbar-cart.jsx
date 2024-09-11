@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import useCart from "@/hooks/use-cart";
@@ -24,7 +24,7 @@ const NavbarCart = () => {
         className="flex items-center rounded-full  px-4 py-2"
         variant="link"
       >
-        <ShoppingBag size={20} color={  pathname === "/cart" ? "blue" : "black"} />
+        <ShoppingCart size={20} color={  pathname === "/cart" ? "blue" : "black"} />
         <span className="absolute right-2 -ml-1 top-2 rounded-full bg-red-500 px-1 py-0 text-xs text-white">
           {cart.items.length}
         </span>

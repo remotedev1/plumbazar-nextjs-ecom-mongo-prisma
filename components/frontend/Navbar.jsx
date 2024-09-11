@@ -29,20 +29,28 @@ export const Navbar = () => {
     },
   ];
   return (
-    <Popover className="fixed  top-0 inset-x-0  mx-auto w-full px-2 sm:px-20 border-b  shadow-md  bg-white/80 backdrop-blur-md z-20">
- 
+    <Popover className=" justify-between  h-[5.5rem] top-0 inset-x-0  w-full  px-6 border-b  shadow-md  bg-white/80 backdrop-blur-md z-20">
       <Container>
-        <header className="mx-2 px-2 md:mx-10">
-          <div className="flex items-center justify-between py-4 md:justify-start md:space-x-10s">
+        <header >
+          <div className="flex items-center justify-between md:justify-start md:space-x-10s">
             <div className="flex flex-1 justify-start lg:w-0">
               <Link href="/" className="ml-4 flex lg:ml-0 gap-x-2">
-                <Image  alt="plumbazar" src="/light-logo.png" width={55} height={55}/>
+                <Image
+                  alt="plumbazar"
+                  src="/light-logo.png"
+                  width={90}
+                  height={90}
+                />
                 {/* <p className="font-light text-xs mt-4 hidden md:block">
                   Buy with ease store
                 </p> */}
               </Link>
             </div>
-            <div className="-my-2 -mr-2 md:hidden">
+            <div className="flex -my-2 -mr-2 xl:hidden">
+              <div className="relative flex">
+              {user.status === "authenticated" && <NavbarWishlist />}
+              <NavbarCart />
+              </div>
               <Popover.Button className="inline-flex items-center justify-center rounded-md bg-transparent p-2 text-neutral-100 hover:text-neutral-200 focus:outline-none   ">
                 <span className="sr-only">Open menu</span>
                 <svg
@@ -51,7 +59,7 @@ export const Navbar = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="black"
-                  className="h-6 w-6"
+                  className="h-10 w-10"
                 >
                   <path
                     strokeLinecap="round"
@@ -81,11 +89,13 @@ export const Navbar = () => {
                   <path d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"></path>
                 </svg>
               </div> */}
-              <div className="hidden md:flex">
+              <div className="hidden xl:flex">
                 <span className="relative flex space-x-2 items-center justify-center">
                   <MainNav data={data} />
                 </span>
-                <span className="relative">{user.status === "authenticated" && <NavbarWishlist />}</span>
+                <span className="relative">
+                  {user.status === "authenticated" && <NavbarWishlist />}
+                </span>
                 <span className="relative">
                   <NavbarCart />
                 </span>
@@ -108,7 +118,7 @@ export const Navbar = () => {
           >
             <Popover.Panel
               focus
-              className="absolute inset-x-0 top-0 origin-top-right transform p-2 transition md:hidden"
+              className="absolute inset-x-0 top-0 origin-top-right transform p-2 transition xl:hidden"
             >
               <div className="divide-y-2 divide-neutral-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
                 <div className="px-5 pt-5 pb-6">
