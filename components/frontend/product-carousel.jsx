@@ -8,7 +8,7 @@ import ProductCard from "./product-card";
 import { Button } from "../ui/button";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
-const ProductCarousel = ({ title, storeId, filter }) => {
+const ProductCarousel = ({ title,  filter, storeId }) => {
   const [fetchedProducts, setFetchedProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

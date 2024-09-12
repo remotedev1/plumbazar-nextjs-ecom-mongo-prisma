@@ -35,29 +35,29 @@ const ProductCard = ({ data }) => {
       onClick={handleClick}
     >
       <div>
-      <Image
-        src={data?.images?.[0]}
-        width={200}
-        height={200}
-        alt="Product Image"
-        className="h-60 w-full aspect-square object-cover rounded-md p-2"
-      />
-      <div className="z-10 absolute uppercase left-2.5 right-2.5 md:left-4 top-4 text-white items-center font-semibold text-center rounded-full back bg-red-600  flex justify-center  w-12 h-12 text-sm">
-        71% OFF
-      </div>
-      {user.status === "authenticated" && (
-        <Button
-          className=" z-10 bg-white w-10 h-10 p-2 rounded-full absolute top-2 right-2 shadow-lg"
-          onClick={onAddToWishlist}
-          variant="ghost"
-        >
-          {wishlist.isItemInWishlist(data.id) ? (
-            <FaHeart size={20} color="red" />
-          ) : (
-            <FaRegHeart size={20} />
-          )}
-        </Button>
-      )}
+        <Image
+          src={data?.images?.[0]}
+          width={200}
+          height={200}
+          alt="Product Image"
+          className="h-60 w-full aspect-square object-contain rounded-md p-5"
+        />
+        <div className="z-10 absolute uppercase left-2.5 right-2.5 md:left-4 top-4 text-white items-center font-semibold text-center rounded-full back bg-red-600  flex justify-center  w-12 h-12 text-sm">
+          71% OFF
+        </div>
+        {user.status === "authenticated" && (
+          <Button
+            className=" z-10 bg-white w-10 h-10 p-2 rounded-full absolute top-2 right-2 shadow-lg"
+            onClick={onAddToWishlist}
+            variant="ghost"
+          >
+            {wishlist.isItemInWishlist(data.id) ? (
+              <FaHeart size={20} color="red" />
+            ) : (
+              <FaRegHeart size={20} />
+            )}
+          </Button>
+        )}
       </div>
       <div className="px-1 w-full flex flex-col pl-2.5 justify-start space-y-3 flex-1 pb-3">
         <h5 className="text-md font-semibold tracking-tight text-slate-900">

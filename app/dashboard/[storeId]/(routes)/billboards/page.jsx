@@ -3,17 +3,12 @@ import { format } from "date-fns";
 import BillboardClient from "./components/Client";
 import { db } from "@/lib/db";
 
-
 const BillboardsPage = async ({ params }) => {
-
-  
   const billboards = await db.billboard.findMany({
     orderBy: {
       createdAt: "desc",
     },
   });
-
-
 
   const formattedBillboards = billboards.map((billboard) => ({
     id: billboard.id,
