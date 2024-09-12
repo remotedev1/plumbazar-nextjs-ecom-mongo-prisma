@@ -1,30 +1,39 @@
-import Link from "next/link";
 
 const Billboard = ({ data }) => {
   return (
-    <div className="max-w-7xl mx-auto">
-      <div className=" bg-white rounded-xl overflow-hidden">
-        <Link
-          href={{
-            pathname: "/products",
-            query: { category: data?.category?.name },
-          }}
-        >
-          <div className="p-2  rounded-xl overflow-hidden">
-            <div
-              style={{ backgroundImage: `url(${data?.imageUrl})` }}
-              className="rounded-xl w-full h-[20vh] sm:h-[20vh]  md:h-[35vh] lg:h-[60vh]  overflow-hidden bg-cover    bg-center bg-no-repeat"
-            >
-              <div className="h-full w-full flex flex-col justify-center items-center text-center gap-y-8">
-                <div className="font-bold text-black text-lg md:text-3xl  lg:text-6xl sm:max-w-xl max-w-xs">
-                  {/* {data.label} */}
-                </div>
-              </div>
-            </div>
-          </div>
-        </Link>
+      <div
+        className="relative overflow-hidden bg-cover bg-center h-[60vh] lg:min-h-screen flex items-center justify-center w-full"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1538474705339-e87de81450e8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`,
+        }}
+      >
+        {/* Hero content */}
+        <div className="text-center text-white p-6">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+            Your Hero Title
+          </h1>
+          <p className="text-lg md:text-xl mb-6">
+            Catchy subtitle or description goes here.
+          </p>
+          <a
+            href="#cta"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Call to Action
+          </a>
+        </div>
+
+        {/* SVG wave effect */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
+            <path
+              fill="#ffffff"
+              fillOpacity="1"
+              d="M0,160L80,170.7C160,181,320,203,480,208C640,213,800,203,960,181.3C1120,160,1280,128,1360,112L1440,96V320H1360C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320H0Z"
+            ></path>
+          </svg>
+        </div>
       </div>
-    </div>
   );
 };
 

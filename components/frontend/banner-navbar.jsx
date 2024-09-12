@@ -18,7 +18,7 @@ const TopNavbar = () => {
         <div
           className={`${
             isOpen ? "block max-h-fit" : "hidden"
-          } lg:flex lg:items-center lg:justify-between  transition-all duration-300 ease-in-out text-sm overflow-hidden lg:opacity-100 lg:max-h-full`}
+          } lg:flex lg:items-center lg:justify-between  transition-all duration-300 ease-in-out text-sm overflow-hidden lg:opacity-100 lg:max-h-full px-3 py-5 lg:p-0`}
           >
           {/* Contact Information */}
           <div className="space-y-4 lg:flex lg:space-y-0 lg:space-x-8 text-primary lg:text-secondary">
@@ -40,7 +40,7 @@ const TopNavbar = () => {
           <div className="mt-4 lg:mt-0">
             <Link href="/request-quote">
               <span
-                className="block lg:bg-secondary bg-primary lg:text-primary text-secondary p-5 py-3  hover:bg-secondary/90"
+                className="w-fit lg:block lg:bg-secondary bg-primary lg:text-primary text-secondary p-5 py-3  hover:bg-secondary/90"
               >
                 Request a Quote
               </span>
@@ -49,7 +49,7 @@ const TopNavbar = () => {
         </div>
         {/* Accordion trigger for mobile and tablet */}
         <button
-          className="lg:hidden w-full flex items-center justify-center bg-primary text-secondary py-2"
+          className="pt-3 lg:hidden w-full flex items-center justify-center bg-primary text-secondary py-2"
           onClick={toggleAccordion}
         >
           {isOpen ? <ChevronUp /> : <ChevronDown />}

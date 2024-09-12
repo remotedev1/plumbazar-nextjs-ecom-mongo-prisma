@@ -38,9 +38,9 @@ export const Navbar = () => {
       <Container>
         <header>
           <div className="flex items-center justify-between md:justify-start md:space-x-10s">
-            <div className="flex flex-1 justify-start lg:w-0">
-              <Link href="/" className="ml-4 flex lg:ml-0 gap-x-2">
-                <div className="relative aspect-[1/1] w-24">
+            <div className="flex flex-1 justify-start lg:w-0 overflow-hidden">
+              <Link href="/" className="flex gap-x-2">
+                <div className="-ml-6 lg:-ml-1 relative aspect-[1/1] w-24">
                   <Image
                     alt="plumbazar"
                     src="/light-logo.png"
@@ -51,7 +51,7 @@ export const Navbar = () => {
               </Link>
             </div>
             <div className="flex -my-2 -mr-2 xl:hidden">
-              <div className="relative flex">
+              <div className="relative  hidden lg:flex">
                 {user.status === "authenticated" && <NavbarWishlist />}
                 <NavbarCart />
               </div>

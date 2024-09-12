@@ -31,7 +31,7 @@ const ProductCard = ({ data }) => {
 
   return (
     <div
-      className="relative  w-full max-w-[320px] overflow-hidden rounded-lg bg-white shadow-md cursor-pointer h-full"
+      className="relative  w-full  overflow-hidden rounded-lg bg-white shadow-md cursor-pointer h-full"
       onClick={handleClick}
     >
       <div>

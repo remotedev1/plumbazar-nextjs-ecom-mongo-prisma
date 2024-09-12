@@ -11,7 +11,7 @@ export const LogoutButton = ({ children }) => {
   return (
     <Button
       onClick={signOut}
-      className="cursor-pointer hover:bg-[#ff29588e] bg-[#ff2958] px-5 text-white rounded-sm "
+      className="cursor-pointer hover:bg-[#e62a2a8e] bg-[#e62a2a] px-5 text-white rounded-sm "
     >
       sign-out
     </Button>

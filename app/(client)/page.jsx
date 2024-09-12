@@ -1,28 +1,29 @@
 import { getBillboard } from "@/actions/get-billboard";
-import { getProducts } from "@/actions/get-products";
+import { getBrands } from "@/actions/get-brands";
 import { Testimonials } from "@/components/frontend/Testimonials";
 import Billboard from "@/components/frontend/billboard";
-// import ProductCarousel from "@/components/frontend/product-carousel";
-import Container from "@/components/ui/container";
+import BrandList from "@/components/frontend/brands";
+import ProductCarousel from "@/components/frontend/product-carousel";
 
 export const revalidate = 0;
 
-export default async function Home() {
+export default async function Home({ params }) {
   const billboard = await getBillboard();
-  const products = await getProducts();
+  const brands = await getBrands();
+
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-between py-4 text-black">
-        <div className="space-y-10 pb-10">
-          <Billboard data={billboard} />
-          <div className="flex flex-col  px-4 sm:px-6 lg:px-8">
-            {/* <ProductList title="Featured Products" items={products} /> */}
-          </div>
-          {/* <ProductCarousel productData={products} title={"Featured Products"} />
-          <ProductCarousel productData={products} title={"Bathroom Products"} /> */}
-          <div>
-            <Testimonials />
-          </div>
-        </div>
+    <main className="flex  w-full overflow-hidden min-h-dvh flex-col items-center justify-between  text-black">
+      <Billboard data={billboard} />
+      {/* <ProductList title="Featured Products" items={products} /> */}
+      {/* <ProductCarousel productData={products} title={"Featured Products"} />
+       */}
+      <BrandList data={brands}/>
+      <ProductCarousel
+        title={"Bathroom Products"}
+        filter={{ category: "tap" }}
+      />
+      <ProductCarousel title={"Jaquar Products"} filter={{ brand: "jaquar" }} />
+      <Testimonials />
     </main>
   );
 }
