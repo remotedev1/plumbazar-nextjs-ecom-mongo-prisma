@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { LogoutButton } from "./logout-button";
 import { Button } from "../ui/button";
 
-export const LoginButton = ({ children, mode = "redirect", asChild }) => {
+export const LoginButton = ({ mode = "redirect", asChild }) => {
   const user = useSession();
   const router = useRouter();
 
@@ -24,13 +24,13 @@ export const LoginButton = ({ children, mode = "redirect", asChild }) => {
   return (
     <>
       {user.status === "authenticated" ? (
-        <LogoutButton>LogOut</LogoutButton>
+        <LogoutButton />
       ) : (
         <Button
-          className="cursor-pointer hover:bg-[#007bff8e] bg-[#007bff] p-2 text-white rounded-sm "
+          className="cursor-pointer hover:bg-[#007bff8e] bg-[#007bff]  px-5 text-white rounded-sm "
           onClick={onClick}
         >
-          {children}
+          sign-in
         </Button>
       )}
     </>

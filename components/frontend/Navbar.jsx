@@ -11,6 +11,7 @@ import { Popover, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { CustomDropdownMenu } from "../common/custom-dropdown";
 
 export const Navbar = () => {
   const user = useSession();
@@ -23,33 +24,36 @@ export const Navbar = () => {
       href: "/products",
       label: "shop",
     },
-    {
-      href: "/profile",
-      label: "profile",
-    },
   ];
+
+  const dropdownOptions = [
+    // { label: "Activity Bar", checked: showActivityBar, setChecked: setShowActivityBar, disabled: true },
+    { label: "Profile", href: "/profile" },
+    { label: "cart", href: "/cart" },
+    { label: "wishlist", href: "/wishlist" },
+  ];
+
   return (
     <Popover className=" justify-between  h-[5.5rem] top-0 inset-x-0  w-full  px-6 border-b  shadow-md  bg-white/80 backdrop-blur-md z-20">
       <Container>
-        <header >
+        <header>
           <div className="flex items-center justify-between md:justify-start md:space-x-10s">
             <div className="flex flex-1 justify-start lg:w-0">
               <Link href="/" className="ml-4 flex lg:ml-0 gap-x-2">
-                <Image
-                  alt="plumbazar"
-                  src="/light-logo.png"
-                  width={90}
-                  height={90}
-                />
-                {/* <p className="font-light text-xs mt-4 hidden md:block">
-                  Buy with ease store
-                </p> */}
+                <div className="relative aspect-[1/1] w-24">
+                  <Image
+                    alt="plumbazar"
+                    src="/light-logo.png"
+                    fill
+                    style={{ objectFit: "contain" }}
+                  />
+                </div>
               </Link>
             </div>
             <div className="flex -my-2 -mr-2 xl:hidden">
               <div className="relative flex">
-              {user.status === "authenticated" && <NavbarWishlist />}
-              <NavbarCart />
+                {user.status === "authenticated" && <NavbarWishlist />}
+                <NavbarCart />
               </div>
               <Popover.Button className="inline-flex items-center justify-center rounded-md bg-transparent p-2 text-neutral-100 hover:text-neutral-200 focus:outline-none   ">
                 <span className="sr-only">Open menu</span>
@@ -74,21 +78,6 @@ export const Navbar = () => {
             </Popover.Group> */}
 
             <div className="flex items-center space-x-5  ml-auto">
-              {/* <div className=" border-2 focus-within:border-gray-400 rounded-full px-6 py-3 overflow-hidden max-w-52 hidden md:flex">
-                <input
-                  type="text"
-                  placeholder="Search something..."
-                  className="w-full text-sm bg-transparent outline-none pr-2"
-                />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 192.904 192.904"
-                  width="16px"
-                  className="cursor-pointer fill-gray-600"
-                >
-                  <path d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"></path>
-                </svg>
-              </div> */}
               <div className="hidden xl:flex">
                 <span className="relative flex space-x-2 items-center justify-center">
                   <MainNav data={data} />
@@ -99,11 +88,13 @@ export const Navbar = () => {
                 <span className="relative">
                   <NavbarCart />
                 </span>
-                <LoginButton>Sign In</LoginButton>
+                <CustomDropdownMenu
+                  options={dropdownOptions}
+                  label="Account settings"
+                  title={"Accounts"}
+                  buttonContent={<LoginButton />}
+                />
               </div>
-              {/* <button className="px-5 py-2 text-sm rounded-full text-white border-2 border-[#007bff] bg-[#007bff] hover:bg-[#004bff]">
-                  Sign In
-                </button> */}
             </div>
           </div>
           {/* //mobile */}
@@ -123,10 +114,16 @@ export const Navbar = () => {
               <div className="divide-y-2 divide-neutral-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
                 <div className="px-5 pt-5 pb-6">
                   <div className="flex items-center justify-between">
-                    <div>
-                      <Link href="/" className="ml-4 flex lg:ml-0 gap-x-2">
-                        {/* <Image className="w-36"/> */}
-                        <p className="font-bold text-xl">TBI</p>
+                    <div className="flex flex-1 justify-start lg:w-0">
+                      <Link href="/" className="flex  gap-x-2">
+                        <div className="relative aspect-[1/1] w-24">
+                          <Image
+                            alt="plumbazar"
+                            src="/light-logo.png"
+                            fill
+                            style={{ objectFit: "contain" }}
+                          />
+                        </div>
                       </Link>
                     </div>
                     <div className="-mr-2">
@@ -152,7 +149,7 @@ export const Navbar = () => {
                 </div>
                 <div className="space-y-6 py-6 px-5">
                   <div className="grid grid-cols-1 gap-y-4 gap-x-8">
-                    <MainNav data={data} />
+                    <MainNav data={[...data,...dropdownOptions]} />
 
                     <LoginButton>Sign In</LoginButton>
                   </div>

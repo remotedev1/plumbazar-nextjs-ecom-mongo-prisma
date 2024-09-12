@@ -17,16 +17,16 @@ const MainNav = ({ data }) => {
   return (
     <>
       {routes.map((route) => (
-          <Link
+        <Link
           key={route.href}
-            href={route.href}
-            className={cn(
-              "transition-colors hover:text-[#007bff] text-[15px] block font-semibold",
-              route.active ? "text-[#007bff]" : " text-black"
-            )}
-          >
-            {route.label}
-          </Link>
+          href={route.href}
+          className={cn(
+            "transition-colors hover:text-[#007bff] text-[15px] block font-semibold",
+            route.active ? "text-[#007bff]" : " text-black"
+          )}
+        >
+          {route.label}
+        </Link>
       ))}
     </>
   );

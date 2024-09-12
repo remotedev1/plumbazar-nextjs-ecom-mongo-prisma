@@ -12,13 +12,13 @@ const TopNavbar = () => {
   };
 
   return (
-    <div className="w-full  bg-secondary lg:bg-primary">
+    <div className="w-full  bg-secondary lg:bg-primary ">
       <Container>
         {/* Content */}
         <div
           className={`${
             isOpen ? "block max-h-fit" : "hidden"
-          } lg:flex lg:items-center lg:justify-between px-4 lg:px-6 py-2 shadow-lg transition-all duration-300 ease-in-out text-sm overflow-hidden lg:opacity-100 lg:max-h-full`}
+          } lg:flex lg:items-center lg:justify-between  transition-all duration-300 ease-in-out text-sm overflow-hidden lg:opacity-100 lg:max-h-full`}
           >
           {/* Contact Information */}
           <div className="space-y-4 lg:flex lg:space-y-0 lg:space-x-8 text-primary lg:text-secondary">
@@ -40,8 +40,7 @@ const TopNavbar = () => {
           <div className="mt-4 lg:mt-0">
             <Link href="/request-quote">
               <span
-                className="lg:bg-secondary bg-primary lg:text-primary text-secondary py-1 px-3
-            rounded-md  hover:bg-secondary/90"
+                className="block lg:bg-secondary bg-primary lg:text-primary text-secondary p-5 py-3  hover:bg-secondary/90"
               >
                 Request a Quote
               </span>
