@@ -1,5 +1,5 @@
 "use client";
-
+import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 
 import Container from "@/components/ui/container";
@@ -8,13 +8,16 @@ import NavbarCart from "./navbar-cart";
 import { LoginButton } from "../auth/login-button";
 import NavbarWishlist from "./navbar-wishlist";
 import { Popover, Transition } from "@headlessui/react";
-import { Fragment } from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { CustomDropdownMenu } from "../common/custom-dropdown";
+import  AdminDashLink  from "./AdminNavLink";
+import { cn } from "@/lib/utils";
 
 export const Navbar = () => {
   const user = useSession();
+  const [isScrolled, setIsScrolled] = useState(false);
+
   const data = [
     {
       href: "/",
@@ -26,6 +29,22 @@ export const Navbar = () => {
     },
   ];
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 30) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const dropdownOptions = [
     // { label: "Activity Bar", checked: showActivityBar, setChecked: setShowActivityBar, disabled: true },
     { label: "Profile", href: "/profile" },
@@ -34,7 +53,11 @@ export const Navbar = () => {
   ];
 
   return (
-    <Popover className=" justify-between  h-[5.5rem] top-0 inset-x-0  w-full  px-6 border-b  shadow-md  bg-white/80 backdrop-blur-md z-20">
+    <Popover className={cn(
+      "bg-white  mx-auto w-full px-2 sm:px-20   z-20 transition-all duration-75 ease-in bg-white/50 backdrop-blur-sm ",
+      isScrolled ? "fixed  top-0 shadow-md  bg-white" : "fixed"
+    )}
+    >
       <Container>
         <header>
           <div className="flex items-center justify-between md:justify-start md:space-x-10s">
@@ -92,7 +115,12 @@ export const Navbar = () => {
                   options={dropdownOptions}
                   label="Account settings"
                   title={"Accounts"}
-                  buttonContent={<LoginButton />}
+                  buttonContent={[
+                    user?.data?.user?.role === "ADMIN" && (
+                      <AdminDashLink key="admin" />
+                    ),
+                    <LoginButton key="login" />,
+                  ]}
                 />
               </div>
             </div>
@@ -109,7 +137,7 @@ export const Navbar = () => {
           >
             <Popover.Panel
               focus
-              className="absolute inset-x-0 top-0 origin-top-right transform p-2 transition xl:hidden"
+              className="absolute inset-x-0 top-0 origin-top-right transform p-2 transition xl:hidden z-30"
             >
               <div className="divide-y-2 divide-neutral-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
                 <div className="px-5 pt-5 pb-6">
@@ -149,7 +177,7 @@ export const Navbar = () => {
                 </div>
                 <div className="space-y-6 py-6 px-5">
                   <div className="grid grid-cols-1 gap-y-4 gap-x-8">
-                    <MainNav data={[...data,...dropdownOptions]} />
+                    <MainNav data={[...data, ...dropdownOptions]} />
 
                     <LoginButton>Sign In</LoginButton>
                   </div>

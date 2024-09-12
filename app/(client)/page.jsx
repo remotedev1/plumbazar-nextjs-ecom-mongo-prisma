@@ -3,6 +3,7 @@ import { getBrands } from "@/actions/get-brands";
 import { Testimonials } from "@/components/frontend/Testimonials";
 import Billboard from "@/components/frontend/billboard";
 import BrandList from "@/components/frontend/brands";
+import CategoryList from "@/components/frontend/categories";
 import ProductCarousel from "@/components/frontend/product-carousel";
 
 export const revalidate = 0;
@@ -17,12 +18,13 @@ export default async function Home({ params }) {
       {/* <ProductList title="Featured Products" items={products} /> */}
       {/* <ProductCarousel productData={products} title={"Featured Products"} />
        */}
-      <BrandList data={brands}/>
+      <BrandList data={brands} />
+      <ProductCarousel title={"Jaquar Products"} filter={{ brand: "jaquar" }} />
+      <CategoryList />
       <ProductCarousel
         title={"Bathroom Products"}
         filter={{ category: "tap" }}
       />
-      <ProductCarousel title={"Jaquar Products"} filter={{ brand: "jaquar" }} />
       <Testimonials />
     </main>
   );

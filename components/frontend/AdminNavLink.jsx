@@ -1,25 +1,27 @@
-import { redirect } from "next/navigation";
-
-import { auth } from "@/auth";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-export const AdminDashLink = async () => {
-  const { user } = await auth();
+const AdminDashLink = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
 
-  if (!user) {
-    redirect("/auth/login");
+  useEffect(() => {
+    if (!session?.user) {
+      router.push("/auth/login");
+    }
+  }, [session, router]);
+
+  if (!session?.user) {
+    return null; // or a loading spinner
   }
 
   return (
-        <div className="flex  items-center px-4 py-2">
-          <div className="ml-auto flex items-center space-x-4">
-            <Link
-              className="font-medium bg-black text-white p-1 rounded"
-              href="/dashboard"
-            >
-              Dashboard
-            </Link>
-          </div>
-        </div>
+    <Link className="font-medium p-1 rounded" href="/dashboard">
+      Dashboard
+    </Link>
   );
 };
+
+export default AdminDashLink;

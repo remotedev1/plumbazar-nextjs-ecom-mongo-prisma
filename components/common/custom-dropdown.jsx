@@ -40,7 +40,9 @@ export const CustomDropdownMenu = ({
         {options.map((option, index) =>
           option.href ? (
             <DropdownMenuItem asChild key={index}>
-              <Link href={option.href} className="cursor-pointer">{option.label}</Link>
+              <Link href={option.href} className="cursor-pointer">
+                {option.label}
+              </Link>
             </DropdownMenuItem>
           ) : (
             <DropdownMenuCheckboxItem
@@ -55,11 +57,12 @@ export const CustomDropdownMenu = ({
         )}
         <DropdownMenuSeparator />
         {/* Render a button if passed */}
-        {buttonContent && (
-          <div className="p-2">
-            {buttonContent} {/* Button inside dropdown content */}
-          </div>
-        )}
+        {buttonContent &&
+          buttonContent.map((button, index) => (
+            <div key={index} className="p-2">
+              {button}
+            </div>
+          ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

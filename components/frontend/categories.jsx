@@ -6,24 +6,14 @@ import { responsiveBrandsCarousel } from "@/lib/variables";
 import { Button } from "../ui/button";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
-const brands = [
-  { title: "Tiles", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Electricals", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Power & Hand Tools", imageUrl: "https://placehold.jp/150x150.png" },
-  {
-    title: "Plywood & Laminates",
-    imageUrl: "https://placehold.jp/150x150.png",
-  },
-  { title: "Hardware", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Paints", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Lighting & Fans", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Bathroom", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Plumbing", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Kitchen", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Appliances", imageUrl: "https://placehold.jp/150x150.png" },
+const categories = [
+  { title: "Category 1", imageUrl: "https://placehold.jp/150x150.png" },
+  { title: "Category 2", imageUrl: "https://placehold.jp/150x150.png" },
+  { title: "Category 3", imageUrl: "https://placehold.jp/150x150.png" },
+  // Add more categories here
 ];
 
-const BrandList = () => {
+const CategoryList = () => {
   const CustomButtonGroupAsArrows = ({
     next,
     previous,
@@ -49,9 +39,9 @@ const BrandList = () => {
   };
 
   return (
-    <div className="relative w-[90vw] mx-auto  my-8">
+    <div className="relative w-[90vw] mx-auto my-8">
       <h2 className="text-xl md:text-3xl font-bold text-left mb-10">
-        Shop by Brands
+        Shop by Categories
       </h2>
       <Carousel
         showDots={false}
@@ -70,12 +60,12 @@ const BrandList = () => {
         itemClass="p-2"
         centerMode={false}
       >
-        {brands.map((brand, index) => (
+        {categories.map((category, index) => (
           <div className="flex flex-col items-center" key={index}>
             <div className="w-28 h-28 rounded-md overflow-hidden relative">
               <Image
-                src={brand.imageUrl}
-                alt={brand.title}
+                src={category.imageUrl}
+                alt={category.title}
                 layout="fill"
                 objectFit="cover"
                 quality={100}
@@ -83,7 +73,7 @@ const BrandList = () => {
               />
             </div>
             <span className="mt-2 text-center font-semibold">
-              {brand.title}
+              {category.title}
             </span>
           </div>
         ))}
@@ -92,4 +82,4 @@ const BrandList = () => {
   );
 };
 
-export default BrandList;
+export default CategoryList;

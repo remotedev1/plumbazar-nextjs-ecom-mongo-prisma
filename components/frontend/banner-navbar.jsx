@@ -38,7 +38,7 @@ const TopNavbar = () => {
 
           {/* Quote Button */}
           <div className="mt-4 lg:mt-0">
-            <Link href="/request-quote">
+            <Link href="/rfq/new">
               <span
                 className="w-fit lg:block lg:bg-secondary bg-primary lg:text-primary text-secondary p-5 py-3  hover:bg-secondary/90"
               >
