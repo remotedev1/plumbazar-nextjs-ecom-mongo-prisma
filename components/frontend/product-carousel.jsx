@@ -7,6 +7,7 @@ import { responsiveProductCarousel } from "@/lib/variables";
 import ProductCard from "./product-card";
 import { Button } from "../ui/button";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const ProductCarousel = ({ title, filter, storeId }) => {
   const [fetchedProducts, setFetchedProducts] = useState([]);
@@ -40,12 +41,11 @@ const ProductCarousel = ({ title, filter, storeId }) => {
         );
 
         const products = response.data.map((product) => ({
-          ...product, // Spread all product properties, including id and name
+          ...product,
         }));
         setFetchedProducts(products);
       } catch (err) {
-        // setError("Error fetching products");
-        setError(JSON.stringify(err));
+        setError("Error fetching products");
         console.error("Error fetching products:", err);
       } finally {
         setLoading(false);
@@ -57,6 +57,7 @@ const ProductCarousel = ({ title, filter, storeId }) => {
       fetchProducts();
     }
   }, [filter]);
+
 
   // Handle error
   if (error) {
@@ -81,12 +82,18 @@ const ProductCarousel = ({ title, filter, storeId }) => {
     return (
       <div className="carousel-button-group absolute right-3 top-5 -translate-y-1/2 space-x-1">
         <Button
-          className={currentSlide === 0 ? "disable" : ""}
+          className={cn(
+            "bg-slate-100 text-black",
+            currentSlide === 0 ? "disable" : ""
+          )}
           onClick={() => previous()}
         >
           <ChevronsLeft />
         </Button>
-        <Button onClick={() => next()}>
+        <Button
+          className={cn("bg-slate-100 text-black", "")}
+          onClick={() => next()}
+        >
           <ChevronsRight />
         </Button>
       </div>

@@ -5,6 +5,7 @@ import "react-multi-carousel/lib/styles.css";
 import { responsiveBrandsCarousel } from "@/lib/variables";
 import { Button } from "../ui/button";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const brands = [
   { title: "Tiles", imageUrl: "https://placehold.jp/150x150.png" },
@@ -34,14 +35,20 @@ const BrandList = () => {
       carouselState: { currentSlide },
     } = rest;
     return (
-      <div className="carousel-button-group absolute right-5 top-5 -translate-y-1/2 space-x-1">
+      <div className="carousel-button-group absolute right-3 top-5 -translate-y-1/2 space-x-1">
         <Button
-          className={currentSlide === 0 ? "disable" : ""}
+          className={cn(
+            "bg-slate-100 text-black",
+            currentSlide === 0 ? "disable" : ""
+          )}
           onClick={() => previous()}
         >
           <ChevronsLeft />
         </Button>
-        <Button onClick={() => next()}>
+        <Button
+          className={cn("bg-slate-100 text-black", "")}
+          onClick={() => next()}
+        >
           <ChevronsRight />
         </Button>
       </div>

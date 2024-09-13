@@ -52,7 +52,7 @@ export const Navbar = () => {
             <div className="flex items-center justify-between md:justify-start md:space-x-10s">
               <div className="flex flex-1 justify-start lg:w-0 overflow-hidden">
                 <Link href="/" className="flex gap-x-2">
-                  <div className="-ml-6 lg:-ml-1 relative aspect-[1/1] w-24">
+                  <div className="-ml-4 lg:-ml-1 relative aspect-[1/1] w-16 md:w-24">
                     <Image
                       alt="plumbazar"
                       src="/light-logo.png"
