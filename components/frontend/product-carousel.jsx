@@ -60,9 +60,9 @@ const ProductCarousel = ({ title, filter, storeId }) => {
 
 
   // Handle error
-  if (error) {
-    return <div>{error}</div>;
-  }
+  // if (error) {
+  //   return <div>{error}</div>;
+  // }
 
   const productsToDisplay = fetchedProducts;
 
