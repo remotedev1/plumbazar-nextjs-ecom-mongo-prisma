@@ -25,7 +25,7 @@ export const SearchProducts = ({ params }) => {
     if (debouncedSearch) {
       try {
         const response = await axios.get(
-          `/api/${storeId}/products/search?query=${debouncedSearch}`
+          `/api/search-product?query=${debouncedSearch}`
         );
         const products = response.data.map((product) => ({
           id: product.id,
