@@ -9,7 +9,7 @@ import { Button } from "../ui/button";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const ProductCarousel = ({ title, filter, storeId }) => {
+const ProductCarousel = ({ title, filter }) => {
   const [fetchedProducts, setFetchedProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -31,18 +31,17 @@ const ProductCarousel = ({ title, filter, storeId }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
+
       try {
         // Build the query string dynamically based on the filter
         const queryString = buildQueryString(filter);
 
         // Use the dynamic query string in the API request
-        const response = await axios.get(
-          `/api/${storeId}/products/search?${queryString}`
-        );
-
+        const response = await axios.get(`/api/search-product?${queryString}`);
         const products = response.data.map((product) => ({
           ...product,
         }));
+
         setFetchedProducts(products);
       } catch (err) {
         setError("Error fetching products");
@@ -52,17 +51,15 @@ const ProductCarousel = ({ title, filter, storeId }) => {
       }
     };
 
-    // Only fetch products if storeId and filter exist
     if (filter) {
       fetchProducts();
     }
   }, [filter]);
 
-
   // Handle error
-  // if (error) {
-  //   return <div>{error}</div>;
-  // }
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   const productsToDisplay = fetchedProducts;
 

@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function GET(req, { params }) {
+export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const query = searchParams.get("query");
@@ -12,7 +12,7 @@ export async function GET(req, { params }) {
 
     // Initialize filter conditions
     const filters = {
-      isArchived: false, // Always exclude archived products
+      isArchived: false, 
     };
 
     // Prioritize by ID if provided
