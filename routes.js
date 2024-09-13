@@ -17,6 +17,7 @@ export const publicRoutes = [
  * These routes will redirect logged in users to /settings
  * @type {string[]}
  */
+
 export const authRoutes = [
   "/auth/login",
   "/auth/register",
@@ -31,9 +32,7 @@ export const authRoutes = [
  * These routes will redirect logged in users
  * @type {string[]}
  */
-export const salesRoutes = [
-  "/rfq",
-];
+export const salesRoutes = ["/rfq"];
 
 /**
  * The prefix for API authentication routes

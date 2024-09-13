@@ -1,6 +1,6 @@
 const AuthLayout = ({ children }) => {
   return (
-    <div className="h-full flex items-center justify-center bg-slate-200">
+    <div className="h-screen flex items-center justify-center bg-primary/20 overflow-y-scroll p-5">
       {children}
     </div>
   );

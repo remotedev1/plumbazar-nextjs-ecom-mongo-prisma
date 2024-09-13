@@ -6,6 +6,7 @@ import { BackButton } from "./back-button";
 import { Header } from "./header";
 import { Social } from "./social";
 import { Button } from "../ui/button";
+import Image from "next/image";
 
 export const CardWrapper = ({
   children,
@@ -15,8 +16,11 @@ export const CardWrapper = ({
   showSocial,
 }) => {
   return (
-    <Card className="w-[400px]  shadow-md">
+    <Card className="w-[400px]  shadow-md my-5">
       <CardHeader>
+        <div className="flex justify-center">
+        <Image src={"/light-logo.png"} alt="Logo" width={100} height={100} />
+        </div>
         <Header label={headerLabel} />
       </CardHeader>
       <CardContent>{children}</CardContent>
