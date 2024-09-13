@@ -49,7 +49,7 @@ const TopNavbar = () => {
         </div>
         {/* Accordion trigger for mobile and tablet */}
         <button
-          className="pt-3 lg:hidden w-full flex items-center justify-center bg-primary text-secondary py-2"
+          className="lg:hidden w-full flex items-center justify-center bg-primary text-secondary py-0.5"
           onClick={toggleAccordion}
         >
           {isOpen ? <ChevronUp /> : <ChevronDown />}

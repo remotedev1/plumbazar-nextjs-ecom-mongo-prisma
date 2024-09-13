@@ -63,7 +63,7 @@ export const SearchProducts = ({ params }) => {
         onClick={() => setIsOpen(true)}
         className="flex items-center justify-center p-3 rounded-full bg-transparent hover:bg-transparent text-primary hover:text-primary/75"
       >
-        <Search className="h-5 w-5" />
+        <Search className="h-6 w-6" />
       </Button>
 
       {/* Search Modal */}

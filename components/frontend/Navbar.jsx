@@ -39,7 +39,7 @@ export const Navbar = () => {
   return (
     <Popover
       className={cn(
-        "bg-white mx-auto w-full px-2 sm:px-20 z-20 transition-all duration-75 ease-in bg-white/50 backdrop-blur-sm",
+        "bg-white mx-auto w-full px-8 sm:px-20 z-20 transition-all duration-75 ease-in bg-white/50 backdrop-blur-sm",
         "sticky top-0  bg-white shadow-md"
       )}
     >
@@ -62,12 +62,12 @@ export const Navbar = () => {
                   </div>
                 </Link>
               </div>
-              <div className="flex -my-2 -mr-2 xl:hidden">
+              <div className="flex -my-2 -mr-2 xl:hidden justify-center items-center">
                 <div className="relative  hidden lg:flex">
                   {user.status === "authenticated" && <NavbarWishlist />}
                   <NavbarCart />
                 </div>
-                <SearchProducts/>
+                <SearchProducts />
 
                 <Popover.Button className="inline-flex items-center justify-center rounded-md bg-transparent p-2 text-neutral-100 hover:text-neutral-200 focus:outline-none   ">
                   <span className="sr-only">Open menu</span>
@@ -93,8 +93,7 @@ export const Navbar = () => {
 
               <div className="flex items-center space-x-5  ml-auto">
                 <div className="hidden xl:flex ">
-                  
-                  <SearchProducts/>
+                  <SearchProducts />
 
                   <span className="relative flex space-x-2 items-center justify-center">
                     <MainNav data={data} />

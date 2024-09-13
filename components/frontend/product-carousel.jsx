@@ -8,7 +8,7 @@ import ProductCard from "./product-card";
 import { Button } from "../ui/button";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
-const ProductCarousel = ({ title,  filter, storeId }) => {
+const ProductCarousel = ({ title, filter, storeId }) => {
   const [fetchedProducts, setFetchedProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -44,7 +44,8 @@ const ProductCarousel = ({ title,  filter, storeId }) => {
         }));
         setFetchedProducts(products);
       } catch (err) {
-        setError("Error fetching products");
+        // setError("Error fetching products");
+        setError(JSON.stringify(err));
         console.error("Error fetching products:", err);
       } finally {
         setLoading(false);
