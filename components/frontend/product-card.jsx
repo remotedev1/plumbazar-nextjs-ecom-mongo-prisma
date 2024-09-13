@@ -8,6 +8,8 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useSession } from "next-auth/react";
 import Currency from "../ui/currency";
 import { Button } from "../ui/button";
+import { calculateDiscountPercentage } from "@/lib/helpers";
+import { calculatePriceWithGST } from "@/lib/variables";
 
 const ProductCard = ({ data }) => {
   const wishlist = useWishlist();
@@ -29,6 +31,11 @@ const ProductCard = ({ data }) => {
     wishlist.addItem(data);
   };
 
+  const { gstAmount, priceWithGST } = calculatePriceWithGST(
+    data.discountedPrice,
+    18
+  );
+
   return (
     <div
       className="relative  w-full  overflow-hidden rounded-lg bg-white shadow-md cursor-pointer h-full"
@@ -43,7 +50,7 @@ const ProductCard = ({ data }) => {
           className="h-60 w-full aspect-square object-contain rounded-md p-5"
         />
         <div className="z-10 absolute uppercase left-2.5 right-2.5 md:left-4 top-4 text-white items-center font-semibold text-center rounded-full back bg-red-600  flex justify-center  w-12 h-12 text-sm">
-          71% OFF
+          {calculateDiscountPercentage(data?.price, data?.discountedPrice)}% OFF
         </div>
         {user.status === "authenticated" && (
           <Button
@@ -69,10 +76,10 @@ const ProductCard = ({ data }) => {
             <div className="text-base flex items-start flex-wrap leading-none text-red-600 flex-row justify-between font-bold ">
               <div>
                 <span className="flex w-full">
-                  <Currency value={data?.price} />
+                  <Currency value={data?.discountedPrice} />
                 </span>
                 <span className="md:text-xs md:mt-1 mb-1 text-11 text-gray-500 font-normal">
-                  incl. GST
+                  <Currency value={priceWithGST} /> incl. GST
                 </span>
               </div>
             </div>
