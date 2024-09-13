@@ -67,6 +67,8 @@ export const Navbar = () => {
                   {user.status === "authenticated" && <NavbarWishlist />}
                   <NavbarCart />
                 </div>
+                <SearchProducts/>
+
                 <Popover.Button className="inline-flex items-center justify-center rounded-md bg-transparent p-2 text-neutral-100 hover:text-neutral-200 focus:outline-none   ">
                   <span className="sr-only">Open menu</span>
                   <svg
