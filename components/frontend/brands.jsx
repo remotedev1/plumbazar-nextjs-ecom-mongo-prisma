@@ -56,45 +56,47 @@ const BrandList = () => {
   };
 
   return (
-    <div className="relative w-[90vw] mx-auto  my-8">
+    <div className="relative">
       <h2 className="text-xl md:text-3xl font-bold text-left mb-10">
         Shop by Brands
       </h2>
-      <Carousel
-        showDots={false}
-        responsive={responsiveBrandsCarousel}
-        swipeable
-        minimumTouchDrag={80}
-        arrows={false}
-        renderButtonGroupOutside={true}
-        customButtonGroup={<CustomButtonGroupAsArrows />}
-        autoPlay
-        autoPlaySpeed={2000}
-        shouldResetAutoplay
-        pauseOnHover
-        infinite
-        additionalTransfrom={0}
-        itemClass="p-2"
-        centerMode={false}
-      >
-        {brands.map((brand, index) => (
-          <div className="flex flex-col items-center" key={index}>
-            <div className="w-28 h-28 rounded-md overflow-hidden relative">
-              <Image
-                src={brand.imageUrl}
-                alt={brand.title}
-                layout="fill"
-                objectFit="cover"
-                quality={100}
-                className="rounded-md"
-              />
+      <div className="w-[95vw] mx-auto">
+        <Carousel
+          showDots={false}
+          responsive={responsiveBrandsCarousel}
+          swipeable
+          minimumTouchDrag={80}
+          arrows={false}
+          renderButtonGroupOutside={true}
+          customButtonGroup={<CustomButtonGroupAsArrows />}
+          autoPlay
+          autoPlaySpeed={2000}
+          shouldResetAutoplay
+          pauseOnHover
+          infinite
+          additionalTransfrom={0}
+          itemClass="p-2"
+          centerMode={false}
+        >
+          {brands.map((brand, index) => (
+            <div className="flex flex-col items-center" key={index}>
+              <div className="w-16 h-16 md:w-28 md:h-28 rounded-md overflow-hidden relative">
+                <Image
+                  src={brand.imageUrl}
+                  alt={brand.title}
+                  layout="fill"
+                  objectFit="cover"
+                  quality={100}
+                  className="rounded-md"
+                />
+              </div>
+              <span className="mt-2 text-center text-sm md:text-md font-semibold">
+                {brand.title}
+              </span>
             </div>
-            <span className="mt-2 text-center font-semibold">
-              {brand.title}
-            </span>
-          </div>
-        ))}
-      </Carousel>
+          ))}
+        </Carousel>
+      </div>
     </div>
   );
 };

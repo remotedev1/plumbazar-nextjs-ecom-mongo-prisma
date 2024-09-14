@@ -80,7 +80,7 @@ const ProductCarousel = ({ title, filter }) => {
       <div className="carousel-button-group absolute right-3 top-5 -translate-y-1/2 space-x-1">
         <Button
           className={cn(
-            "bg-slate-100 text-black",
+            "bg-slate-100 text-black hover:text-white",
             currentSlide === 0 ? "disable" : ""
           )}
           onClick={() => previous()}
@@ -88,7 +88,7 @@ const ProductCarousel = ({ title, filter }) => {
           <ChevronsLeft />
         </Button>
         <Button
-          className={cn("bg-slate-100 text-black", "")}
+          className={cn("bg-slate-100 text-black hover:text-white", "")}
           onClick={() => next()}
         >
           <ChevronsRight />
@@ -97,30 +97,32 @@ const ProductCarousel = ({ title, filter }) => {
     );
   };
   return (
-    <div className="relative w-[90vw] mx-auto  my-8">
+    <div className="relative  my-8">
       <h2 className="text-xl md:text-3xl font-bold text-left mb-10">{title}</h2>
 
       {loading && <div className="text-center">Loading products...</div>}
 
-      <Carousel
-        showDots={false}
-        responsive={responsiveProductCarousel}
-        swipeable
-        minimumTouchDrag={80}
-        arrows={false}
-        renderButtonGroupOutside={true}
-        customButtonGroup={<CustomButtonGroupAsArrows />}
-        autoPlay
-        autoPlaySpeed={2000}
-        shouldResetAutoplay
-        pauseOnHover
-        infinite
-        additionalTransfrom={0}
-        itemClass="p-2"
-        centerMode={false}
-      >
-        {product}
-      </Carousel>
+      <div className="w-[95vw] mx-auto">
+        <Carousel
+          showDots={false}
+          responsive={responsiveProductCarousel}
+          swipeable
+          minimumTouchDrag={80}
+          arrows={false}
+          renderButtonGroupOutside={true}
+          customButtonGroup={<CustomButtonGroupAsArrows />}
+          autoPlay
+          autoPlaySpeed={5000}
+          shouldResetAutoplay
+          pauseOnHover
+          infinite
+          additionalTransfrom={0}
+          itemClass="p-1 "
+          centerMode={false}
+        >
+          {product}
+        </Carousel>
+      </div>
     </div>
   );
 };

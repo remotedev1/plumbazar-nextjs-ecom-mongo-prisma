@@ -108,7 +108,12 @@ export const Navbar = () => {
                     options={dropdownOptions}
                     label="Account settings"
                     title={"Accounts"}
-                    buttonContent={[, <LoginButton key="login" />]}
+                    buttonContent={[
+                      user?.data?.user?.role === "ADMIN" && (
+                        <AdminDashLink key="admin" />
+                      ),
+                      <LoginButton key="login" />,
+                    ]}
                   />
                 </div>
               </div>

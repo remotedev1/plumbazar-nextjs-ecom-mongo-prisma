@@ -28,9 +28,9 @@ export const Testimonials = () => {
     },
   ];
   return (
-    <div className="min-w-screen flex items-center justify-center mb-10">
+    <div className="min-w-screen flex items-center justify-center ">
       <Container>
-        <div className="w-full  px-5 pt-16  text-gray-800">
+        <div className="w-full  px-5 text-gray-800">
           <div className="text-center mx-auto">
             <h1 className="text-2xl md:text-5xl font-bold mb-5 text-gray-600">
               What people <br />

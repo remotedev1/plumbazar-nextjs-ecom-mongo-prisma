@@ -38,23 +38,26 @@ const ProductCard = ({ data }) => {
 
   return (
     <div
-      className="relative  w-full  overflow-hidden rounded-lg bg-white shadow-md cursor-pointer h-full"
+      className="relative  w-full   overflow-hidden rounded-lg bg-white  shadow-md cursor-pointer h-full"
       onClick={handleClick}
     >
       <div>
-        <Image
-          src={data?.images?.[0]}
-          width={200}
-          height={200}
-          alt="Product Image"
-          className="h-60 w-full aspect-square object-contain rounded-md p-5"
-        />
-        <div className="z-10 absolute uppercase left-2.5 right-2.5 md:left-4 top-4 text-white items-center font-semibold text-center rounded-full back bg-red-600  flex justify-center  w-12 h-12 text-sm">
-          {calculateDiscountPercentage(data?.price, data?.discountedPrice)}% OFF
+        <div className="relative h-24 xs:h-36 sm:h-40 md:h-60 w-full aspect-square  rounded-md p-5">
+          <Image
+            src={data?.images?.[0]}
+            fill
+            alt="Product Image"
+            className="object-contain"
+          />
+        </div>
+        <div className="z-10 absolute uppercase left-2.5 right-2.5 md:left-4 top-4 text-white items-center font-semibold text-center rounded-full back bg-red-600  flex justify-center  w-8 h-8 text-[9px]">
+          {calculateDiscountPercentage(data?.price, data?.discountedPrice)}%{" "}
+          <br />
+          OFF
         </div>
         {user.status === "authenticated" && (
           <Button
-            className=" z-10 bg-white w-10 h-10 p-2 rounded-full absolute top-2 right-2 shadow-lg"
+            className=" z-10 w-10 h-10 p-2 rounded-full absolute top-2 right-2 shadow-sm"
             onClick={onAddToWishlist}
             variant="ghost"
           >
@@ -66,35 +69,27 @@ const ProductCard = ({ data }) => {
           </Button>
         )}
       </div>
-      <div className="px-1 w-full flex flex-col pl-2.5 justify-start space-y-3 flex-1 pb-3">
-        <h5 className="text-md font-semibold tracking-tight text-slate-900">
+      <div className="px-1 w-full flex flex-col pl-2.5 justify-start space-y-2 pb-3">
+        <h5 className="text-[10px] xs:text-xs md:text-lg font-semibold tracking-tight text-slate-900">
           {data.name}
         </h5>
 
-        <div className="flex flex-col mt-1 mb-1 ">
-          <div className="flex flex-col mt-1 mb-1">
-            <div className="text-base flex items-start flex-wrap leading-none text-red-600 flex-row justify-between font-bold ">
-              <div>
-                <span className="flex w-full">
-                  <Currency value={data?.discountedPrice} />
-                </span>
-                <span className="md:text-xs md:mt-1 mb-1 text-11 text-gray-500 font-normal">
-                  <Currency value={priceWithGST} /> incl. GST
-                </span>
-              </div>
-            </div>
-            <div className="md:text-xs md:mt-1.5 text-11 uppercase text-gray-500 ">
-              <div>
-                <span className="">mrp</span>
-                <span className="ml-1 font-normal">
-                  <Currency value={data?.price} lineThrough={true} />
-                </span>
-                <span className="text-red-600 text-xs font-medium px-1 italic uppercase">
-                  (76% OFF)
-                </span>
-              </div>
-            </div>
-          </div>
+        <div className=" flex items-start flex-wrap leading-none text-red-600  font-bold ">
+            <span className="flex w-full text-sm md:text-base">
+              <Currency value={data?.discountedPrice} />
+            </span>
+            <span className="text-[10px] md:text-sm md:mt-1 mb-1  text-gray-500 font-normal">
+              <Currency value={priceWithGST} /> incl. GST
+            </span>
+        </div>
+        <div className="md:mt-1.5  text-[10px] md:text-base uppercase text-gray-500 ">
+            <span className="">mrp</span>
+            <span className="ml-1 font-normal">
+              <Currency value={data?.price} lineThrough={true} />
+            </span>
+            <span className="text-red-600 text-xs font-medium px-1 italic uppercase">
+              (76% OFF)
+            </span>
         </div>
         {/* <div className="mt-2.5 mb-5 flex items-center">
           <span className="mr-2 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">
