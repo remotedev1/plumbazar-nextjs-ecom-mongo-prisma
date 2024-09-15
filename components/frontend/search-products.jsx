@@ -30,7 +30,7 @@ export const SearchProducts = ({ params }) => {
         const products = response.data.map((product) => ({
           id: product.id,
           name: product.name,
-          imageUrl: product.images[0], // Assuming your product object has an imageUrl property
+          imageUrl: product.images[0], 
           price: product.price,
         }));
         setOptions(products);
@@ -38,7 +38,7 @@ export const SearchProducts = ({ params }) => {
         console.error("Error fetching products:", error);
       }
     } else {
-      setOptions([]); // Clear options if search query is empty
+      setOptions([]); 
     }
   }, [debouncedSearch, storeId]);
 

@@ -10,6 +10,10 @@ export async function GET(req) {
     const isFeatured = searchParams.get("isFeatured");
     const id = searchParams.get("id");
 
+    // Pagination parameters
+    const skip = parseInt(searchParams.get("skip") || "0", 20); // Start at 0 by default
+    const take = parseInt(searchParams.get("take") || "20", 20); // Fetch 10 items by default
+
     // Initialize filter conditions
     const filters = {
       isArchived: false, 
@@ -53,10 +57,11 @@ export async function GET(req) {
       filters.isFeatured = isFeatured === "true";
     }
 
-    // Fetch products from the database
+    // Fetch products from the database with pagination
     const products = await db.product.findMany({
       where: filters,
-      take: 10, // Limit the results for better performance
+      skip, // Skip the number of records passed
+      take, // Limit the results
       include: {
         category: true, // Include category data
         brand: true, // Include brand data
@@ -65,7 +70,6 @@ export async function GET(req) {
 
     // Return the filtered products as JSON
     return NextResponse.json(products);
-
 
   } catch (error) {
     console.error("[PRODUCTS_GET]", error);

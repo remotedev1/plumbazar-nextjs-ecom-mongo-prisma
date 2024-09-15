@@ -87,9 +87,9 @@ export const Testimonials = () => {
                       </div>
                     </div>
                     <div className="flex-1">
-                      <div className="relative p-5">
+                      <div className="relative px-5">
                         <div className="overflow-hidden ">
-                          <p className="mb-0 font-italic text-md select-none">
+                          <p className="mb-0 font-italic text-[10px] sm:text-sm md:text-md select-none">
                             {d.text}
                           </p>
                         </div>
