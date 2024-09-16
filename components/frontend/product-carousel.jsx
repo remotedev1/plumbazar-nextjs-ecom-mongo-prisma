@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import axios from "axios"; // Ensure axios is imported
+import axios from "axios";
 import { responsiveProductCarousel } from "@/lib/variables";
 import ProductCard from "./product-card";
 import { Button } from "../ui/button";
@@ -10,69 +10,65 @@ import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ProductCarousel = ({ title, filter }) => {
-  const [fetchedProducts, setFetchedProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [fetchedProducts, setFetchedProducts] = useState([]); // State to store fetched products
+  const [loading, setLoading] = useState(false); // Loading state
+  const [error, setError] = useState(null); // Error state
 
-  // Helper function to build query parameters
+  // Helper function to build query parameters based on filter object
   const buildQueryString = (filter) => {
     const queryParams = new URLSearchParams();
 
-    // Loop through the filter object and append non-empty values
     Object.keys(filter).forEach((key) => {
       if (filter[key]) {
-        queryParams.append(key, filter[key]);
+        queryParams.append(key, filter[key]); // Append non-empty values
       }
     });
 
-    return queryParams.toString(); // Returns query string like "category=bathroom&name=shower"
+    return queryParams.toString(); // Returns a query string for the API
   };
 
   useEffect(() => {
+    // Function to fetch products based on filter criteria
     const fetchProducts = async () => {
-      setLoading(true);
+      setLoading(true); // Set loading to true before the request
 
       try {
-        // Build the query string dynamically based on the filter
-        const queryString = buildQueryString(filter);
+        const queryString = buildQueryString(filter); // Build query string dynamically
+        const response = await axios.get(`/api/search-product?${queryString}`); // Fetch products from the API
 
-        // Use the dynamic query string in the API request
-        const response = await axios.get(`/api/search-product?${queryString}`);
-        const products = response.data.map((product) => ({
+        const products = response.data.products.map((product) => ({
           ...product,
         }));
 
-        setFetchedProducts(products);
+        setFetchedProducts(products); // Update the state with fetched products
       } catch (err) {
-        setError("Error fetching products");
+        setError("Error fetching products"); // Handle errors
         console.error("Error fetching products:", err);
       } finally {
-        setLoading(false);
+        setLoading(false); // Set loading to false when the request is done
       }
     };
 
     if (filter) {
-      fetchProducts();
+      fetchProducts(); // Trigger fetch when the filter is available
     }
   }, [filter]);
 
-  // Handle error
+  // Handle error display
   if (error) {
     return <div>{error}</div>;
   }
 
+  // Handle loading state
+  if (loading) {
+    return <div className="text-center">Loading products...</div>;
+  }
+
+  // Limit products to 10 for carousel display
   const productsToDisplay = fetchedProducts;
 
-  const product = productsToDisplay
-    .map((item) => <ProductCard data={item} key={item.id} />)
-    .slice(0, 10); // Limit products to 10 for carousel
-
-  const CustomButtonGroupAsArrows = ({
-    next,
-    previous,
-    goToSlide,
-    ...rest
-  }) => {
+  // Define custom arrow buttons for carousel navigation
+  const CustomButtonGroupAsArrows = ({ next, previous, ...rest }) => {
     const {
       carouselState: { currentSlide },
     } = rest;
@@ -96,13 +92,14 @@ const ProductCarousel = ({ title, filter }) => {
       </div>
     );
   };
+
   return (
-    <div className="relative  my-8">
+    <div className="relative my-8">
+      {/* Carousel Title */}
       <h2 className="text-xl md:text-3xl font-bold text-left mb-10">{title}</h2>
 
-      {loading && <div className="text-center">Loading products...</div>}
-
       <div className="w-[95vw] mx-auto">
+        {/* Carousel Component */}
         <Carousel
           showDots={false}
           responsive={responsiveProductCarousel}
@@ -110,17 +107,20 @@ const ProductCarousel = ({ title, filter }) => {
           minimumTouchDrag={80}
           arrows={false}
           renderButtonGroupOutside={true}
-          customButtonGroup={<CustomButtonGroupAsArrows />}
+          customButtonGroup={<CustomButtonGroupAsArrows />} // Custom arrow buttons
           autoPlay
           autoPlaySpeed={5000}
           shouldResetAutoplay
           pauseOnHover
           infinite
           additionalTransfrom={0}
-          itemClass="p-1 "
+          itemClass="p-1"
           centerMode={false}
         >
-          {product}
+          {/* Map through products and display them in the carousel */}
+          {productsToDisplay.map((product) => (
+            <ProductCard key={product.id} data={product} />
+          ))}
         </Carousel>
       </div>
     </div>

@@ -26,12 +26,15 @@ export async function GET(req) {
     }
 
     // Add query filter for name (case-insensitive)
-    if (query && query.trim() !== "") {
-      filters.name = {
-        contains: query,
-        mode: "insensitive",
-      };
-    }
+if (query && query.trim() !== "") {
+  const terms = query.trim().split(/\s+/); // Split query into terms by whitespace
+  filters.OR = terms.map(term => ({
+    name: {
+      contains: term,
+      mode: "insensitive",
+    },
+  }));
+}
 
     // Add category filter if provided
     if (category && category.trim() !== "") {
@@ -76,6 +79,8 @@ export async function GET(req) {
         brand: true, // Include brand data
       },
     });
+
+
 
     // Check if there are more products to load
     const hasMore = products.length === take;

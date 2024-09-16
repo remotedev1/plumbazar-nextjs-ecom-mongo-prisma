@@ -3,9 +3,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { FaSpinner } from "react-icons/fa";
 import NoResults from "@/components/frontend/no-results";
-import ProductCard from "@/components/ui/product-card";
 import { SkeletonCard } from "@/components/common/card-skeleton";
 import { useDebounce } from "@/hooks/useDebounce"; // Import the debounce hook
+import ProductCard from "@/components/frontend/product-card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 
 const ProductsList = ({ searchParams, brands, categories }) => {
   const [products, setProducts] = useState([]); // Products state
@@ -115,120 +121,208 @@ const ProductsList = ({ searchParams, brands, categories }) => {
   }
 
   return (
-    <section className="py-14 relative overflow-x-hidden">
-      <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
-              {/* Sidebar: Search, Brand, and Category Filter */}
-              <div className="col-span-12 md:col-span-3 max-w-72 mx-auto">
-            <div className="box rounded-xl border border-gray-300 bg-white p-6 w-full md:max-w-sm">
-              <h6 className="font-medium text-base leading-7 text-black mb-5">
-                Search
-              </h6>
-              <div className="border-2 focus-within:border-gray-400 rounded-full px-6 py-3 flex">
-                <input
-                  type="text"
-                  placeholder="Search something..."
-                  className="w-full text-sm bg-transparent outline-none pr-2"
-                  value={searchQuery}
-                  onChange={handleSearchInputChange}
-                />
+    <section className="py-8 overflow-x-hidden">
+      <div className="w-full  mx-auto px-4 md:px-8 flex flex-col md:flex-row gap-4">
+        {/* Sidebar: Search, Brand, and Category Filter */}
+        <div className="hidden md:block col-span-12 md:col-span-3 max-w-72 mx-auto ">
+          <div className="box rounded-xl border border-gray-300 bg-white p-6 w-full md:max-w-sm">
+            <h6 className="font-medium text-base leading-7 text-black mb-5">
+              Search
+            </h6>
+            <div className="border-2 focus-within:border-gray-400 rounded-full px-6 py-3 flex">
+              <input
+                type="text"
+                placeholder="Search something..."
+                className="w-full text-sm bg-transparent outline-none pr-2"
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+              />
+            </div>
+          </div>
+          <div className="mt-7 box rounded-xl border border-gray-300 bg-white p-6 w-full md:max-w-sm">
+            <div className="flex items-center justify-between w-full pb-3 border-b border-gray-200 mb-7">
+              <p className="font-medium text-base leading-7 text-black">
+                Filter By
+              </p>
+              <p
+                className="font-medium text-xs text-gray-500 cursor-pointer hover:text-indigo-600"
+                onClick={handleResetFilters}
+              >
+                RESET
+              </p>
+            </div>
+
+            {/* Brand Filter */}
+            <div>
+              <label
+                htmlFor="Brand"
+                className="font-medium text-sm leading-6 text-gray-600 mb-1"
+              >
+                Brand
+              </label>
+              <div className="relative w-full mb-7">
+                <select
+                  id="Brand"
+                  value={selectedBrand}
+                  onChange={handleBrandChange}
+                  className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
+                >
+                  <option disabled>Select Brand</option>
+                  {/* Map through brand options */}
+                  {brands.map((brand) => (
+                    <option key={brand.name} value={brand.name}>
+                      {brand.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
-            <div className="mt-7 box rounded-xl border border-gray-300 bg-white p-6 w-full md:max-w-sm">
-              <div className="flex items-center justify-between w-full pb-3 border-b border-gray-200 mb-7">
-                <p className="font-medium text-base leading-7 text-black">
-                  Filter By
-                </p>
-                <p
-                  className="font-medium text-xs text-gray-500 cursor-pointer hover:text-indigo-600"
-                  onClick={handleResetFilters}
-                >
-                  RESET
-                </p>
-              </div>
 
-              {/* Brand Filter */}
-              <div>
-                <label
-                  htmlFor="Brand"
-                  className="font-medium text-sm leading-6 text-gray-600 mb-1"
+            {/* Category Filter */}
+            <div>
+              <label
+                htmlFor="Category"
+                className="font-medium text-sm leading-6 text-gray-600 mb-1"
+              >
+                Category
+              </label>
+              <div className="relative w-full mb-7">
+                <select
+                  id="Category"
+                  value={selectedCategory}
+                  onChange={handleCategoryChange}
+                  className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
                 >
-                  Brand
-                </label>
-                <div className="relative w-full mb-7">
-                  <select
-                    id="Brand"
-                    value={selectedBrand}
-                    onChange={handleBrandChange}
-                    className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
-                  >
-                    <option disabled>Select Brand</option>
-                    {/* Map through brand options */}
-                    {brands.map((brand) => (
-                      <option key={brand.name} value={brand.name}>
-                        {brand.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Category Filter */}
-              <div>
-                <label
-                  htmlFor="Category"
-                  className="font-medium text-sm leading-6 text-gray-600 mb-1"
-                >
-                  Category
-                </label>
-                <div className="relative w-full mb-7">
-                  <select
-                    id="Category"
-                    value={selectedCategory}
-                    onChange={handleCategoryChange}
-                    className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
-                  >
-                    <option disabled>Select Category</option>
-                    {/* Map through category options */}
-                    {categories.map((category) => (
-                      <option key={category.name} value={category.name}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                  <option disabled>Select Category</option>
+                  {/* Map through category options */}
+                  {categories.map((category) => (
+                    <option key={category.name} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>
-    
+        </div>
+        {/* //mobile view */}
+        <div className="md:hidden mx-auto ">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline">Open filter</Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 bg-primary shadow-2xl">
+              <>
+                <div className=" rounded-xl  bg-white p-6 w-full md:max-w-sm">
+                  <h6 className="font-medium text-base leading-7  text-black mb-5">
+                    Search
+                  </h6>
+                  <div className="border-2 focus-within:border-gray-400 rounded-full px-6 py-3 flex">
+                    <input
+                      type="text"
+                      placeholder="Search something..."
+                      className="w-full text-sm outline-none pr-2 text-slate-600"
+                      value={searchQuery}
+                      onChange={handleSearchInputChange}
+                    />
+                  </div>
+                </div>
+                <div className="mt-7 box rounded-xl border border-gray-300 bg-white p-6 w-full md:max-w-sm">
+                  <div className="flex items-center justify-between w-full pb-3 border-b border-gray-200 mb-7">
+                    <p className="font-medium text-base leading-7 text-black">
+                      Filter By
+                    </p>
+                    <p
+                      className="font-medium text-xs text-gray-500 cursor-pointer hover:text-indigo-600"
+                      onClick={handleResetFilters}
+                    >
+                      RESET
+                    </p>
+                  </div>
 
+                  {/* Brand Filter */}
+                  <div>
+                    <label
+                      htmlFor="Brand"
+                      className="font-medium text-sm leading-6 text-gray-600 mb-1"
+                    >
+                      Brand
+                    </label>
+                    <div className="relative w-full mb-7">
+                      <select
+                        id="Brand"
+                        value={selectedBrand}
+                        onChange={handleBrandChange}
+                        className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
+                      >
+                        <option disabled>Select Brand</option>
+                        {/* Map through brand options */}
+                        {brands.map((brand) => (
+                          <option key={brand.name} value={brand.name}>
+                            {brand.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Category Filter */}
+                  <div>
+                    <label
+                      htmlFor="Category"
+                      className="font-medium text-sm leading-6 text-gray-600 mb-1"
+                    >
+                      Category
+                    </label>
+                    <div className="relative w-full mb-7">
+                      <select
+                        id="Category"
+                        value={selectedCategory}
+                        onChange={handleCategoryChange}
+                        className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
+                      >
+                        <option disabled>Select Category</option>
+                        {/* Map through category options */}
+                        {categories.map((category) => (
+                          <option key={category.name} value={category.name}>
+                            {category.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </>
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        <div className="flex-1">
           {/* Main content: Products List */}
-            {products.length === 0 && !loading ? (
-              <NoResults />
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {loading && products.length === 0
-                  ? [...Array(10).keys()].map((i) => <SkeletonCard key={i} />)
-                  : products.map((product) => (
-                      <ProductCard key={product.id} data={product} />
-                    ))}
-              </div>
-            )}
-            {/* Load More Button */}
-            {hasMore && products.length > 0 && (
-              <div className="mt-10 text-center">
-                <button
-                  onClick={handleLoadMore}
-                  className="btn btn-outline bg-primary w-44 text-white p-4 rounded-sm shadow-sm"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <FaSpinner className="animate-spin" />
-                  ) : (
-                    "Load More"
-                  )}
-                </button>
-              </div>
-            )}
+          {products.length === 0 && !loading ? (
+            <NoResults />
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2">
+              {loading && products.length === 0
+                ? [...Array(10).keys()].map((i) => <SkeletonCard key={i} />)
+                : products.map((product) => (
+                    <ProductCard key={product.id} data={product} />
+                  ))}
+            </div>
+          )}
+          {/* Load More Button */}
+          {hasMore && products.length > 0 && (
+            <div className="mt-10 text-center">
+              <button
+                onClick={handleLoadMore}
+                className="btn btn-outline bg-primary w-44 text-white p-4 rounded-sm shadow-sm"
+                disabled={loading}
+              >
+                {loading ? <FaSpinner className="animate-spin" /> : "Load More"}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );

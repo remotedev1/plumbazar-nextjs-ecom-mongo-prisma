@@ -5,11 +5,9 @@ import Gallery from "@/components/frontend/gallery";
 import ProductAdditionalInfo from "@/components/ui/product-additional-info";
 import Info from "@/components/frontend/product-info";
 import ProductRating from "@/components/frontend/product-rating";
-import { Button } from "@/components/ui/button";
-// import { getProducts } from "@/actions/get-products";
-// import ProductList from "@/components/product-list";
+
 import Container from "@/components/ui/container";
-import { FaHeart, FaRegHeart, FaSpinner } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 
 // Individual Product page
 
