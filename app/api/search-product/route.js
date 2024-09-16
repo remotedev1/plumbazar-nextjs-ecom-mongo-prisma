@@ -10,13 +10,14 @@ export async function GET(req) {
     const isFeatured = searchParams.get("isFeatured");
     const id = searchParams.get("id");
 
-    // Pagination parameters
-    const skip = parseInt(searchParams.get("skip") || "0", 20); // Start at 0 by default
-    const take = parseInt(searchParams.get("take") || "20", 20); // Fetch 10 items by default
+    // Pagination parameters with defaults
+    const skip = parseInt(searchParams.get("skip") || "0", 10); // Start at 0 by default
+    const take = parseInt(searchParams.get("take") || "10", 10); // Fetch 10 items by default
+    const fetchCount = searchParams.get("fetchCount") === "true"; // Flag to fetch total count or not
 
     // Initialize filter conditions
     const filters = {
-      isArchived: false, 
+      isArchived: false,
     };
 
     // Prioritize by ID if provided
@@ -57,6 +58,14 @@ export async function GET(req) {
       filters.isFeatured = isFeatured === "true";
     }
 
+    let totalProducts = 0;
+    // Fetch total count if fetchCount is true (on first load or filter change)
+    if (fetchCount) {
+      totalProducts = await db.product.count({
+        where: filters,
+      });
+    }
+
     // Fetch products from the database with pagination
     const products = await db.product.findMany({
       where: filters,
@@ -68,8 +77,15 @@ export async function GET(req) {
       },
     });
 
-    // Return the filtered products as JSON
-    return NextResponse.json(products);
+    // Check if there are more products to load
+    const hasMore = products.length === take;
+
+    // Return the products along with pagination data if `fetchCount` is true
+    return NextResponse.json({
+      products,
+      ...(fetchCount ? { total: totalProducts } : {}), // Include total count only if requested
+      hasMore,
+    });
 
   } catch (error) {
     console.error("[PRODUCTS_GET]", error);
