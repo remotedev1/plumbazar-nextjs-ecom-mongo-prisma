@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const services = [
@@ -120,17 +121,29 @@ const services = [
 const OurServices = () => {
   return (
     <div className="pt-[2rem] pb-8 ">
-      <h2 className="text-2xl md:text-5xl font-bold mb-5 text-gray-600 text-center">
-        Our Services
-      </h2>
-      <div className="max-w-7xl mx-auto grid grid-cols-2  lg:grid-cols-3 gap-2 md:gap-8 px-4">
+      <div className="relative flex flex-col justify-center items-center mb-5">
+        <h2 className="text-2xl md:text-5xl font-bold text-gray-600 text-center">
+          Our Services
+        </h2>
+        <div className="ml-2 relative group">
+          <Link href="/our-services">
+            <span className="text-gray-400 cursor-pointer">Know more</span>
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block w-max bg-black text-white text-xs py-2 px-3 rounded-md shadow-lg">
+              Click to learn more
+            </div>
+          </Link>
+        </div>
+      </div>
+      <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-8 px-4">
         {services.map((service, index) => (
           <div
             key={index}
             className="border border-gray-200 rounded-lg p-2 md:p-6 text-center bg-white shadow-lg"
           >
             {service.icon}
-            <h3 className="mt-4 text-sm md:text-lg font-semibold">{service.title}</h3>
+            <h3 className="mt-4 text-sm md:text-lg font-semibold">
+              {service.title}
+            </h3>
           </div>
         ))}
       </div>

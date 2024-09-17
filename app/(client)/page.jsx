@@ -4,10 +4,9 @@ import { Testimonials } from "@/components/frontend/Testimonials";
 import Billboard from "@/components/frontend/homepage/billboard";
 import BrandList from "@/components/frontend/homepage/brands";
 import CategoryList from "@/components/frontend/homepage/categories";
-import { WhyChooseUs } from "@/components/frontend/homepage/ehy-chooe-us";
-
 import OurServices from "@/components/frontend/homepage/our-services";
 import { PartnerProgram } from "@/components/frontend/homepage/partner-program";
+import { WhyChooseUs } from "@/components/frontend/homepage/why-choose-us";
 import ProductCarousel from "@/components/frontend/product-carousel";
 
 export const revalidate = 0;
