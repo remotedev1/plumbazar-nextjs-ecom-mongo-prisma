@@ -8,7 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 import {  columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 
-const CategoryClient = ({ data }) => {
+const TestimonialsClient = ({ data }) => {
   const router = useRouter();
   const params = useParams();
   return (
@@ -22,7 +22,7 @@ const CategoryClient = ({ data }) => {
 
         <Button
           onClick={() =>
-            router.push(`/dashboard/${params.storeId}/categories/new`)
+            router.push(`/dashboard/${params.storeId}/testimonials/new`)
           }
         >
           <Plus className="mr-2 h-4 w-4">Add New</Plus>
@@ -35,4 +35,4 @@ const CategoryClient = ({ data }) => {
   );
 };
 
-export default CategoryClient;
+export default TestimonialsClient;

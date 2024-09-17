@@ -6,7 +6,6 @@ import Container from "@/components/ui/container";
 
 import useWishlist from "@/hooks/use-wishlist";
 import WishListItem from "./_components/wishlist-item";
-import { usePathname } from "next/navigation";
 
 const CartPage = () => {
   const [isMounted, setIsMounted] = useState(false);

@@ -15,7 +15,8 @@ import ImageUpload from "@/components/ui/image-upload";
 import { Input } from "@/components/ui/input";
 
 import { Separator } from "@/components/ui/separator";
-import { CategorySchema } from "@/schemas";
+import { Textarea } from "@/components/ui/textarea";
+import { TestimonialSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { Trash } from "lucide-react";
@@ -25,27 +26,29 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-export const CategoryForm = ({ initialData }) => {
+export const TestimonialForm = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? "Edit Category" : "Create Category";
+  const title = initialData ? "Edit Testimonial" : "Create Testimonial";
   const description = initialData
-    ? "Edit category details"
-    : "Add a new category";
+    ? "Edit Testimonial details"
+    : "Add a new Testimonial";
   const toastMessage = initialData
-    ? "Category updated successfully"
-    : "Category created successfully";
-  const action = initialData ? "Save Changes" : "Create Category";
+    ? "Testimonial updated successfully"
+    : "Testimonial created successfully";
+  const action = initialData ? "Save Changes" : "Create Testimonial";
 
   const form = useForm({
-    resolver: zodResolver(CategorySchema),
+    resolver: zodResolver(TestimonialSchema),
     defaultValues: initialData || {
       name: "",
-      images: [],
+      address: "",
+      image: [],
+      message: "",
     },
   });
 
@@ -54,27 +57,18 @@ export const CategoryForm = ({ initialData }) => {
       setLoading(true);
       const formData = new FormData();
       formData.append("name", data.name);
-
-      data.images.forEach((fileOrUrl, index) => {
-        if (typeof fileOrUrl === "string") {
-          // If the image is a URL, append it as a string
-          formData.append("images", fileOrUrl);
-        } else if (fileOrUrl instanceof File) {
-          // If the image is a File object, append it as a file
-          formData.append("newImages", fileOrUrl);
-        }
-      });
+      formData.append("images", data.image);
 
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/categories/${params.categoryId}`,
+          `/api/${params.storeId}/testimonials/${params.testimonialId}`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
       } else {
-        await axios.post(`/api/${params.storeId}/categories`, formData, {
+        await axios.post(`/api/${params.storeId}/testimonials`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }
@@ -94,15 +88,15 @@ export const CategoryForm = ({ initialData }) => {
       setLoading(true);
       // Delete store
       await axios.delete(
-        `/api/${params.storeId}/categories/${params.categoryId}`
+        `/api/${params.storeId}/testimonials/${params.testimonialId}`
       );
       router.refresh();
 
       router.push("/");
-      toast.success("Category deleted successfully");
+      toast.success("Testimonial deleted successfully");
     } catch (error) {
       toast.error(
-        "Make sure you removed all products from this category before deleting it "
+        "Make sure you removed all products from this testimonials before deleting it "
       );
     } finally {
       setLoading(false);
@@ -111,7 +105,7 @@ export const CategoryForm = ({ initialData }) => {
   };
 
   return (
-    <>
+    <div className="w-fit mx-auto pt-5">
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
@@ -145,11 +139,11 @@ export const CategoryForm = ({ initialData }) => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category Name</FormLabel>
+                  <FormLabel>Name*</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Category..."
+                      placeholder="Testimonial..."
                       {...field}
                     />
                   </FormControl>
@@ -159,10 +153,44 @@ export const CategoryForm = ({ initialData }) => {
             />
             <FormField
               control={form.control}
-              name="images"
+              name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Logo</FormLabel>
+                  <FormLabel>Location</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="location..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="message"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Message*</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      disabled={loading}
+                      placeholder="message..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image</FormLabel>
                   <FormControl>
                     <ImageUpload
                       value={field.value.map((image) => image)}
@@ -191,6 +219,6 @@ export const CategoryForm = ({ initialData }) => {
           </Button>
         </form>
       </Form>
-    </>
+    </div>
   );
 };

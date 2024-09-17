@@ -9,9 +9,9 @@ const Profile = async () => {
         <div className="px-6">
           <div className="flex flex-wrap justify-center">
             <div className="w-full px-4 flex justify-center">
-              <div class="absolute w-[4.5rem] h-[4.5rem] -top-5  overflow-hidden bg-gray-300 rounded-full dark:bg-gray-600">
+              <div className="absolute w-[4.5rem] h-[4.5rem] -top-5  overflow-hidden bg-gray-300 rounded-full dark:bg-gray-600">
                 <svg
-                  class=" text-gray-400 w-[4rem] h-[4rem] mx-auto"
+                  className=" text-gray-400 w-[4rem] h-[4rem] mx-auto"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"

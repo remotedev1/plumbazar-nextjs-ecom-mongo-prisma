@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const OrderDetails = async ({ searchParams }) => {
   const order = await getOrder(searchParams.orderId);
-
+console.log(order)
   if (!order) {
     return (
       <div className="flex items-center justify-center font-extrabold text-5xl min-h-[80vh]">
@@ -54,7 +54,7 @@ const OrderDetails = async ({ searchParams }) => {
                 <div className="relative h-24 w-24 rounded-md overflow-hidden ">
                   <Image
                     fill
-                    src={item.product.images[0].url}
+                    src={item.product.images[0]}
                     alt=""
                     className="object-cover object-center"
                   />
@@ -69,20 +69,7 @@ const OrderDetails = async ({ searchParams }) => {
                         <p className="font-normal text-lg leading-8 text-gray-500 mb-3 ">
                           Category: {item.product.category.name}
                         </p>
-                        <div className="flex items-center ">
-                          <p className="font-medium text-base leading-7 text-black pr-4 mr-4 border-r border-gray-200">
-                            Size:{" "}
-                            <span className="text-gray-500">
-                              {item.product.size.name}
-                            </span>
-                          </p>
-                          <p className="font-medium text-base leading-7 text-black ">
-                            color:{" "}
-                            <span className="text-gray-500">
-                              {item.product.color.name}
-                            </span>
-                          </p>
-                        </div>
+                       
                       </div>
                     </div>
                     <div className="grid grid-cols-5">

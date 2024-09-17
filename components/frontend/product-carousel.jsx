@@ -75,7 +75,7 @@ const ProductCarousel = ({ title, filter }) => {
       carouselState: { currentSlide },
     } = rest;
     return (
-      <div className="carousel-button-group absolute right-3 top-5 -translate-y-1/2 space-x-1">
+      <div className="carousel-button-group absolute right-3 top-12 -translate-y-1/2 space-x-1">
         <Button
           className={cn(
             "bg-slate-100 text-black hover:text-white",
@@ -96,18 +96,11 @@ const ProductCarousel = ({ title, filter }) => {
   };
 
   return (
-    <div className="relative px-6">
+    <div className="relative px-6 py-8">
       {/* Carousel Title */}
       <div className="flex flex-col items-start space-y-4 mb-8">
-      <h2 className="text-xl md:text-3xl font-bold text-left ">
-        {title}
-      </h2>
-      <Link href={`/products?${buildQueryString(filter)}`}>
-        <div className="p-2 text-center text-white hover:bg-primary/50 cursor-pointer bg-primary rounded-md">
-          View more
-        </div>
-      </Link>
-    </div>
+        <h2 className="text-xl md:text-3xl font-bold text-left ">{title}</h2>
+      </div>
 
       <div className="w-[95vw] mx-auto">
         {/* Carousel Component */}
@@ -140,6 +133,9 @@ const ProductCarousel = ({ title, filter }) => {
           ))}
         </Carousel>
       </div>
+      <Link href={`/products?${buildQueryString(filter)}`} className="ml-auto w-fit p-2 text-center text-white hover:bg-primary/50 cursor-pointer bg-primary rounded-md block mt-5">
+  View more
+</Link>
     </div>
   );
 };

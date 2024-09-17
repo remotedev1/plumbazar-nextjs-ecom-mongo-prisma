@@ -28,7 +28,7 @@ export const Testimonials = () => {
     },
   ];
   return (
-    <div className="min-w-screen flex items-center justify-center ">
+    <div className="min-w-screen flex items-center justify-center py-8 md:py-16">
       <Container>
         <div className="w-full  px-5 text-gray-800">
           <div className="text-center mx-auto">

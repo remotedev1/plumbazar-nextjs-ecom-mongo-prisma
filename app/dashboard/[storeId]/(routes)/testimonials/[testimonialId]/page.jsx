@@ -1,17 +1,17 @@
 import { auth } from "@/auth";
-import { CategoryForm } from "./components/category-form";
+import { TestimonialForm } from "./components/testimonial-form";
 import { db } from "@/lib/db";
 import Unauthorized from "@/components/auth/un-authorized";
 
-const CategoryPage = async ({ params }) => {
+const TestimonialPage = async ({ params }) => {
   const { user } = await auth();
   if (user.role !== "SUPERADMIN" && user.role !== "ADMIN") {
     return <Unauthorized />;
   }
-  if (params.categoryId !== "new") {
-    var category = await db.category.findFirst({
+  if (params.testimonialId !== "new") {
+    var testimonials = await db.testimonials.findFirst({
       where: {
-        id: params.categoryId,
+        id: params.testimonialId,
       },
     });
   }
@@ -19,10 +19,10 @@ const CategoryPage = async ({ params }) => {
   return (
     <div className="flex-col ">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <CategoryForm initialData={category} />
+        <TestimonialForm initialData={testimonials} />
       </div>
     </div>
   );
 };
 
-export default CategoryPage;
+export default TestimonialPage;

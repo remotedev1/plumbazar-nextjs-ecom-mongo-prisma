@@ -25,7 +25,7 @@ const CategoryList = () => {
       carouselState: { currentSlide },
     } = rest;
     return (
-      <div className="carousel-button-group absolute right-3 top-5 -translate-y-1/2 space-x-1">
+      <div className="carousel-button-group absolute right-3 top-12 -translate-y-1/2 space-x-1">
         <Button
           className={cn(
             "bg-slate-100 text-black",
@@ -46,10 +46,12 @@ const CategoryList = () => {
   };
 
   return (
-    <div className="relative  px-6">
-      <h2 className="text-xl md:text-3xl font-bold text-left mb-10">
-        Shop by Categories
-      </h2>
+    <div className="relative px-6 py-8">
+      <div className="flex flex-col items-start space-y-4 mb-8">
+        <h2 className="text-xl md:text-3xl font-bold text-left ">
+          Shop by Categories
+        </h2>
+      </div>
       <div className="w-[95vw] mx-auto">
         <Carousel
           showDots={false}

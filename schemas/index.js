@@ -76,6 +76,13 @@ export const StockInSchema = z.object({
   ),
 });
 
+export const TestimonialSchema = z.object({
+  name: z.string(),
+  address: z.string().optional(), // optional field
+  image: z.array(z.any()), // optional field
+  message: z.string(),
+});
+
 export const PostReviewSchema = z.object({
   productId: z.string().min(1),
   rating: z.number().max(5),

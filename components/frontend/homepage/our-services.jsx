@@ -9,7 +9,7 @@ const services = [
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
-        class="w-12 h-12 mx-auto text-primary"
+        className="w-12 h-12 mx-auto text-primary"
       >
         <path
           stroke-linecap="round"
@@ -120,7 +120,7 @@ const services = [
 
 const OurServices = () => {
   return (
-    <div className="pt-[2rem] pb-8">
+    <div className=" py-8 md:py-16">
       <div className="relative flex flex-col justify-center items-center mb-5">
         <h2 className="text-2xl md:text-5xl font-bold text-gray-600 text-center">
           Our Services
@@ -129,7 +129,7 @@ const OurServices = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-8 px-4">
         {services.map((service, index) => (
           <Link key={index} href="/our-services">
-            <div className="border border-gray-200 rounded-lg p-2 md:p-6 text-center bg-white shadow-lg cursor-pointer hover:shadow-xl transition-shadow">
+            <div className="border border-gray-200 rounded-lg p-2 md:p-6 text-center bg-white shadow-lg  cursor-pointer hover:scale-105 hover:shadow-primary/20  transition-all duration-300">
               {service.icon}
               <h3 className="mt-4 text-sm md:text-lg font-semibold">
                 {service.title}

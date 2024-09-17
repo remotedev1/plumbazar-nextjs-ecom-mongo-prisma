@@ -1,3 +1,4 @@
+import Container from "@/components/ui/container";
 import Link from "next/link";
 import React from "react";
 
@@ -17,8 +18,8 @@ const data = [
 
 export const PartnerProgram = () => {
   return (
-    <section className="bg-gray-50 py-10">
-      <div className="container mx-auto">
+    <div className="bg-gray-50  py-8 md:py-16">
+      <Container>
         {/* Section Title */}
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-5xl font-bold mb-5 text-gray-600">
@@ -61,7 +62,7 @@ export const PartnerProgram = () => {
             ))}
           </ul>
         </div>
-      </div>
-    </section>
+      </Container>
+    </div>
   );
 };

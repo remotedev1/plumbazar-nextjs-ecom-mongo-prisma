@@ -17,24 +17,25 @@ export default async function Home() {
 
   return (
     <main className="flex   overflow-hidden min-h-dvh flex-col items-center justify-between  text-black">
-      <div className="flex w-full flex-col space-y-8">
+      <div className="flex w-full flex-col">
         <Billboard data={billboard} />
         <CategoryList />
-        <span className="w-full bg-gray-50  py-5 md:py-8">
+        <span className="w-full bg-gray-50">
           <BrandList data={brands} />
         </span>
         <OurServices />
         <WhyChooseUs />
-        <span className="w-full bg-gray-50 py-5 md:py-8">
+      
+        <ProductCarousel
+          title={"Jaquar Products"}
+          filter={{ brand: "jaquar" }}
+        />
+          <span className="w-full bg-gray-50 ">
           <ProductCarousel
             title={"Bathroom Products"}
             filter={{ category: "tap" }}
           />
         </span>
-        <ProductCarousel
-          title={"Jaquar Products"}
-          filter={{ brand: "jaquar" }}
-        />
         <PartnerProgram/>
         <Testimonials />
       </div>

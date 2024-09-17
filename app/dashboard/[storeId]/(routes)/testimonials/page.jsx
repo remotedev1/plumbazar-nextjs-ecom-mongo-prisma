@@ -1,17 +1,17 @@
 import { format } from "date-fns";
 
-import CategoryClient from "./components/Client";
+import TestimonialsClient from "./components/Client";
 import { db } from "@/lib/db";
 
-const CategoriesPage = async ({ params }) => {
+const TestimonialsPage = async ({ params }) => {
 
-  const categories = await db.category.findMany({
+  const testimonials = await db.testimonials.findMany({
     orderBy: {
       createdAt: "desc",
     },
   });
 
-  const formattedCategories = categories.map((item) => ({
+  const formattedTestimonials = testimonials.map((item) => ({
     id: item.id,
     name: item.name,
     image: item.images[0],
@@ -21,10 +21,10 @@ const CategoriesPage = async ({ params }) => {
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <CategoryClient data={formattedCategories} />
+        <TestimonialsClient data={formattedTestimonials} />
       </div>
     </div>
   );
 };
 
-export default CategoriesPage;
+export default TestimonialsPage;
