@@ -207,7 +207,7 @@ const ProductsList = ({ searchParams, brands, categories }) => {
             <DrawerTrigger  asChild>
               <Button variant="outline">Open filter</Button>
             </DrawerTrigger >
-            <DrawerContent className="h-[90vh] w-full bg-primary/30 shadow-2xl">
+            <DrawerContent className="h-[80vh] w-full bg-primary/30 shadow-2xl">
               <div className="w-[70vw] mx-auto mt-4">
                 <div className=" rounded-xl  bg-white p-6 w-full md:max-w-sm">
                   <h6 className="font-medium text-base leading-7  text-black mb-5">

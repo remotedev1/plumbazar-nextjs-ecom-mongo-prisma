@@ -8,6 +8,7 @@ import ProductCard from "./product-card";
 import { Button } from "../ui/button";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SkeletonCard } from "../common/card-skeleton";
 
 const ProductCarousel = ({ title, filter }) => {
   const [fetchedProducts, setFetchedProducts] = useState([]); // State to store fetched products
@@ -59,10 +60,10 @@ const ProductCarousel = ({ title, filter }) => {
     return <div>{error}</div>;
   }
 
-  // Handle loading state
-  if (loading) {
-    return <div className="text-center">Loading products...</div>;
-  }
+  // // Handle loading state
+  // if (loading) {
+  //   return <div className="text-center">Loading products...</div>;
+  // }
 
   // Limit products to 10 for carousel display
   const productsToDisplay = fetchedProducts;
@@ -118,6 +119,12 @@ const ProductCarousel = ({ title, filter }) => {
           centerMode={false}
         >
           {/* Map through products and display them in the carousel */}
+
+          {loading &&
+            !productsToDisplay &&
+            Array.from({ length: 10 }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
           {productsToDisplay.map((product) => (
             <ProductCard key={product.id} data={product} />
           ))}
