@@ -8,6 +8,9 @@ export const publicRoutes = [
   "/",
   "/products/*",
   "/products",
+  "/why-us",
+  "/partner-program",
+  "/our-services",
   "/cart",
   "/api/search-product",
 ];
