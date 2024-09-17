@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SkeletonCard } from "../common/card-skeleton";
+import Link from "next/link";
 
 const ProductCarousel = ({ title, filter }) => {
   const [fetchedProducts, setFetchedProducts] = useState([]); // State to store fetched products
@@ -95,9 +96,18 @@ const ProductCarousel = ({ title, filter }) => {
   };
 
   return (
-    <div className="relative my-8">
+    <div className="relative px-6">
       {/* Carousel Title */}
-      <h2 className="text-xl md:text-3xl font-bold text-left mb-10">{title}</h2>
+      <div className="flex flex-col items-start space-y-4 mb-8">
+      <h2 className="text-xl md:text-3xl font-bold text-left ">
+        {title}
+      </h2>
+      <Link href={`/products?${buildQueryString(filter)}`}>
+        <div className="p-2 text-center text-white hover:bg-primary/50 cursor-pointer bg-primary rounded-md">
+          View more
+        </div>
+      </Link>
+    </div>
 
       <div className="w-[95vw] mx-auto">
         {/* Carousel Component */}

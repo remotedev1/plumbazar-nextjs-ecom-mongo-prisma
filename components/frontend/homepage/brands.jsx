@@ -3,9 +3,9 @@ import Image from "next/image";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsiveBrandsCarousel } from "@/lib/variables";
-import { Button } from "../ui/button";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const brands = [
   { title: "Tiles", imageUrl: "https://placehold.jp/150x150.png" },
@@ -35,7 +35,7 @@ const BrandList = () => {
       carouselState: { currentSlide },
     } = rest;
     return (
-      <div className="carousel-button-group absolute right-3 top-5 -translate-y-1/2 space-x-1">
+      <div className="carousel-button-group absolute right-3 top-5 -translate-y-1/2 space-x-1 ">
         <Button
           className={cn(
             "bg-slate-100 text-black",
@@ -56,7 +56,7 @@ const BrandList = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative px-6">
       <h2 className="text-xl md:text-3xl font-bold text-left mb-10">
         Shop by Brands
       </h2>

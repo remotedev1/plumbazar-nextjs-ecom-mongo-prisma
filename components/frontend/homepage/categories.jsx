@@ -3,9 +3,9 @@ import Image from "next/image";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsiveBrandsCarousel } from "@/lib/variables";
-import { Button } from "../ui/button";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const categories = [
   { title: "Category 1", imageUrl: "https://placehold.jp/150x150.png" },
@@ -46,7 +46,7 @@ const CategoryList = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative  px-6">
       <h2 className="text-xl md:text-3xl font-bold text-left mb-10">
         Shop by Categories
       </h2>
