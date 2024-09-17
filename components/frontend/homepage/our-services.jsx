@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import { FaWarehouse } from "react-icons/fa";
 
 const services = [
   {
@@ -9,13 +9,13 @@ const services = [
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
-        className="w-12 h-12 mx-auto text-primary"
+        class="w-12 h-12 mx-auto text-primary"
       >
         <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M12 8V3m0 5l2 2m-4 0l2-2m-6 5h2m2-2h4m2 2h2M4 13h16"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 3h2l.5 2h15a1 1 0 0 1 .95 1.31l-1.28 4.68a2 2 0 0 1-1.95 1.5H7.12m5.88 5H9a2 2 0 1 1-4 0m8 0a2 2 0 1 1-4 0m2-12h2l3 3m-6 0h3m-3-3v3"
         />
       </svg>
     ),
@@ -120,31 +120,22 @@ const services = [
 
 const OurServices = () => {
   return (
-    <div className="pt-[2rem] pb-8 ">
+    <div className="pt-[2rem] pb-8">
       <div className="relative flex flex-col justify-center items-center mb-5">
         <h2 className="text-2xl md:text-5xl font-bold text-gray-600 text-center">
           Our Services
         </h2>
-        <div className="ml-2 relative group">
-          <Link href="/our-services">
-            <span className="text-gray-400 cursor-pointer">Know more</span>
-            <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block w-max bg-black text-white text-xs py-2 px-3 rounded-md shadow-lg">
-              Click to learn more
-            </div>
-          </Link>
-        </div>
       </div>
       <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-8 px-4">
         {services.map((service, index) => (
-          <div
-            key={index}
-            className="border border-gray-200 rounded-lg p-2 md:p-6 text-center bg-white shadow-lg"
-          >
-            {service.icon}
-            <h3 className="mt-4 text-sm md:text-lg font-semibold">
-              {service.title}
-            </h3>
-          </div>
+          <Link key={index} href="/our-services">
+            <div className="border border-gray-200 rounded-lg p-2 md:p-6 text-center bg-white shadow-lg cursor-pointer hover:shadow-xl transition-shadow">
+              {service.icon}
+              <h3 className="mt-4 text-sm md:text-lg font-semibold">
+                {service.title}
+              </h3>
+            </div>
+          </Link>
         ))}
       </div>
     </div>

@@ -208,12 +208,12 @@ const ProductsList = ({ searchParams, brands, categories }) => {
               <Button variant="outline">Open filter</Button>
             </DrawerTrigger >
             <DrawerContent className="h-[80vh] w-full bg-primary/30 shadow-2xl">
-              <div className="w-[70vw] mx-auto mt-4">
-                <div className=" rounded-xl  bg-white p-6 w-full md:max-w-sm">
-                  <h6 className="font-medium text-base leading-7  text-black mb-5">
+              <div className="w-[80vw] mx-auto mt-4">
+                <div className=" rounded-xl  bg-white p-3 w-full md:max-w-sm">
+                  <h6 className="font-medium text-sm leading-7  text-black mb-2">
                     Search
                   </h6>
-                  <div className="border-2 focus-within:border-gray-400 rounded-full px-6 py-3 flex">
+                  <div className="border-2 focus-within:border-gray-400 rounded-full px-2 py-2 flex">
                     <input
                       type="text"
                       placeholder="Search something..."
@@ -223,9 +223,9 @@ const ProductsList = ({ searchParams, brands, categories }) => {
                     />
                   </div>
                 </div>
-                <div className="mt-7 box rounded-xl border border-gray-300 bg-white p-6 w-full md:max-w-sm">
-                  <div className="flex items-center justify-between w-full pb-3 border-b border-gray-200 mb-7">
-                    <p className="font-medium text-base leading-7 text-black">
+                <div className="mt-4 box rounded-xl border border-gray-300 bg-white p-3 w-full md:max-w-sm">
+                  <div className="flex items-center justify-between w-full  border-b border-gray-200 mb-2">
+                    <p className="font-medium text-sm leading-7 text-black">
                       Filter By
                     </p>
                     <p
@@ -244,12 +244,12 @@ const ProductsList = ({ searchParams, brands, categories }) => {
                     >
                       Brand
                     </label>
-                    <div className="relative w-full mb-7">
+                    <div className="relative w-full mb-2">
                       <select
                         id="Brand"
                         value={selectedBrand}
                         onChange={handleBrandChange}
-                        className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
+                        className=" border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full  p-2 bg-white"
                       >
                         <option disabled>Select Brand</option>
                         {/* Map through brand options */}
@@ -275,7 +275,7 @@ const ProductsList = ({ searchParams, brands, categories }) => {
                         id="Category"
                         value={selectedCategory}
                         onChange={handleCategoryChange}
-                        className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
+                        className=" border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
                       >
                         <option disabled>Select Category</option>
                         {/* Map through category options */}

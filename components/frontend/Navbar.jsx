@@ -70,7 +70,7 @@ export const Navbar = () => {
             {open && (
               <div className="fixed w-full h-screen inset-0 bg-black bg-opacity-50 z-20" />
             )}
-            <header>
+            <header className="px-8">
               <div className="flex items-center justify-between md:justify-start md:space-x-10s">
                 <div className="flex flex-1 justify-start lg:w-0 overflow-hidden">
                   <Link href="/" className="flex gap-x-2">
@@ -128,7 +128,7 @@ export const Navbar = () => {
                       label="Account settings"
                       title={"Accounts"}
                       buttonContent={[
-                        user?.role === "ADMIN" && <AdminDashLink key="admin" />,
+                        user?.user?.role === "ADMIN" && <AdminDashLink key="admin" />,
                         <LoginButton key="login" />,
                       ]}
                     />
@@ -147,7 +147,7 @@ export const Navbar = () => {
               >
                 <Popover.Panel
                   focus
-                  className="absolute inset-x-0 top-0 origin-top-right transform p-2 transition xl:hidden z-30"
+                  className="absolute inset-x-0 top-0 origin-top-right transform p-2 transition xl:hidden z-50"
                 >
                   <div className="divide-y-2 divide-neutral-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
                     <div className="px-5 pt-5 pb-6">
@@ -188,7 +188,7 @@ export const Navbar = () => {
                     <div className="space-y-6 py-6 px-5">
                       <div className="grid grid-cols-1 gap-y-4 gap-x-8">
                         <MainNav data={[...data, ...dropdownOptions]} />
-
+                        {user?.user?.role === "ADMIN" && <AdminDashLink key="admin" />}
                         <LoginButton>Sign In</LoginButton>
                       </div>
                     </div>

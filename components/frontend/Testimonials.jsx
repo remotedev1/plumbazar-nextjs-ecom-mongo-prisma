@@ -36,13 +36,7 @@ export const Testimonials = () => {
               What people <br />
               are saying.
             </h1>
-            <div className="text-center mb-10">
-              <span className="inline-block w-1 h-1 rounded-full bg-primary ml-1" />
-              <span className="inline-block w-3 h-1 rounded-full bg-primary ml-1" />
-              <span className="inline-block w-40 h-1 rounded-full bg-primary" />
-              <span className="inline-block w-3 h-1 rounded-full bg-primary ml-1" />
-              <span className="inline-block w-1 h-1 rounded-full bg-primary ml-1" />
-            </div>
+           
           </div>
           <div className="max-w-[85vw]">
             <Carousel
