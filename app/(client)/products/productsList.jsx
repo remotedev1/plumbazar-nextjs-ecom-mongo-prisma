@@ -6,12 +6,8 @@ import NoResults from "@/components/frontend/no-results";
 import { SkeletonCard } from "@/components/common/card-skeleton";
 import { useDebounce } from "@/hooks/useDebounce"; // Import the debounce hook
 import ProductCard from "@/components/frontend/product-card";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 
 const ProductsList = ({ searchParams, brands, categories }) => {
   const [products, setProducts] = useState([]); // Products state
@@ -207,12 +203,12 @@ const ProductsList = ({ searchParams, brands, categories }) => {
         </div>
         {/* //mobile view */}
         <div className="md:hidden mx-auto ">
-          <Popover>
-            <PopoverTrigger asChild>
+          <Drawer>
+            <DrawerTrigger  asChild>
               <Button variant="outline">Open filter</Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80 bg-primary shadow-2xl">
-              <>
+            </DrawerTrigger >
+            <DrawerContent className="h-[90vh] w-full bg-primary/30 shadow-2xl">
+              <div className="w-[70vw] mx-auto mt-4">
                 <div className=" rounded-xl  bg-white p-6 w-full md:max-w-sm">
                   <h6 className="font-medium text-base leading-7  text-black mb-5">
                     Search
@@ -292,9 +288,9 @@ const ProductsList = ({ searchParams, brands, categories }) => {
                     </div>
                   </div>
                 </div>
-              </>
-            </PopoverContent>
-          </Popover>
+              </div>
+            </DrawerContent>
+          </Drawer>
         </div>
 
         <div className="flex-1">

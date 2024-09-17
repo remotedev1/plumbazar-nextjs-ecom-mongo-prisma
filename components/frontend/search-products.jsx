@@ -15,6 +15,7 @@ import { useDebounce } from "@/hooks/useDebounce"; // Import your debounce hook
 import { Search } from "lucide-react"; // Import the search icon from Lucide
 import Image from "next/image";
 import { ScrollArea } from "../ui/scroll-area";
+import Currency from "../ui/currency";
 
 export const SearchProducts = ({ params }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -63,7 +64,7 @@ export const SearchProducts = ({ params }) => {
   };
 
   return (
-    <div className="w-full max-w-md ">
+    <div className="w-full max-w-md max-h-[80vh]">
       {/* Search Icon Button */}
       <Button
         onClick={() => setIsOpen(true)}
@@ -89,36 +90,45 @@ export const SearchProducts = ({ params }) => {
           />
 
           {/* Search results or query */}
-          <div className="mt-4 space-y-4">
-            {debouncedSearch && options.length ? (
+            { debouncedSearch && options.length ? (
               <ScrollArea className="h-96  rounded-md border">
                 <ul>
                   {options.map((product) => (
                     <li
                       key={product.id}
-                      className="flex items-center justify-between border-b p-4 rounded-lg"
+                      className="flex items-center space-x-2 justify-between border-b p-2 rounded-lg cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleProductClick(product.id)}
                     >
                       {/* Product Image */}
                       <Image
                         src={product.imageUrl}
                         alt={product.name}
-                        width={50}
-                        height={50}
+                        width={100}
+                        height={100}
                         className="rounded-md"
                         layout="intrinsic"
                         priority // Load image with priority
                       />
 
-                      {/* Product Name */}
-                      <span className="font-medium">{product.name}</span>
+                      <div className="flex flex-col space-y-2 flex-1">
+                        {/* Product Name */}
 
-                      {/* View Product Button */}
-                      <Button
+                        <span className="font-medium text-sm">
+                          {product.name}
+                        </span>
+                        <div className=" flex items-start flex-wrap leading-none text-red-600  font-bold ">
+                          <span className="flex w-full text-sm md:text-base">
+                            <Currency value={product?.price} />
+                          </span>
+                        </div>
+                        {/* View Product Button */}
+                        {/* <Button
                         onClick={() => handleProductClick(product.id)}
-                        className="ml-4"
+                        className="w-fit"
                       >
                         View
-                      </Button>
+                      </Button> */}
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -126,10 +136,9 @@ export const SearchProducts = ({ params }) => {
             ) : (
               <div>No products found...</div>
             )}
-          </div>
 
           {/* Close Button */}
-          <Button onClick={() => setIsOpen(false)} className="mt-6 bg-red-500">
+          <Button onClick={() => setIsOpen(false)} className=" bg-red-500">
             Close
           </Button>
         </DialogContent>
