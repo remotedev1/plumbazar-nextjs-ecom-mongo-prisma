@@ -6,6 +6,12 @@ import cloudinary from "@/lib/cloudinary";
 export async function POST(req, { params }) {
   try {
     const { user } = await auth();
+    if (user.role !== "ADMIN") {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    if (!params.storeId) {
+      return new NextResponse("Store id is required", { status: 400 });
+    }
 
     const formData = await req.formData();
 
@@ -15,11 +21,6 @@ export async function POST(req, { params }) {
     const message = formData.get("message");
     const images = formData.getAll("newImages");
 
-    //TODO
-    if (user.role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
     }
@@ -28,9 +29,6 @@ export async function POST(req, { params }) {
       return new NextResponse("message is required", { status: 400 });
     }
 
-    if (!params.storeId) {
-      return new NextResponse("Store id is required", { status: 400 });
-    }
     // Upload images to Cloudinary path
     const folderPath = "testimonials";
     // Upload images to Cloudinary

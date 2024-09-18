@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { postRfq } from "@/actions/post-rfq";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/container";
 import {
@@ -26,11 +25,13 @@ import { useParams, useRouter } from "next/navigation";
 
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 // formSchema -> ProductFormValues -> ProductForm using react hook form -> onSubmit -> update store
 
 export const RfqForm = ({ initialData }) => {
-  const [isPending, startTransition] = useTransition();
+  const [loading, setLoading] = useState(false);
+
   const params = useParams();
   const router = useRouter();
   const {
@@ -39,17 +40,13 @@ export const RfqForm = ({ initialData }) => {
     },
   } = useSession();
 
-  const [open, setOpen] = useState(false);
-
   const title = initialData ? "Edit RFQ" : "Create a new RFQ";
-
-  const description = initialData ? "Edit your Quote" : "Create a new RFQ";
 
   const toastMessage = initialData
     ? "Quote updated successfully"
     : "Quote created successfully";
 
-  const action = initialData ? "Save Quote" : "Create Product";
+  const action = initialData ? "Save Quote" : "Create RFQ";
 
   const defaultValues = initialData
     ? {
@@ -58,7 +55,7 @@ export const RfqForm = ({ initialData }) => {
       }
     : {
         images: [],
-        phone: address?.phone,
+        phone:  address?.phone,
         notes: "",
       };
 
@@ -68,22 +65,43 @@ export const RfqForm = ({ initialData }) => {
   });
 
   const onSubmit = async (data) => {
-    startTransition(() => {
-      if (initialData) {
-      } else {
-        postRfq(data).then((res) => {
-          if (res?.error) {
-            toast.error(res.error);
-          }
+    try {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("phone", data.phone);
+      formData.append("notes", data.notes);
 
-          if (res?.success) {
-            toast.success(res.success);
-            router.refresh();
-            router.push(`/rfq`);
+      data.images.forEach((fileOrUrl, index) => {
+        if (typeof fileOrUrl === "string") {
+          // If the image is a URL, append it as a string
+          formData.append("images", fileOrUrl);
+        } else if (fileOrUrl instanceof File) {
+          // If the image is a File object, append it as a file
+          formData.append("newImages", fileOrUrl);
+        }
+      });
+      if (initialData) {
+        await axios.patch(
+          `/api/${params.storeId}/rfq/${params.brandId}`,
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
           }
+        );
+      } else {
+        await axios.post(`/api/rfq`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
         });
       }
-    });
+
+      router.refresh();
+      toast.success("Quote created successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -104,25 +122,23 @@ export const RfqForm = ({ initialData }) => {
             name="images"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Images</FormLabel>
+                <FormLabel>Logo</FormLabel>
                 <FormControl>
                   <ImageUpload
-                    value={field.value.map((image) => image.url)}
-                    disabled={isPending}
-                    onChange={(url) => {
-                      // Get the current value of the images field
-                      const currentImages = form.getValues("images");
-
-                      // Update the images field with the new image appended
-                      const updatedImages = [...currentImages, { url }];
-                      form.setValue("images", updatedImages);
+                    value={field.value.map((image) => image)}
+                    onChange={(newImage) => {
+                      field.onChange([newImage]);
                     }}
-                    onRemove={(url) => {
-                      const filteredImages = field.value.filter(
-                        (current) => current.url !== url
+                    onRemove={(id) => {
+                      field.onChange(
+                        field.value.filter(
+                          (image, index) =>
+                            index !== id &&
+                            (!image.publicId || image.publicId !== id)
+                        )
                       );
-                      field.onChange(filteredImages);
                     }}
+                    disabled={loading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -138,10 +154,9 @@ export const RfqForm = ({ initialData }) => {
                   <FormLabel>Phone</FormLabel>
                   <FormControl>
                     <Input
-                      disabled={isPending}
+                      disabled={loading}
                       placeholder="Provide Phone number"
                       {...field}
-                      type="number"
                     />
                   </FormControl>
                   <FormMessage />
@@ -158,7 +173,7 @@ export const RfqForm = ({ initialData }) => {
                   <FormLabel>Notes</FormLabel>
                   <FormControl>
                     <Textarea
-                      disabled={isPending}
+                      disabled={loading}
                       placeholder="add notes..."
                       {...field}
                     />
@@ -168,8 +183,8 @@ export const RfqForm = ({ initialData }) => {
               )}
             />
           </div>
-          <Button disabled={isPending} className="ml-auto" type="submit">
-            {action}
+          <Button disabled={loading} className="ml-auto" type="submit">
+            {loading ? "Submitting..." : action}
           </Button>
         </form>
       </Form>

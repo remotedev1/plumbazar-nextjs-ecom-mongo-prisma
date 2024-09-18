@@ -27,6 +27,7 @@ export async function POST(req, { params }) {
     if (!params.storeId) {
       return new NextResponse("Store id is required", { status: 400 });
     }
+    const folderPath = "brands";
 
     // Upload images to Cloudinary
     const uploadedImages = await Promise.all(
@@ -35,7 +36,8 @@ export async function POST(req, { params }) {
           const arrayBuffer = await image.arrayBuffer();
           const buffer = Buffer.from(arrayBuffer);
           const result = await cloudinary.uploader.upload(
-            `data:${image.type};base64,${buffer.toString("base64")}`
+            `data:${image.type};base64,${buffer.toString("base64")}`,
+            { folder: folderPath }
           );
           return { url: result.secure_url };
         } else {

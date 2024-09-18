@@ -178,7 +178,7 @@ export const BrandForm = ({ initialData }) => {
             />
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
-            {action}
+            {loading ? "Submitting..." : action}
           </Button>
         </form>
       </Form>

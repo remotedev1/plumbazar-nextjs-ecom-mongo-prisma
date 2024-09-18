@@ -110,7 +110,7 @@ export const RfqSchema = z.object({
     .string()
     .min(1, { message: "Phone number is required" })
     .max(10, { message: "Phone number must not exceed 10 characters" }),
-  images: z.object({ url: z.string() }).array().min(1),
+  images: z.array(z.any()).min(1), // optional field
   response: z.string().optional(),
   notes: z.string().optional(),
 });

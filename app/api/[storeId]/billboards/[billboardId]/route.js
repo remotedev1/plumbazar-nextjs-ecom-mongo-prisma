@@ -29,50 +29,54 @@ export async function PATCH(req, { params }) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    if (!params.billboardId) {
+      return new NextResponse("Billboard ID is Required", { status: 400 });
+    }
+
     const formData = await req.formData();
 
     const title = formData.get("title");
     const description = formData.get("description");
     const action = formData.get("action");
-    const images = formData.getAll("images");
-    const newImages = formData.getAll("newImages");
+    const images = formData.getAll("images"); // URLs of existing images
+    const newImages = formData.getAll("newImages"); // New images as File objects
 
-
+    if (!title) {
+      return new NextResponse("Title is required", { status: 400 });
+    }
+    if (!description) {
+      return new NextResponse("Description is required", { status: 400 });
+    }
     if (!images || !newImages) {
       return new NextResponse("Images are required", { status: 400 });
     }
 
-
-    if (!params.storeId) {
-      return new NextResponse("Store ID is Required", { status: 400 });
-    }
-    if (!params.billboardId) {
-      return new NextResponse("Billboard ID is Required", { status: 400 });
-    }
- // Fetch current images from the database
-    const currentProduct = await db.product.findUnique({
+    // Fetch current images from the database
+    const currentBillboard = await db.billboard.findUnique({
       where: {
-        id: params.productId,
+        id: params.billboardId,
       },
     });
 
-    // Find images to delete (images present in DB but not in the new images list)
-    const imagesToDelete = currentProduct.images.filter(
-      (dbImage) => !images.some((image) => image === dbImage)
+    if (!currentBillboard) {
+      return new NextResponse("Billboard not found", { status: 404 });
+    }
+
+    // Find images to delete (present in DB but not in the images array from the form)
+    const imagesToDelete = currentBillboard.images.filter(
+      (dbImage) => !images.includes(dbImage) // Images in DB but not in the new array of URLs
     );
 
     // Delete images from Cloudinary
     await Promise.all(
       imagesToDelete.map(async (image) => {
         const publicId = image.split("/").pop().split(".")[0];
-        console.log(publicId);
-        await cloudinary.uploader.destroy(`products/${publicId}`);
+        await cloudinary.uploader.destroy(`billboards/${publicId}`);
       })
     );
 
-    // Upload images to Cloudinary path
-    const folderPath = "testimonials";
-    // Upload images to Cloudinary
+    // Upload new images to Cloudinary (if they are not already in the images array)
+    const folderPath = "billboards";
     const uploadedImages = await Promise.all(
       newImages.map(async (image) => {
         if (image instanceof File) {
@@ -82,13 +86,18 @@ export async function PATCH(req, { params }) {
             `data:${image.type};base64,${buffer.toString("base64")}`,
             { folder: folderPath }
           );
-          return { url: result.secure_url };
+          return result.secure_url;
         } else {
           throw new Error("Invalid file format");
         }
       })
     );
-    const billboard = await db.billboard.update({
+
+    // Combine new uploaded images and the existing images that weren't deleted
+    const finalImages = [...images, ...uploadedImages];
+
+    // Update the billboard with new data
+    const updatedBillboard = await db.billboard.update({
       where: {
         id: params.billboardId,
       },
@@ -97,16 +106,14 @@ export async function PATCH(req, { params }) {
         title,
         description,
         action,
-        images: uploadedImages.map((img) => img.url),
+        images: finalImages, // Updated array with old and new images
       },
     });
 
-    return NextResponse.json(billboard);
+    return NextResponse.json(updatedBillboard);
   } catch (error) {
-    console.log(`[STORE_PATCH] `, error);
-    return new NextResponse("Internal Server Error", {
-      status: 500,
-    });
+    console.log(`[BILLBOARD_PATCH] `, error);
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
 
@@ -126,19 +133,6 @@ export async function DELETE(req, { params }) {
     if (!params.billboardId) {
       return new NextResponse("Billboard ID is Required", { status: 400 });
     }
-
-    // const storeByUserId = await db.store.findFirst({
-    //   where: {
-    //     id: params.storeId,
-    //     userId: user.id,
-    //   },
-    // });
-
-    // if (!storeByUserId) {
-    //   return new NextResponse("Unauthorized", { status: 403 });
-    // }
-
-    // find and update store
 
     const billboard = await db.billboard.deleteMany({
       where: {

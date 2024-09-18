@@ -83,9 +83,8 @@ export const TestimonialForm = ({ initialData }) => {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }
-
-      router.refresh();
       toast.success(toastMessage);
+      router.refresh();
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
@@ -243,7 +242,7 @@ export const TestimonialForm = ({ initialData }) => {
             />
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
-            {action}
+            {loading ? "Submitting..." : action}
           </Button>
         </form>
       </Form>

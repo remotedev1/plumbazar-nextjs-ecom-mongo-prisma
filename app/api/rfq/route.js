@@ -1,33 +1,54 @@
 import { auth } from "@/auth";
+import cloudinary from "@/lib/cloudinary";
 import { db } from "@/lib/db";
 import { SendRfqNotification } from "@/lib/mailService";
-import { RfqSchema } from "@/schemas";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    const body = await req.json();
-
-    const validatedFields = RfqSchema.safeParse(body);
-
-    if (!validatedFields.success) {
-      return { error: "Invalid fields!" };
-    }
-
-    const { images, phone, notes } = validatedFields.data;
-
     const { user } = await auth();
-
     if (!user) {
-      return new NextResponse("Please sign in", { status: 400 });
+      return new NextResponse("Unauthorized", { status: 401 });
     }
+
+    const formData = await req.formData();
+
+    const phone = formData.get("phone");
+    const notes = formData.get("notes");
+    const images = formData.getAll("newImages");
+    if (!phone) {
+      return new NextResponse("Phone number is required", { status: 400 });
+    }
+
+    if (!images) {
+      return new NextResponse("Images are required", { status: 400 });
+    }
+
+    // Upload images to Cloudinary
+    const folderPath = "rfq";
+
+    const uploadedImages = await Promise.all(
+      images.map(async (image) => {
+        if (image instanceof File) {
+          const arrayBuffer = await image.arrayBuffer();
+          const buffer = Buffer.from(arrayBuffer);
+          const result = await cloudinary.uploader.upload(
+            `data:${image.type};base64,${buffer.toString("base64")}`,
+            { folder: folderPath }
+          );
+          return { url: result.secure_url };
+        } else {
+          throw new Error("Invalid file format");
+        }
+      })
+    );
 
     const newRfq = await db.rfq.create({
       data: {
         userId: user.id,
-        phone: Number(phone),
+        phone: phone,
         notes: notes,
-        images: images.map((image) => image.url),
+        images: uploadedImages.map((img) => img.url),
       },
     });
 

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import Heading from "@/components/ui/heading";
 import { Plus } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import {  useRouter } from "next/navigation";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
 
@@ -15,8 +15,8 @@ const RfqClient = ({ data }) => {
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title="Products"
-          description="Manage your products."
+          title="RFQ"
+          description="Manage your RFQs."
         />
 
         <Button onClick={() => router.push(`/rfq/new`)} variant="destructive">

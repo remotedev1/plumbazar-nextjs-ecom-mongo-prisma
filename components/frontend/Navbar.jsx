@@ -29,6 +29,8 @@ export const Navbar = () => {
       href: "/products",
       label: "Shop",
     },
+    { label: "Rfq", href: "/rfq" },
+
   ];
 
   const categories = [

@@ -50,12 +50,6 @@ export async function DELETE(req, { params }) {
 export async function PATCH(req, { params }) {
   try {
     const { user } = await auth();
-    const formData = await req.formData();
-    const name = formData.get("name");
-    const organization = formData.get("organization");
-    const designation = formData.get("designation");
-    const message = formData.get("message");
-    const newImages = formData.getAll("newImages");
     if (user.role !== "ADMIN") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -63,6 +57,47 @@ export async function PATCH(req, { params }) {
     if (!params.testimonialId) {
       return new NextResponse("testimonial id is required", { status: 400 });
     }
+
+    const formData = await req.formData();
+
+    const name = formData.get("name");
+    const organization = formData.get("organization");
+    const designation = formData.get("designation");
+    const message = formData.get("message");
+    const images = formData.getAll("images");
+    const newImages = formData.getAll("newImages");
+
+    if (!name) {
+      return new NextResponse("Name is required", { status: 400 });
+    }
+
+    if (!message) {
+      return new NextResponse("message is required", { status: 400 });
+    }
+
+    const currentTestimonial = await db.testimonial.findUnique({
+      where: {
+        id: params.testimonialId,
+      },
+    });
+
+    if (!currentTestimonial) {
+      return new NextResponse("Testimonial not found", { status: 404 });
+    }
+
+    // Find images to delete (present in DB but not in the images array from the form)
+    const imagesToDelete = currentTestimonial.images.filter(
+      (dbImage) => !images.includes(dbImage) // Images in DB but not in the new array of URLs
+    );
+
+    // Delete images from Cloudinary
+    await Promise.all(
+      imagesToDelete.map(async (image) => {
+        const publicId = image.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(`testimonials/${publicId}`);
+      })
+    );
+
     // Upload images to Cloudinary path
     const folderPath = "testimonials";
     // Upload new images to Cloudinary
@@ -75,12 +110,14 @@ export async function PATCH(req, { params }) {
             `data:${image.type};base64,${buffer.toString("base64")}`,
             { folder: folderPath }
           );
-          return { url: result.secure_url };
+          return result.secure_url;
         } else {
           throw new Error("Invalid file format");
         }
       })
     );
+    // Combine new uploaded images and the existing images that weren't deleted
+    const finalImages = [...images, ...uploadedImages];
 
     const testimonial = await db.testimonial.update({
       where: {
@@ -91,7 +128,7 @@ export async function PATCH(req, { params }) {
         message,
         organization,
         designation,
-        images: uploadedImages.map((img) => img.url),
+        images: finalImages,
       },
     });
 
