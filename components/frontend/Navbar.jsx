@@ -30,7 +30,6 @@ export const Navbar = () => {
       label: "Shop",
     },
     { label: "Rfq", href: "/rfq" },
-
   ];
 
   const categories = [
@@ -130,7 +129,9 @@ export const Navbar = () => {
                       label="Account settings"
                       title={"Accounts"}
                       buttonContent={[
-                        user?.user?.role === "ADMIN" && <AdminDashLink key="admin" />,
+                        user?.user?.role === "ADMIN" && (
+                          <AdminDashLink key="admin" />
+                        ),
                         <LoginButton key="login" />,
                       ]}
                     />
@@ -190,7 +191,9 @@ export const Navbar = () => {
                     <div className="space-y-6 py-6 px-5">
                       <div className="grid grid-cols-1 gap-y-4 gap-x-8">
                         <MainNav data={[...data, ...dropdownOptions]} />
-                        {user?.user?.role === "ADMIN" && <AdminDashLink key="admin" />}
+                        {user?.user?.role === "ADMIN" && (
+                          <AdminDashLink key="admin" />
+                        )}
                         <LoginButton>Sign In</LoginButton>
                       </div>
                     </div>
