@@ -34,13 +34,33 @@ export async function DELETE(req, { params }) {
       return new NextResponse("testimonial id is required", { status: 400 });
     }
 
-    const testimonial = await db.testimonial.delete({
+    
+    const testimonial = await db.testimonial.findUnique({
       where: {
         id: params.testimonialId,
       },
     });
 
-    return NextResponse.json(testimonial);
+    if (!testimonial) {
+      return new NextResponse("testimonial not found", { status: 404 });
+    }
+
+    // Delete images from Cloudinary
+    await Promise.all(
+      testimonial.images.map(async (image) => {
+        const publicId = image.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(`billboards/${publicId}`);
+      })
+    );
+
+
+     await db.testimonial.delete({
+      where: {
+        id: params.testimonialId,
+      },
+    });
+
+    return NextResponse.json({message: "Testimonial deleted successfully"});
   } catch (error) {
     console.log("[TESTIMONIAL_DELETE]", error);
     return new NextResponse("Internal error", { status: 500 });
@@ -99,7 +119,6 @@ export async function PATCH(req, { params }) {
     );
 
     // Upload images to Cloudinary path
-    const folderPath = "testimonials";
     // Upload new images to Cloudinary
     const uploadedImages = await Promise.all(
       newImages.map(async (image) => {
@@ -108,7 +127,7 @@ export async function PATCH(req, { params }) {
           const buffer = Buffer.from(arrayBuffer);
           const result = await cloudinary.uploader.upload(
             `data:${image.type};base64,${buffer.toString("base64")}`,
-            { folder: folderPath }
+            { folder: "testimonials" }
           );
           return result.secure_url;
         } else {

@@ -13,7 +13,8 @@ export async function POST(req, { params }) {
     const formData = await req.formData();
 
     const name = formData.get("name");
-    const price = formData.get("price");
+    const mrp = formData.get("mrp");
+    const msp = formData.get("msp");
     const purchasedPrice = formData.get("purchasedPrice");
     const gst = formData.get("gst");
     const brandId = formData.get("brandId");
@@ -32,45 +33,37 @@ export async function POST(req, { params }) {
       return new NextResponse("gst is required", { status: 400 });
     }
 
-    if (!images || !images.length) {
+    if (!images.length) {
       return new NextResponse("Images are required", { status: 400 });
     }
 
-    if (!price) {
-      return new NextResponse("Price is required", { status: 400 });
+    if (!mrp) {
+      return new NextResponse("MRP is required", { status: 400 });
     }
- 
+
+    if (!msp) {
+      return new NextResponse("MSP is required", { status: 400 });
+    }
+
     if (!brandId) {
       return new NextResponse("Brand id is required", { status: 400 });
     }
     if (!categoryId) {
       return new NextResponse("Category id is required", { status: 400 });
     }
-    if (!params.storeId) {
-      return new NextResponse("Store id is required", { status: 400 });
-    }
 
-    const storeByUser = await db.store.findFirst({
-      where: {
-        id: params.storeId,
-        userId: user.id,
-      },
-    });
-
-    if (!storeByUser) {
-      return new NextResponse("Unauthorized", { status: 405 });
-    }
-
-    // Upload images to Cloudinary
+    // Upload new images to Cloudinary (if they are not already in the images array)
+    const folderPath = "products";
     const uploadedImages = await Promise.all(
       images.map(async (image) => {
         if (image instanceof File) {
           const arrayBuffer = await image.arrayBuffer();
           const buffer = Buffer.from(arrayBuffer);
           const result = await cloudinary.uploader.upload(
-            `data:${image.type};base64,${buffer.toString("base64")}`
+            `data:${image.type};base64,${buffer.toString("base64")}`,
+            { folder: folderPath }
           );
-          return { url: result.secure_url };
+          return result.secure_url;
         } else {
           throw new Error("Invalid file format");
         }
@@ -79,17 +72,18 @@ export async function POST(req, { params }) {
 
     const product = await db.product.create({
       data: {
+        postedBy: user.id,
         name,
-        price: Number(price),
+        msp: Number(msp),
+        mrp: Number(mrp),
         purchasedPrice: Number(purchasedPrice),
         isFeatured,
         isArchived,
-        gst,
+        gst: Number(gst),
         brandId,
         description,
         categoryId,
-        storeId: params.storeId,
-        images: uploadedImages.map((img) => img.url),
+        images: uploadedImages,
       },
     });
 

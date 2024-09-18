@@ -81,7 +81,7 @@ export const CategoryForm = ({ initialData }) => {
 
       router.refresh();
 
-      toast.success(toastMessage);
+      toast.success("Category created/updated successfully");
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
@@ -187,7 +187,7 @@ export const CategoryForm = ({ initialData }) => {
             />
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
-            {action}
+            {loading ? "Submitting..." : action}
           </Button>
         </form>
       </Form>

@@ -36,7 +36,6 @@ export const Testimonials = () => {
               What people <br />
               are saying.
             </h1>
-           
           </div>
           <div className="max-w-[85vw]">
             <Carousel
@@ -95,6 +94,15 @@ export const Testimonials = () => {
             </Carousel>
           </div>
         </div>
+        <video
+          width="800px"
+          height="450px"
+          controls={true}
+          style={{ maxWidth: "100%", borderRadius: "8px" }}
+        >
+          <source src="https://youtu.be/PmYocEA5gsU" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </Container>
     </div>
   );

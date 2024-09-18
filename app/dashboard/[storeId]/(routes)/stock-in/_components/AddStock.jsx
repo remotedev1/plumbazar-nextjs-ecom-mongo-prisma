@@ -39,7 +39,8 @@ export const AddStock = ({
       name:"",
       quantity: 0,
       purchasePrice: 0,
-      price: 0,
+      mrp: 0,
+      msp: 0,
       total: 0,
     },
   ],
@@ -82,7 +83,8 @@ export const AddStock = ({
       name:"",
       quantity: 0,
       purchasePrice: 0,
-      price: 0,
+      mrp: 0,
+      msp: 0,
       total: 0,
     });
   };

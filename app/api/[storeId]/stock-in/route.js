@@ -23,7 +23,7 @@ export async function POST(req) {
         data: {
           notes: notes || "",
           inBy: user.id,
-          products: JSON.stringify(products), // Store products as JSON
+          products: JSON.stringify(products),
         },
       });
 
@@ -36,8 +36,9 @@ export async function POST(req) {
               stock: {
                 increment: product.quantity, // Increment the stock quantity
               },
-              purchasedPrice: product.purchasePrice, // Update the purchased price
-              price: product.price, // Update the price
+              purchasedPrice: product.purchasePrice,
+              msp: product.msp,
+              mrp: product.mrp,
             },
           })
         )

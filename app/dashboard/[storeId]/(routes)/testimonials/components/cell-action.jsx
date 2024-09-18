@@ -16,7 +16,6 @@ import { useState } from "react";
 import axios from "axios";
 import { AlertModal } from "@/components/models/alert-modal";
 
-
 export const CellAction = ({ data }) => {
   const router = useRouter();
   const params = useParams();
@@ -37,11 +36,9 @@ export const CellAction = ({ data }) => {
       await axios.delete(`/api/${params.storeId}/testimonials/${data.id}`);
       router.refresh();
 
-      toast.success("Category deleted successfully");
+      toast.success("testimonials deleted successfully");
     } catch (error) {
-      toast.error(
-        "Make sure you removed all products using this category first. ",
-      );
+      toast.error("something went wrong.");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -72,7 +69,9 @@ export const CellAction = ({ data }) => {
           {/* Update */}
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/dashboard/${params.storeId}/testimonials/${data.id}`)
+              router.push(
+                `/dashboard/${params.storeId}/testimonials/${data.id}`
+              )
             }
           >
             <Edit className="mr-2 h-4 w-4" />

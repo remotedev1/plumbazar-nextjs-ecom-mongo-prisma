@@ -47,6 +47,7 @@ export async function POST(req, { params }) {
 
     const category = await db.category.create({
       data: {
+        postedBy: user.id,
         name,
         images: uploadedImages.map((img) => img.url),
       },

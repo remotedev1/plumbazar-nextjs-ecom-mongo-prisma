@@ -75,7 +75,8 @@ const SingleItem = ({
           const products = response.data.map((product) => ({
             label: product.name,
             value: product.id,
-            price: product.price,
+            msp: product.msp,
+            mrp: product.mrp,
             purchasePrice: product.purchasePrice,
             stock: product.stock,
           }));
@@ -133,7 +134,8 @@ const SingleItem = ({
       if (selectedOption) {
         setValue(`${name}[${index}].name`, selectedOption?.label || "");
         setValue(`${name}[${index}].stock`, selectedOption?.stock || 0);
-        setValue(`${name}[${index}].price`, selectedOption.price || 0); // Update price
+        setValue(`${name}[${index}].msp`, selectedOption.msp || 0); 
+        setValue(`${name}[${index}].mrp`, selectedOption.mrp || 0); 
         setValue(
           `${name}[${index}].purchasePrice`,
           selectedOption.purchasePrice || 0
@@ -268,9 +270,29 @@ const SingleItem = ({
           )}
         />
 
-        {/* Selling Price */}
+        {/* mrp Price */}
         <Controller
-          name={`${name}[${index}].price`}
+          name={`${name}[${index}].mrp`}
+          control={control}
+          render={({ field }) => (
+            <div className="inline">
+              <FormLabel>Retail price</FormLabel>
+              <Input
+                {...field}
+                onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                type="number"
+                placeholder="retail price"
+                className="w-[8rem]"
+              />
+              {errors?.[name]?.[index]?.mrp && (
+                <FormMessage>{errors[name][index].price.message}</FormMessage>
+              )}
+            </div>
+          )}
+        />
+        {/* msp Price */}
+        <Controller
+          name={`${name}[${index}].msp`}
           control={control}
           render={({ field }) => (
             <div className="inline">
@@ -282,7 +304,7 @@ const SingleItem = ({
                 placeholder="Selling price"
                 className="w-[8rem]"
               />
-              {errors?.[name]?.[index]?.price && (
+              {errors?.[name]?.[index]?.msp && (
                 <FormMessage>{errors[name][index].price.message}</FormMessage>
               )}
             </div>

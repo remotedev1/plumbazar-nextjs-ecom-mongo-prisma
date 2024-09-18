@@ -76,7 +76,7 @@ export const BrandForm = ({ initialData }) => {
       }
 
       router.refresh();
-      toast.success(toastMessage);
+      toast.success("Brand created/updated successfully");
     } catch (error) {
       toast.error("Something went wrong");
     } finally {

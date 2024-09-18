@@ -34,13 +34,32 @@ export async function DELETE(req, { params }) {
       return new NextResponse("Brand id is required", { status: 400 });
     }
 
-    const brand = await db.brand.delete({
+    
+    const brand = await db.brand.findUnique({
       where: {
         id: params.brandId,
       },
     });
 
-    return NextResponse.json(brand);
+    if (!brand) {
+      return new NextResponse("brand not found", { status: 404 });
+    }
+
+    // Delete images from Cloudinary
+    await Promise.all(
+      brand.images.map(async (image) => {
+        const publicId = image.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(`categories/${publicId}`);
+      })
+    );
+
+   await db.brand.delete({
+      where: {
+        id: params.brandId,
+      },
+    });
+
+    return NextResponse.json({ message: "Brand deleted successfully" });
   } catch (error) {
     console.log("[BRAND_DELETE]", error);
     return new NextResponse("Internal error", { status: 500 });

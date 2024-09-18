@@ -29,8 +29,6 @@ export async function POST(req, { params }) {
       return new NextResponse("message is required", { status: 400 });
     }
 
-    // Upload images to Cloudinary path
-    const folderPath = "testimonials";
     // Upload images to Cloudinary
     const uploadedImages = await Promise.all(
       images.map(async (image) => {
@@ -39,7 +37,7 @@ export async function POST(req, { params }) {
           const buffer = Buffer.from(arrayBuffer);
           const result = await cloudinary.uploader.upload(
             `data:${image.type};base64,${buffer.toString("base64")}`,
-            { folder: folderPath }
+            { folder: "testimonials" }
           );
           return { url: result.secure_url };
         } else {

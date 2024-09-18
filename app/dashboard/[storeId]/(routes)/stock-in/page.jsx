@@ -23,13 +23,13 @@ const StockInPage = async () => {
 
   return (
     <div className="bg-white min-h-[80vh]  py-14 px-4">
-      <Container >
+      <Container>
         <div className="flex items-center justify-between">
           <Heading title={title} description={description} />
+          <AddProductModel brands={brands} categories={categories} />
         </div>
         <Separator className="my-6" />
-        <AddProductModel brands={brands} categories={categories} />
-        <AddStock  />
+        <AddStock />
       </Container>
     </div>
   );

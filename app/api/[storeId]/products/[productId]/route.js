@@ -20,7 +20,6 @@ export async function GET(req, { params }) {
         // include the relations to get the full data of the product
         brand: true,
         category: true,
-
       },
     });
 
@@ -40,7 +39,8 @@ export async function PATCH(req, { params }) {
     const formData = await req.formData();
 
     const name = formData.get("name");
-    const price = formData.get("price");
+    const mrp = formData.get("mrp");
+    const msp = formData.get("msp");
     const purchasedPrice = formData.get("purchasedPrice");
     const gst = formData.get("gst");
     const brandId = formData.get("brandId");
@@ -52,17 +52,6 @@ export async function PATCH(req, { params }) {
     const images = formData.getAll("images");
     const newImages = formData.getAll("newImages");
 
-    const storeByUser = await db.store.findFirst({
-      where: {
-        id: params.storeId,
-        userId: user.id,
-      },
-    });
-
-    if (!storeByUser) {
-      return new NextResponse("Unauthorized", { status: 403 });
-    }
-
     if (!gst) {
       return new NextResponse("gst is required", { status: 400 });
     }
@@ -72,8 +61,9 @@ export async function PATCH(req, { params }) {
     }
 
     if (!brandId) {
-      return new NextResponse("Category Id is required", { status: 400 });
+      return new NextResponse("Brand Id is required", { status: 400 });
     }
+
     if (!categoryId) {
       return new NextResponse("Category Id is required", { status: 400 });
     }
@@ -82,11 +72,15 @@ export async function PATCH(req, { params }) {
       return new NextResponse("purchased price is required", { status: 400 });
     }
 
-    if (!price) {
-      return new NextResponse("Price is required", { status: 400 });
+    if (!mrp) {
+      return new NextResponse("MRP is required", { status: 400 });
     }
 
-    if (!images || !newImages) {
+    if (!msp) {
+      return new NextResponse("MSP is required", { status: 400 });
+    }
+
+    if (!images) {
       return new NextResponse("Images are required", { status: 400 });
     }
 
@@ -94,49 +88,52 @@ export async function PATCH(req, { params }) {
       return new NextResponse("Product ID is required", { status: 400 });
     }
 
-    // Fetch current images from the database
+    // Fetch current product from the database
     const currentProduct = await db.product.findUnique({
       where: {
         id: params.productId,
       },
     });
 
-    // Find images to delete (images present in DB but not in the new images list)
+    if (!currentProduct) {
+      return new NextResponse("Product not found", { status: 404 });
+    }
+
+    // Determine which images to delete
     const imagesToDelete = currentProduct.images.filter(
-      (dbImage) => !images.some((image) => image === dbImage)
+      (dbImage) => !images.includes(dbImage) // Images in DB but not in the new array of URLs
     );
 
     // Delete images from Cloudinary
     await Promise.all(
       imagesToDelete.map(async (image) => {
         const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(publicId);
+        await cloudinary.uploader.destroy(`products/${publicId}`);
       })
     );
 
-    // Upload new images to Cloudinary
-    const uploadedImages = await Promise.all(
-      newImages.map(async (image) => {
-        if (image instanceof File) {
-          const arrayBuffer = await image.arrayBuffer();
-          const buffer = Buffer.from(arrayBuffer);
-          const result = await cloudinary.uploader.upload(
-            `data:${image.type};base64,${buffer.toString("base64")}`
-          );
-          return { url: result.secure_url };
-        } else {
-          throw new Error("Invalid file format");
-        }
-      })
-    );
+    // Upload new images to Cloudinary (if they are provided)
+    let uploadedImages = [];
+    if (newImages && newImages.length > 0) {
+      uploadedImages = await Promise.all(
+        newImages.map(async (image) => {
+          if (image instanceof File) {
+            const arrayBuffer = await image.arrayBuffer();
+            const buffer = Buffer.from(arrayBuffer);
+            const result = await cloudinary.uploader.upload(
+              `data:${image.type};base64,${buffer.toString("base64")}`,
+              { folder: "products" }
+            );
+            return result.secure_url;
+          } else {
+            throw new Error("Invalid file format");
+          }
+        })
+      );
+    }
 
-    // Combine existing images that were not deleted and newly uploaded images
-    const finalImages = [
-      ...currentProduct.images.filter((dbImage) =>
-        images.some((image) => image === dbImage)
-      ),
-      ...uploadedImages.map((dbImage) => dbImage.url),
-    ];
+    // Combine new uploaded images and the existing images that weren't deleted
+    const finalImages = [...images, ...uploadedImages];
 
     // Update the product
     await db.product.update({
@@ -145,15 +142,15 @@ export async function PATCH(req, { params }) {
       },
       data: {
         name,
-        price: Number(price),
+        msp: Number(msp),
+        mrp: Number(mrp),
         purchasedPrice: Number(purchasedPrice),
         isFeatured,
         isArchived,
+        gst: Number(gst),
         brandId,
         description,
-        gst,
         categoryId,
-        storeId: params.storeId,
         images: finalImages,
       },
     });
@@ -210,7 +207,7 @@ export async function DELETE(req, { params }) {
     await Promise.all(
       product.images.map(async (image) => {
         const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(publicId);
+        await cloudinary.uploader.destroy(`products/${publicId}`);
       })
     );
 

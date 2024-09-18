@@ -40,11 +40,8 @@ export const CategorySchema = z.object({
 export const ProductSchema = z.object({
   name: z.string().min(1, "Name is required"),
   images: z.array(z.any()).min(1, "At least one image is required"),
-  // images: z.any().refine((value) => value instanceof File, {
-  //   message: "Must be a File object",
-  // }),
-  price: z.number().min(0, "Price must be a positive number"),
-
+  msp: z.number().min(0, "MSP must be a positive number"),
+  mrp: z.number().min(0, "MRP must be a positive number"),
   brandId: z.string().min(1, "Category is required"),
   categoryId: z.string().min(1, "Category is required"),
   discount: z.coerce.number().optional(),
@@ -55,7 +52,12 @@ export const ProductSchema = z.object({
     })
     .optional(),
   description: z.string().optional(),
-  gst: z.string(),
+  gst: z.number().min(0, "GST must be a positive number")
+  .refine(value => value === 18 || value > 0, {
+    message: "GST must be either 18 or a positive number",
+  })
+  .default(18)
+  .optional(),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
 });
@@ -69,7 +71,8 @@ export const StockInSchema = z.object({
         .number()
         .int()
         .positive("Quantity must be a positive integer"),
-      price: z.number().int().positive("Price must be a positive integer"),
+      mrp: z.number().int().positive("mrp must be a positive integer"),
+      msp: z.number().int().positive("msp must be a positive integer"),
       purchasePrice: z
         .number()
         .int()

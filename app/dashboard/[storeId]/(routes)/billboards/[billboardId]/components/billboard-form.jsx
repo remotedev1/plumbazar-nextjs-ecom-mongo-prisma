@@ -89,7 +89,7 @@ export const BillboardForm = ({ initialData, categories }) => {
       }
 
       router.refresh();
-      toast.success(toastMessage);
+      toast.success("Billboard created/updated successfully");
     } catch (error) {
       console.log(error)
       toast.error("Something went wrong");

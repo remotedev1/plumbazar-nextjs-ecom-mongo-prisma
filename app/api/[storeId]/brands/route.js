@@ -48,6 +48,7 @@ export async function POST(req, { params }) {
 
     const brand = await db.brand.create({
       data: {
+        postedBy: user.id,
         name,
         images: uploadedImages.map((img) => img.url),
       },

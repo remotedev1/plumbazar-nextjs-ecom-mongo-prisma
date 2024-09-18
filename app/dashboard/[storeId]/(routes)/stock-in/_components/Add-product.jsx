@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 import { Textarea } from "@/components/ui/textarea";
@@ -47,7 +47,6 @@ import {
 export const AddProductModel = ({ brands, categories }) => {
   const params = useParams();
 
-  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const title = "Create a new Product";
@@ -57,7 +56,8 @@ export const AddProductModel = ({ brands, categories }) => {
   const defaultValues = {
     name: "",
     images: [],
-    price: null,
+    msp: null,
+    mrp: null,
     purchasedPrice: null,
     gst: 18,
     description: "",
@@ -77,7 +77,8 @@ export const AddProductModel = ({ brands, categories }) => {
       setLoading(true);
       const formData = new FormData();
       formData.append("name", data.name);
-      formData.append("price", data.price);
+      formData.append("mrp", data.mrp);
+      formData.append("msp", data.msp);
       formData.append("purchasedPrice", data.purchasedPrice);
       formData.append("brandId", data.brandId);
       formData.append("description", data.description);
@@ -103,7 +104,8 @@ export const AddProductModel = ({ brands, categories }) => {
         },
       });
 
-      toast.success(toastMessage);
+      toast.success("Product created successfully");
+      form.reset();
     } catch (error) {
       toast.error(error.response?.data);
     } finally {
@@ -114,16 +116,16 @@ export const AddProductModel = ({ brands, categories }) => {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button className="w-fit bg-blue-500  hover:bg-blue-300">
+        <Button className="w-fit bg-primary  hover:bg-primary/60">
           Add a new Product
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="mx-auto w-full max-w-xl">
+        <div className="mx-auto w-full max-w-4xl">
           <div className="flex items-center justify-between">
             <Heading title={title} />
           </div>
-          <Separator className="mb-8 mt-5" />
+          <Separator className="my-2" />
 
           <Form {...form}>
             <form
@@ -158,7 +160,7 @@ export const AddProductModel = ({ brands, categories }) => {
                   </FormItem>
                 )}
               />
-              <div className="grid md:grid-cols-2 gap-8">
+              <div className="grid md:grid-cols-4 gap-3">
                 <FormField
                   control={form.control}
                   name="name"
@@ -179,15 +181,37 @@ export const AddProductModel = ({ brands, categories }) => {
 
                 <FormField
                   control={form.control}
-                  name="price"
+                  name="mrp"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Price</FormLabel>
+                      <FormLabel>Retail price</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
                           disabled={loading}
-                          placeholder="price"
+                          placeholder="mrp"
+                          {...field}
+                          value={field.value}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="msp"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Selling price</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          disabled={loading}
+                          placeholder="msp"
                           {...field}
                           value={field.value}
                           onChange={(e) =>
@@ -286,7 +310,7 @@ export const AddProductModel = ({ brands, categories }) => {
                     </FormItem>
                   )}
                 />
-                <div>
+                <div className="flex justify-between gap-2">
                   <FormField
                     control={form.control}
                     name="gst"
@@ -321,7 +345,7 @@ export const AddProductModel = ({ brands, categories }) => {
                     control={form.control}
                     name="isFeatured"
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 py-4">
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 py-2">
                         <FormControl>
                           <Checkbox
                             disabled={loading}
@@ -352,7 +376,7 @@ export const AddProductModel = ({ brands, categories }) => {
                     control={form.control}
                     name="isArchived"
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 py-4">
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 py-2">
                         <FormControl>
                           <Checkbox
                             disabled={loading}
@@ -386,7 +410,7 @@ export const AddProductModel = ({ brands, categories }) => {
 
               <Button
                 disabled={loading}
-                className="ml-auto w-full bg-blue-500"
+                className="ml-auto w-full bg-primary"
                 type="submit"
               >
                 {action}

@@ -63,7 +63,7 @@ export async function PATCH(req, { params }) {
     }
 
     // Find images to delete (present in DB but not in the images array from the form)
-    const imagesToDelete = currentBillboard.images.filter(
+    const imagesToDelete = currentBrand.images.filter(
       (dbImage) => !images.includes(dbImage) // Images in DB but not in the new array of URLs
     );
 
@@ -71,12 +71,12 @@ export async function PATCH(req, { params }) {
     await Promise.all(
       imagesToDelete.map(async (image) => {
         const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`billboards/${publicId}`);
+        await cloudinary.uploader.destroy(`brands/${publicId}`);
       })
     );
 
-    // Upload new images to Cloudinary (if they are not already in the images array)
-    const folderPath = "billboards";
+
+    // Upload new images to Cloudinary
     const uploadedImages = await Promise.all(
       newImages.map(async (image) => {
         if (image instanceof File) {
@@ -84,7 +84,7 @@ export async function PATCH(req, { params }) {
           const buffer = Buffer.from(arrayBuffer);
           const result = await cloudinary.uploader.upload(
             `data:${image.type};base64,${buffer.toString("base64")}`,
-            { folder: folderPath }
+            { folder: "brands" }
           );
           return result.secure_url;
         } else {
@@ -94,7 +94,7 @@ export async function PATCH(req, { params }) {
     );
 
     // Combine new uploaded images and the existing images that weren't deleted
-    const finalImages = [...images, ...uploadedImages];
+    const finalImages = [...images, ...uploadedImages].flat();
 
     // Update the billboard with new data
     const updatedBillboard = await db.billboard.update({
@@ -124,22 +124,34 @@ export async function DELETE(req, { params }) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const { storeId } = params;
-
-    if (!storeId) {
-      return new NextResponse("Store ID is Required", { status: 400 });
-    }
-
     if (!params.billboardId) {
       return new NextResponse("Billboard ID is Required", { status: 400 });
     }
 
-    const billboard = await db.billboard.deleteMany({
+    const billboard = await db.billboard.findUnique({
+      where: {
+        id: params.brandId,
+      },
+    });
+
+    if (!billboard) {
+      return new NextResponse("billboard not found", { status: 404 });
+    }
+
+    // Delete images from Cloudinary
+    await Promise.all(
+      billboard.images.map(async (image) => {
+        const publicId = image.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(`billboards/${publicId}`);
+      })
+    );
+
+    await db.billboard.deleteMany({
       where: {
         id: params.billboardId,
       },
     });
-    return NextResponse.json(billboard);
+    return NextResponse.json({ message: "Billboard deleted successfully" });
   } catch (error) {
     console.log(`[BILLBOARDS_DELETE] `, error);
     return new NextResponse("Internal Server Error", {

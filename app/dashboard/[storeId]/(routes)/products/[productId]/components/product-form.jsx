@@ -8,7 +8,6 @@ import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { Trash } from "lucide-react";
 
-import MultiSelect from "@/components/common/multi-selelct";
 import { AlertModal } from "@/components/models/alert-modal";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -51,36 +50,24 @@ export const ProductForm = ({ initialData, brands, categories }) => {
   const description = initialData
     ? "Edit your Product"
     : "Create a new Product";
-  const toastMessage = initialData
-    ? "Product updated successfully"
-    : "Product created successfully";
+
   const action = initialData ? "Save Changes" : "Create Product";
 
-  const defaultValues = initialData
-    ? {
-        name: initialData.name || "",
-        images: initialData.images || [],
-        price: parseFloat(String(initialData.price)),
-        purchasedPrice: parseFloat(String(initialData.purchasedPrice)),
-        brandId: initialData.brandId || "",
-        description: initialData.description || "",
-        gst: initialData?.gst,
-        categoryId: initialData.categoryId || "",
-        isFeatured: initialData.isFeatured || false,
-        isArchived: initialData.isArchived || false,
-      }
-    : {
-        name: "",
-        images: [],
-        price: null,
-        purchasedPrice: null,
-        gst: 18,
-        description: "",
-        brandId: "",
-        categoryId: "",
-        isFeatured: false,
-        isArchived: false,
-      };
+  const defaultValues = {
+    name: initialData?.name ?? "",
+    images: initialData?.images ?? [],
+    purchasedPrice: initialData?.purchasedPrice
+      ? parseFloat(String(initialData.purchasedPrice))
+      : null,
+    brandId: initialData?.brandId ?? "",
+    description: initialData?.description ?? "",
+    gst: initialData?.gst ?? 18,
+    categoryId: initialData?.categoryId ?? "",
+    isFeatured: initialData?.isFeatured ?? false,
+    isArchived: initialData?.isArchived ?? false,
+    msp: initialData?.msp ?? null,
+    mrp: initialData?.mrp ?? null,
+  };
 
   const form = useForm({
     resolver: zodResolver(ProductSchema),
@@ -92,7 +79,8 @@ export const ProductForm = ({ initialData, brands, categories }) => {
       setLoading(true);
       const formData = new FormData();
       formData.append("name", data.name);
-      formData.append("price", data.price);
+      formData.append("mrp", data.mrp);
+      formData.append("msp", data.msp);
       formData.append("purchasedPrice", data.purchasedPrice);
       formData.append("brandId", data.brandId);
       formData.append("description", data.description);
@@ -126,7 +114,7 @@ export const ProductForm = ({ initialData, brands, categories }) => {
       }
 
       router.refresh();
-      toast.success(toastMessage);
+      toast.success("Product created/updated successfully");
     } catch (error) {
       toast.error(error.response?.data);
     } finally {
@@ -224,18 +212,40 @@ export const ProductForm = ({ initialData, brands, categories }) => {
                 </FormItem>
               )}
             />
-          
+
             <FormField
               control={form.control}
-              name="price"
+              name="mrp"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>Retail price</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
                       disabled={loading}
-                      placeholder="price"
+                      placeholder="mrp"
+                      {...field}
+                      value={field.value}
+                      onChange={(e) =>
+                        field.onChange(parseFloat(e.target.value))
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="msp"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Selling price</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      disabled={loading}
+                      placeholder="msp"
                       {...field}
                       value={field.value}
                       onChange={(e) =>
@@ -335,36 +345,36 @@ export const ProductForm = ({ initialData, brands, categories }) => {
               )}
             />
             <div>
-            <FormField
-  control={form.control}
-  name="gst"
-  render={({ field }) => (
-    <FormItem>
-      <FormLabel>GST</FormLabel>
-      <Select
-        disabled={loading}
-        onValueChange={(value) => field.onChange(value)} 
-        value={field.value?.toString()} 
-      >
-        <FormControl>
-          <SelectTrigger>
-            <SelectValue placeholder="Select a GST" />
-          </SelectTrigger>
-        </FormControl>
+              <FormField
+                control={form.control}
+                name="gst"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>GST</FormLabel>
+                    <Select
+                      disabled={loading}
+                      onValueChange={(value) => field.onChange(value)}
+                      value={field.value?.toString()}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a GST" />
+                        </SelectTrigger>
+                      </FormControl>
 
-        <SelectContent>
-          {[0, 5, 12, 18, 28].map((gst) => (
-            <SelectItem key={gst} value={gst.toString()}>
-              {gst}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+                      <SelectContent>
+                        {[0, 5, 12, 18, 28].map((gst) => (
+                          <SelectItem key={gst} value={gst.toString()}>
+                            {gst}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
 
-      <FormMessage />
-    </FormItem>
-  )}
-/>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="isFeatured"
@@ -432,7 +442,7 @@ export const ProductForm = ({ initialData, brands, categories }) => {
           </div>
 
           <Button disabled={loading} className="ml-auto" type="submit">
-            {action}
+            {loading ? "Submitting..." : action}
           </Button>
         </form>
       </Form>

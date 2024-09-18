@@ -114,7 +114,7 @@ export const TestimonialForm = ({ initialData }) => {
   };
 
   return (
-    <div className="w-fit mx-auto pt-5">
+    <div className="max-w-4xl mx-auto pt-5">
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
@@ -135,14 +135,42 @@ export const TestimonialForm = ({ initialData }) => {
           </Button>
         )}
       </div>
-      <Separator />
+      <Separator className="my-2" />
 
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
-          <div className="flex flex-col gap-5 max-w-lg">
+          <FormField
+            control={form.control}
+            name="images"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Image</FormLabel>
+                <FormControl>
+                  <ImageUpload
+                    value={field.value.map((image) => image)}
+                    disabled={loading}
+                    onChange={(newImage) => {
+                      field.onChange([newImage]);
+                    }}
+                    onRemove={(id) => {
+                      field.onChange(
+                        field.value.filter(
+                          (image, index) =>
+                            index !== id &&
+                            (!image.publicId || image.publicId !== id)
+                        )
+                      );
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="grid grid-cols-3 gap-5 max-w-lg">
             <FormField
               control={form.control}
               name="name"
@@ -208,34 +236,6 @@ export const TestimonialForm = ({ initialData }) => {
                     />
                   </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="images"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Image</FormLabel>
-                  <FormControl>
-                    <ImageUpload
-                      value={field.value.map((image) => image)}
-                      disabled={loading}
-                      onChange={(newImage) => {
-                        field.onChange([newImage]);
-                      }}
-                      onRemove={(id) => {
-                        field.onChange(
-                          field.value.filter(
-                            (image, index) =>
-                              index !== id &&
-                              (!image.publicId || image.publicId !== id)
-                          )
-                        );
-                      }}
-                    />
-                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

@@ -17,11 +17,15 @@ export const columns = [
   },
   {
     accessorKey: "purchasedPrice",
-    header: "Purchased Price",
+    header: "PP",
   },
   {
-    accessorKey: "price",
-    header: "Price",
+    accessorKey: "mrp",
+    header: "MRP",
+  },
+  {
+    accessorKey: "msp",
+    header: "MSP",
   },
   {
     accessorKey: "brand",
@@ -31,10 +35,7 @@ export const columns = [
     accessorKey: "category",
     header: "Category",
   },
-  {
-    accessorKey: "createdAt",
-    header: "Date",
-  },
+
   {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,
