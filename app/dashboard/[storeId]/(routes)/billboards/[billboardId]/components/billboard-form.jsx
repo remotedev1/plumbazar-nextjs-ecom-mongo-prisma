@@ -13,14 +13,8 @@ import {
 import Heading from "@/components/ui/heading";
 import ImageUpload from "@/components/ui/image-upload";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import { billboardSchema } from "@/schemas";
 // import { useOrigin } from "@/hooks/use-origin";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -54,9 +48,10 @@ export const BillboardForm = ({ initialData, categories }) => {
   const form = useForm({
     resolver: zodResolver(billboardSchema),
     defaultValues: initialData || {
-      label: "",
-      imageUrl: "",
-      category: "",
+      title: "",
+      description: "",
+      action: "",
+      images: [],
     },
   });
 
@@ -65,17 +60,32 @@ export const BillboardForm = ({ initialData, categories }) => {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-
-      //& if initialData is true then we are updating the store else we are creating a new store (initialData is null)
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("action", data.action);
+      data.images.forEach((fileOrUrl, index) => {
+        if (typeof fileOrUrl === "string") {
+          // If the image is a URL, append it as a string
+          formData.append("images", fileOrUrl);
+        } else if (fileOrUrl instanceof File) {
+          // If the image is a File object, append it as a file
+          formData.append("newImages", fileOrUrl);
+        }
+      });
 
       if (initialData) {
         await axios.patch(
           `/api/${params.storeId}/billboards/${params.billboardId}`,
-          data
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
         );
       } else {
-        console.log("ran");
-        await axios.post(`/api/${params.storeId}/billboards`, data);
+        await axios.post(`/api/${params.storeId}/billboards`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
       }
 
       router.refresh();
@@ -141,16 +151,26 @@ export const BillboardForm = ({ initialData, categories }) => {
         >
           <FormField
             control={form.control}
-            name="imageUrl"
+            name="images"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Background image</FormLabel>
+                <FormLabel>Image</FormLabel>
                 <FormControl>
                   <ImageUpload
-                    value={field.value ? [field.value] : []}
+                    value={field.value.map((image) => image)}
                     disabled={loading}
-                    onChange={(url) => field.onChange(url)}
-                    onRemove={() => field.onChange("")}
+                    onChange={(newImage) => {
+                      field.onChange([newImage]);
+                    }}
+                    onRemove={(id) => {
+                      field.onChange(
+                        field.value.filter(
+                          (image, index) =>
+                            index !== id &&
+                            (!image.publicId || image.publicId !== id)
+                        )
+                      );
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -160,14 +180,14 @@ export const BillboardForm = ({ initialData, categories }) => {
           <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="label"
+              name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Label</FormLabel>
+                  <FormLabel>Title</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Billboard label"
+                      placeholder="Billboard title"
                       {...field}
                     />
                   </FormControl>
@@ -177,41 +197,41 @@ export const BillboardForm = ({ initialData, categories }) => {
             />
             <FormField
               control={form.control}
-              name="category"
+              name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          placeholder="Select a category"
-                          defaultValue={field.value}
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      disabled={loading}
+                      placeholder="description..."
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="action"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Action</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      disabled={loading}
+                      placeholder="action..."
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
-            {action}
+            {loading ? "Submitting..." : action}
           </Button>
         </form>
       </Form>

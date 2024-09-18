@@ -5,21 +5,21 @@ import Heading from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import {  columns } from "./columns";
+import { columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 
 const TestimonialsClient = ({ data }) => {
   const router = useRouter();
   const params = useParams();
+
   return (
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Categories (${data.length})`}
-          description="Manage Categories for your store. 
+          title={`Testimonials (${data.length})`}
+          description="Manage testimonials for your store. 
           "
         />
-
         <Button
           onClick={() =>
             router.push(`/dashboard/${params.storeId}/testimonials/new`)
@@ -30,7 +30,6 @@ const TestimonialsClient = ({ data }) => {
       </div>
       <Separator />
       <DataTable searchKey="name" columns={columns} data={data} />
-     
     </>
   );
 };

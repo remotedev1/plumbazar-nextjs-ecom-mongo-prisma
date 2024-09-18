@@ -9,7 +9,7 @@ const TestimonialPage = async ({ params }) => {
     return <Unauthorized />;
   }
   if (params.testimonialId !== "new") {
-    var testimonials = await db.testimonials.findFirst({
+    var testimonials = await db.testimonial.findFirst({
       where: {
         id: params.testimonialId,
       },

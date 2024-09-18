@@ -27,14 +27,14 @@ export const CellAction = ({ data }) => {
 
   const onCopy = (id) => {
     navigator.clipboard.writeText(id);
-    toast.success("Category Id copied to clipboard.");
+    toast.success("testimonials Id copied to clipboard.");
   };
 
   const onDelete = async () => {
     try {
       setLoading(true);
       // Delete store
-      await axios.delete(`/api/${params.storeId}/categories/${data.id}`);
+      await axios.delete(`/api/${params.storeId}/testimonials/${data.id}`);
       router.refresh();
 
       toast.success("Category deleted successfully");
@@ -72,7 +72,7 @@ export const CellAction = ({ data }) => {
           {/* Update */}
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/dashboard/${params.storeId}/categories/${data.id}`)
+              router.push(`/dashboard/${params.storeId}/testimonials/${data.id}`)
             }
           >
             <Edit className="mr-2 h-4 w-4" />

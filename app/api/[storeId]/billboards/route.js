@@ -1,39 +1,60 @@
 import { auth } from "@/auth";
+import cloudinary from "@/lib/cloudinary";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export async function POST(req, { params }) {
   try {
     const { user } = await auth(); // we have access to the user id here that wants to create new store using our api
+    const formData = await req.formData();
 
-    const body = await req.json();
-    const { label, imageUrl, category } = body;
+    const title = formData.get("title");
+    const description = formData.get("description");
+    const action = formData.get("action");
+    const images = formData.getAll("newImages");
 
-    if (user.role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 401 });
+    if (!title) {
+      return new NextResponse("title is required", { status: 400 });
     }
-
-    if (!label) {
-      return new NextResponse("Label is required", { status: 400 });
+    if (!description) {
+      return new NextResponse("description is required", { status: 400 });
     }
-    if (!imageUrl) {
-      return new NextResponse("Image URL is required", { status: 400 });
-    }
-    if (!category) {
-      return new NextResponse("category is required", { status: 400 });
+    if (!images) {
+      return new NextResponse("images is required", { status: 400 });
     }
 
     if (!params.storeId) {
       return new NextResponse("Store ID is required", { status: 400 });
     }
 
+    // Upload images to Cloudinary path
+    const folderPath = "billboards";
+    // Upload images to Cloudinary
+    const uploadedImages = await Promise.all(
+      images.map(async (image) => {
+        if (image instanceof File) {
+          const arrayBuffer = await image.arrayBuffer();
+          const buffer = Buffer.from(arrayBuffer);
+          const result = await cloudinary.uploader.upload(
+            `data:${image.type};base64,${buffer.toString("base64")}`,
+            { folder: folderPath }
+          );
+          return { url: result.secure_url };
+        } else {
+          throw new Error("Invalid file format");
+        }
+      })
+    );
+
     // create new billboard using prisma client instance and return the billboard data to the client
 
     const billboard = await db.billboard.create({
       data: {
-        label,
-        imageUrl,
-        category: { connect: { id: category } },
+        postedBy: user.id,
+        title,
+        description,
+        action,
+        images: uploadedImages.map((img) => img.url),
       },
     });
 

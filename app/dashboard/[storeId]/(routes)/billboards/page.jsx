@@ -12,7 +12,9 @@ const BillboardsPage = async ({ params }) => {
 
   const formattedBillboards = billboards.map((billboard) => ({
     id: billboard.id,
-    label: billboard.label,
+    title: billboard.title,
+    description: billboard.description,
+    action: billboard.action,
     createdAt: format(new Date(billboard.createdAt), "MMMM do ,yyyy"),
   }));
 

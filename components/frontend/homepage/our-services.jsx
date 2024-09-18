@@ -12,9 +12,9 @@ const services = [
         className="w-12 h-12 mx-auto text-primary"
       >
         <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
           d="M3 3h2l.5 2h15a1 1 0 0 1 .95 1.31l-1.28 4.68a2 2 0 0 1-1.95 1.5H7.12m5.88 5H9a2 2 0 1 1-4 0m8 0a2 2 0 1 1-4 0m2-12h2l3 3m-6 0h3m-3-3v3"
         />
       </svg>

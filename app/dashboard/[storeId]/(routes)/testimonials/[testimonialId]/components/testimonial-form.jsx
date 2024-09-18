@@ -47,7 +47,7 @@ export const TestimonialForm = ({ initialData }) => {
     defaultValues: initialData || {
       name: "",
       address: "",
-      image: [],
+      images: [],
       message: "",
     },
   });
@@ -57,7 +57,18 @@ export const TestimonialForm = ({ initialData }) => {
       setLoading(true);
       const formData = new FormData();
       formData.append("name", data.name);
-      formData.append("images", data.image);
+      formData.append("message", data.message);
+      formData.append("organization", data.organization);
+      formData.append("designation", data.designation);
+      data.images.forEach((fileOrUrl, index) => {
+        if (typeof fileOrUrl === "string") {
+          // If the image is a URL, append it as a string
+          formData.append("images", fileOrUrl);
+        } else if (fileOrUrl instanceof File) {
+          // If the image is a File object, append it as a file
+          formData.append("newImages", fileOrUrl);
+        }
+      });
 
       if (initialData) {
         await axios.patch(
@@ -74,7 +85,6 @@ export const TestimonialForm = ({ initialData }) => {
       }
 
       router.refresh();
-
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
@@ -153,14 +163,31 @@ export const TestimonialForm = ({ initialData }) => {
             />
             <FormField
               control={form.control}
-              name="address"
+              name="organization"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Location</FormLabel>
+                  <FormLabel>Organization</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="location..."
+                      placeholder="organization..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="designation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Designation</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="designation..."
                       {...field}
                     />
                   </FormControl>
@@ -181,13 +208,14 @@ export const TestimonialForm = ({ initialData }) => {
                       {...field}
                     />
                   </FormControl>
+
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="image"
+              name="images"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Image</FormLabel>

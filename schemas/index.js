@@ -21,8 +21,10 @@ export const newPasswordSchema = z.object({
 });
 
 export const billboardSchema = z.object({
-  label: z.string().min(3, { message: "Label is required" }),
-  imageUrl: z.string().url(),
+  title: z.string().min(3, { message: "title is required" }),
+  description: z.string().min(3, { message: "description is required" }),
+  action: z.string(),
+  images: z.array(z.any()).min(1).max(1),
 });
 
 export const BrandSchema = z.object({
@@ -78,8 +80,9 @@ export const StockInSchema = z.object({
 
 export const TestimonialSchema = z.object({
   name: z.string(),
-  address: z.string().optional(), // optional field
-  image: z.array(z.any()), // optional field
+  organization: z.string().optional(), // optional field
+  designation: z.string().optional(), // optional field
+  images: z.array(z.any()).max(1), // optional field
   message: z.string(),
 });
 

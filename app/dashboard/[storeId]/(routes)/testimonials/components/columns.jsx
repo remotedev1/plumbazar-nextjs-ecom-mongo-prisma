@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { CellAction } from "./cell-action";
 
 export const columns = [
@@ -9,21 +8,18 @@ export const columns = [
     header: "Name",
   },
   {
-    accessorKey: "images",
-    header: "Image",
-    cell: ({ row }) => {
-      if (row.original.image) {
-        return (
-          <Image
-            width={50}
-            height={50}
-            src={row.original.image}
-            alt="image"
-          />
-        );
-      }
-    },
+    accessorKey: "message",
+    header: "Message",
   },
+  {
+    accessorKey: "designation",
+    header: "Designation",
+  },
+  {
+    accessorKey: "organization",
+    header: "Organization",
+  },
+ 
   {
     accessorKey: "createdAt",
     header: "Date",

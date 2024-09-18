@@ -6,9 +6,9 @@ import Unauthorized from "@/components/auth/un-authorized";
 
 const BillboardPage = async ({ params }) => {
   const { user } = await auth();
-  if (user.role !== "SUPERADMIN") {
-    return <Unauthorized />;
-  }
+  // if (user.role !== "SUPERADMIN") {
+  //   return <Unauthorized />;
+  // }
   if (params.billboardId !== "new") {
     var billboard = await db.billboard.findFirst({
       where: { id: params.billboardId },

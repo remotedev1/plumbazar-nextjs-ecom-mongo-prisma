@@ -4,8 +4,16 @@ import { CellAction } from "./cell-action";
 
 export const columns = [
   {
-    accessorKey: "label",
-    header: "Label",
+    accessorKey: "title",
+    header: "Title",
+  },
+  {
+    accessorKey: "description",
+    header: "Description",
+  },
+  {
+    accessorKey: "action",
+    header: "Action",
   },
 
   {
@@ -13,10 +21,6 @@ export const columns = [
     header: "Date",
   },
 
-  {
-    accessorKey: "category",
-    header: "category",
-  },
   {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,

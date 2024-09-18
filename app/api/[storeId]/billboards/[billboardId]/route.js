@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import cloudinary from "@/lib/cloudinary";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
@@ -28,19 +29,19 @@ export async function PATCH(req, { params }) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const body = await req.json();
-    const { label, imageUrl, category } = body;
+    const formData = await req.formData();
 
-    if (!label) {
-      return new NextResponse("Label is Required", { status: 400 });
+    const title = formData.get("title");
+    const description = formData.get("description");
+    const action = formData.get("action");
+    const images = formData.getAll("images");
+    const newImages = formData.getAll("newImages");
+
+
+    if (!images || !newImages) {
+      return new NextResponse("Images are required", { status: 400 });
     }
 
-    if (!imageUrl) {
-      return new NextResponse("Image URL is Required", { status: 400 });
-    }
-    if (!category) {
-      return new NextResponse("category is Required", { status: 400 });
-    }
 
     if (!params.storeId) {
       return new NextResponse("Store ID is Required", { status: 400 });
@@ -48,17 +49,55 @@ export async function PATCH(req, { params }) {
     if (!params.billboardId) {
       return new NextResponse("Billboard ID is Required", { status: 400 });
     }
+ // Fetch current images from the database
+    const currentProduct = await db.product.findUnique({
+      where: {
+        id: params.productId,
+      },
+    });
 
-    // find and update billboard
+    // Find images to delete (images present in DB but not in the new images list)
+    const imagesToDelete = currentProduct.images.filter(
+      (dbImage) => !images.some((image) => image === dbImage)
+    );
 
-    const billboard = await db.billboard.updateMany({
+    // Delete images from Cloudinary
+    await Promise.all(
+      imagesToDelete.map(async (image) => {
+        const publicId = image.split("/").pop().split(".")[0];
+        console.log(publicId);
+        await cloudinary.uploader.destroy(`products/${publicId}`);
+      })
+    );
+
+    // Upload images to Cloudinary path
+    const folderPath = "testimonials";
+    // Upload images to Cloudinary
+    const uploadedImages = await Promise.all(
+      newImages.map(async (image) => {
+        if (image instanceof File) {
+          const arrayBuffer = await image.arrayBuffer();
+          const buffer = Buffer.from(arrayBuffer);
+          const result = await cloudinary.uploader.upload(
+            `data:${image.type};base64,${buffer.toString("base64")}`,
+            { folder: folderPath }
+          );
+          return { url: result.secure_url };
+        } else {
+          throw new Error("Invalid file format");
+        }
+      })
+    );
+    const billboard = await db.billboard.update({
       where: {
         id: params.billboardId,
       },
       data: {
-        label,
-        imageUrl,
-        category: { connect: { id: category } },
+        postedBy: user.id,
+        title,
+        description,
+        action,
+        images: uploadedImages.map((img) => img.url),
       },
     });
 

@@ -56,6 +56,11 @@ export function MainNav({ className, ...props }) {
       active: pathname === `/dashboard/${params.storeId}/rfq`,
     },
     {
+      href: `/dashboard/${params.storeId}/testimonials`,
+      label: "Testimonials",
+      active: pathname === `/dashboard/${params.storeId}/testimonials`,
+    },
+    {
       href: `/dashboard/${params.storeId}/settings`,
       label: "Settings",
       active: pathname === `/dashboard/${params.storeId}/settings`,

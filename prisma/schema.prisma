@@ -92,37 +92,32 @@ model Store {
 }
 
 model Billboard {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  label    String
-  imageUrl String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  Brand      Brand?    @relation(fields: [brandId], references: [id])
-  brandId    String?   @db.ObjectId
-  Category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId String?   @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  postedBy    String   @db.ObjectId
+  images      String[]
+  title       String
+  description String
+  action      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Brand {
-  id        String      @id @default(auto()) @map("_id") @db.ObjectId
-  products  Product[]   @relation("BrandToProduct")
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  products  Product[] @relation("BrandToProduct")
   name      String
   images    String[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  Billboard Billboard[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Category {
-  id        String      @id @default(auto()) @map("_id") @db.ObjectId
-  products  Product[]   @relation("CategoryToProduct")
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  products  Product[] @relation("CategoryToProduct")
   name      String
   images    String[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  Billboard Billboard[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Product {
@@ -135,6 +130,7 @@ model Product {
   category        Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name            String
   price           Int
+  mrp             Int
   stock           Int         @default(0)
   purchasedPrice  Int?
   discountedPrice Int?
@@ -320,13 +316,14 @@ model StockIn {
   updatedAt DateTime @updatedAt
 }
 
-model Testimonials {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  postedBy    String   @db.ObjectId
-  name        String
-  address     String?
-  image       String?
-  message String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model Testimonial {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  postedBy     String   @db.ObjectId
+  name         String
+  images       String[]
+  organization String?
+  designation  String?
+  message      String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
