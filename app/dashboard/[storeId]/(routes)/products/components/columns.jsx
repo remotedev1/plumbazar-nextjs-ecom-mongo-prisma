@@ -35,7 +35,13 @@ export const columns = [
     accessorKey: "category.name",
     header: "Category",
   },
-
+  {
+    accessorKey: "offers",
+    header: "Offers",
+    cell: ({ row }) => (
+      <div className="">{row.original?.offers.length}</div>
+    ),
+  },
   {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,

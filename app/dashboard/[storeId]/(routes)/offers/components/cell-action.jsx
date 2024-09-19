@@ -16,8 +16,6 @@ import { useState } from "react";
 import axios from "axios";
 import { AlertModal } from "@/components/models/alert-modal";
 
-
-
 export const CellAction = ({ data }) => {
   const router = useRouter();
   const params = useParams();
@@ -28,17 +26,16 @@ export const CellAction = ({ data }) => {
 
   const onCopy = (id) => {
     navigator.clipboard.writeText(id);
-    toast.success("Product Id copied to clipboard.");
+    toast.success("offer Id copied to clipboard.");
   };
 
   const onDelete = async () => {
     try {
       setLoading(true);
       // Delete store
-      await axios.delete(`/api/${params.storeId}/products/${data.id}`);
+      await axios.delete(`/api/${params.storeId}/products/offers/${data.id}`);
+      toast.success("Offer deleted successfully");
       router.refresh();
-      router.push(`/dashboard/${params.storeId}/products`);
-      toast.success("Product deleted successfully");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -71,7 +68,7 @@ export const CellAction = ({ data }) => {
           {/* Update */}
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/dashboard/${params.storeId}/products/${data.id}`)
+              router.push(`/dashboard/${params.storeId}/offers/${data.id}`)
             }
           >
             <Edit className="mr-2 h-4 w-4" />

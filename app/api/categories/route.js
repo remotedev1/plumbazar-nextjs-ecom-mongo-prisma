@@ -10,9 +10,6 @@ export async function POST(req, { params }) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (!params.storeId) {
-      return new NextResponse("Store id is required", { status: 400 });
-    }
     const formData = await req.formData();
 
     const name = formData.get("name");
@@ -62,9 +59,7 @@ export async function POST(req, { params }) {
 
 export async function GET(req, { params }) {
   try {
-    if (!params.storeId) {
-      return new NextResponse("Store id is required", { status: 400 });
-    }
+
 
     const categories = await db.category.findMany();
 

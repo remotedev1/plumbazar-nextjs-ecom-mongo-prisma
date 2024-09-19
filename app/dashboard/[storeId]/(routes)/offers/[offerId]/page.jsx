@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 import { OfferForm } from "./components/offer-form";
 import { auth } from "@/auth";
 import Unauthorized from "@/components/auth/un-authorized";
+import { getBrands } from "@/actions/get-brands";
+import { getCategories } from "@/actions/get-categories";
 
 const OfferPage = async ({ params }) => {
   const { user } = await auth();
@@ -16,10 +18,14 @@ const OfferPage = async ({ params }) => {
     });
   }
 
+
+  const brands = await getBrands();
+  const categories = await getCategories();
+
   return (
     <div className="flex-col ">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <OfferForm initialData={offer} />
+        <OfferForm initialData={offer} brands={brands} categories={categories} />
       </div>
     </div>
   );

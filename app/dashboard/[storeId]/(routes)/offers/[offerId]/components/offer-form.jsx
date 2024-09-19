@@ -1,6 +1,6 @@
-"use client";
+"use client"; // Ensure this file is a client component
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { OfferSchema } from "@/schemas";
@@ -20,21 +20,25 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Heading from "@/components/ui/heading";
+import MultiSelect from "@/components/common/multi-selelct";
+import ProductMultiSelect from "./product-multi-slect";
 
-export const OfferForm = ({ initialData }) => {
+export const OfferForm = ({ initialData, brands, categories }) => {
   const router = useRouter();
   const params = useParams();
   const [loading, setLoading] = useState(false);
-
+console.log(initialData)
   const form = useForm({
     resolver: zodResolver(OfferSchema),
-    defaultValues: initialData || {
-      title: "",
-      description: "",
-      discountPercentage: 0,
-      validFrom: new Date(),
-      validUntil: new Date(),
-      productIds: [],
+    defaultValues: {
+      title: initialData?.title ?? "",
+      description: initialData?.description ?? "",
+      discountPercentage: initialData?.discountPercentage ?? 0,
+      validFrom: initialData?.validFrom ?? null,
+      validUntil: initialData?.validUntil ?? null,
+      productIds: initialData?.productIds ?? [],
+      brandIds: initialData?.brandIds ?? [],
+      categoryIds: initialData?.categoryIds ?? [],
     },
   });
 
@@ -138,31 +142,94 @@ export const OfferForm = ({ initialData }) => {
               )}
             />
 
-            <Controller
-              name="validUntil"
+            <FormField
               control={form.control}
-              render={({ field: { value, onChange } }) => (
-                <FormField
-                  control={form.control}
-                  name="validUntil"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>End Date</FormLabel>
-                      <FormControl>
-                        <DatePicker
-                          selectedDate={value}
-                          onDateChange={onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              name="validUntil"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>End Date</FormLabel>
+                  <FormControl>
+                    <DatePicker
+                      selectedDate={field.value}
+                      onDateChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
             />
 
-            {/* Add product selection and other fields as necessary */}
+            {/* Brand selection */}
+            <FormField
+              control={form.control}
+              name="brandIds"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Brands</FormLabel>
+                  <FormControl>
+                    <MultiSelect
+                      placeholder="Select brands"
+                      options={brands.map((brand) => ({
+                        label: brand.name,
+                        value: brand.id,
+                      }))}
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Category selection */}
+            <FormField
+              control={form.control}
+              name="categoryIds"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Categories</FormLabel>
+                  <FormControl>
+                    <MultiSelect
+                      placeholder="Select categories"
+                      options={categories.map((category) => ({
+                        label: category.name,
+                        value: category.id,
+                      }))}
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Product selection */}
+            <FormField
+              control={form.control}
+              name="productIds"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Products</FormLabel>
+                  <FormControl>
+                    <Controller
+                      name="productIds"
+                      control={form.control}
+                      render={({ field }) => (
+                        <ProductMultiSelect
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      )}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
+
           <Button disabled={loading} className="ml-auto" type="submit">
             {loading
               ? "Submitting..."

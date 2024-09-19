@@ -164,6 +164,8 @@ model Offer {
   productId          String[]  @db.ObjectId
   products           Product[] @relation(fields: [productId], references: [id])
   deletedAt          DateTime? // Soft delete field
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 }
 
 type Features {

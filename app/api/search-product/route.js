@@ -77,6 +77,7 @@ if (query && query.trim() !== "") {
       include: {
         category: true, // Include category data
         brand: true, // Include brand data
+        offers: true, // Include brand data
       },
     });
 

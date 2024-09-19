@@ -38,7 +38,10 @@ export const SearchProducts = ({ params }) => {
           id: product.id,
           name: product.name,
           imageUrl: product.images[0],
-          price: product.price,
+          mrp: product.mrp,
+          msp: product.msp,
+          gst: product.gst,
+          offers: product.offers,
         }));
         setOptions(products);
       } catch (error) {
@@ -62,6 +65,7 @@ export const SearchProducts = ({ params }) => {
     router.push(`/products/${id}`);
     setIsOpen(false); // Close the modal after navigation
   };
+
 
   return (
     <div className="w-full max-w-md max-h-[80vh]">
@@ -90,52 +94,52 @@ export const SearchProducts = ({ params }) => {
           />
 
           {/* Search results or query */}
-            { debouncedSearch && options.length ? (
-              <ScrollArea className="h-96  rounded-md border">
-                <ul>
-                  {options.map((product) => (
-                    <li
-                      key={product.id}
-                      className="flex items-center space-x-2 justify-between border-b p-2 rounded-lg cursor-pointer hover:bg-gray-100"
-                      onClick={() => handleProductClick(product.id)}
-                    >
-                      {/* Product Image */}
-                      <Image
-                        src={product.imageUrl}
-                        alt={product.name}
-                        width={100}
-                        height={100}
-                        className="rounded-md"
-                        layout="intrinsic"
-                        priority // Load image with priority
-                      />
+          {debouncedSearch && options.length ? (
+            <ScrollArea className="h-96  rounded-md border">
+              <ul>
+                {options.map((product) => (
+                  <li
+                    key={product.id}
+                    className="flex items-center space-x-2 justify-between border-b p-2 rounded-lg cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleProductClick(product.id)}
+                  >
+                    {/* Product Image */}
+                    <Image
+                      src={product.imageUrl}
+                      alt={product.name}
+                      width={100}
+                      height={100}
+                      className="rounded-md"
+                      layout="intrinsic"
+                      priority // Load image with priority
+                    />
 
-                      <div className="flex flex-col space-y-2 flex-1">
-                        {/* Product Name */}
+                    <div className="flex flex-col space-y-2 flex-1">
+                      {/* Product Name */}
 
-                        <span className="font-medium text-sm">
-                          {product.name}
+                      <span className="font-medium text-sm">
+                        {product.name}
+                      </span>
+                      <div className=" flex items-start flex-wrap leading-none text-red-600  font-bold ">
+                        <span className="flex w-full text-sm md:text-base">
+                          <Currency value={product?.price} />
                         </span>
-                        <div className=" flex items-start flex-wrap leading-none text-red-600  font-bold ">
-                          <span className="flex w-full text-sm md:text-base">
-                            <Currency value={product?.price} />
-                          </span>
-                        </div>
-                        {/* View Product Button */}
-                        {/* <Button
+                      </div>
+                      {/* View Product Button */}
+                      {/* <Button
                         onClick={() => handleProductClick(product.id)}
                         className="w-fit"
                       >
                         View
                       </Button> */}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </ScrollArea>
-            ) : (
-              <div>No products found...</div>
-            )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </ScrollArea>
+          ) : (
+            <div>No products found...</div>
+          )}
 
           {/* Close Button */}
           <Button onClick={() => setIsOpen(false)} className=" bg-red-500">

@@ -1,39 +1,38 @@
 "use client";
 
+import { convertTimestampToFormattedDate } from "@/lib/utils";
 import { CellAction } from "./cell-action";
 
 export const columns = [
   {
-    accessorKey: "name",
-    header: "Name",
+    accessorKey: "title",
+    header: "Title",
   },
   {
-    accessorKey: "isArchived",
-    header: "Archived",
+    accessorKey: "validFrom",
+    header: "From",
+    cell: ({ row }) => (
+      <div className="">
+        {convertTimestampToFormattedDate(row.original?.validFrom)}
+      </div>
+    ),
   },
   {
-    accessorKey: "isFeatured",
-    header: "Featured",
+    accessorKey: "validUntil",
+    header: "Till",
+    cell: ({ row }) => (
+      <div className="">
+        {convertTimestampToFormattedDate(row.original?.validUntil)}
+      </div>
+    ),
   },
+
   {
-    accessorKey: "purchasedPrice",
-    header: "PP",
-  },
-  {
-    accessorKey: "mrp",
-    header: "MRP",
-  },
-  {
-    accessorKey: "msp",
-    header: "MSP",
-  },
-  {
-    accessorKey: "brand.name",
-    header: "Brand",
-  },
-  {
-    accessorKey: "category.name",
-    header: "Category",
+    accessorKey: "deletedAt",
+    header: "Deleted",
+    cell: ({ row }) => (
+      <div className="">{row.original?.deletedAt ? "true" : "false"}</div>
+    ),
   },
 
   {
