@@ -80,6 +80,8 @@ export async function POST(req) {
           products: {
             connect: uniqueProductIds.map((productId) => ({ id: productId })),
           },
+          brands :brandIds,
+          categories :categoryIds
         },
       });
 

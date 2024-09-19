@@ -1,49 +1,124 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-// POST request to add a new offer
-export async function PATCH(req, { params }) {
+// PATCH request to add a new offer
+export async function PATCH(req) {
   try {
-    const offerId = params.id;
     const body = await req.json();
 
-    // Validate required fields
+    // Destructure required fields
     const {
+      title,
       description,
       discountPercentage,
       validFrom,
       validUntil,
-      type,
       productIds,
+      brandIds,
+      categoryIds,
     } = body;
 
-    // Update offer
-    const updatedOffer = await db.offer.update({
-      where: { id: offerId },
-      data: {
-        description,
-        discountPercentage,
-        validFrom: validFrom ? new Date(validFrom) : undefined,
-        validUntil: validUntil ? new Date(validUntil) : undefined,
-        type,
-        products: {
-          set: productIds ? productIds.map((id) => ({ id })) : [],
+    // Validate required fields
+    if (
+      !title ||
+      !description ||
+      !discountPercentage ||
+      !validFrom ||
+      !validUntil
+    ) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Fetch products based on the selected brands or categories
+    let products = [];
+    if (brandIds && brandIds.length > 0) {
+      const brandProducts = await db.product.findMany({
+        where: {
+          brandId: { in: brandIds },
         },
-      },
-      include: {
-        products: true, // Include associated products
-      },
+      });
+      products.push(...brandProducts);
+    }
+
+    if (categoryIds && categoryIds.length > 0) {
+      const categoryProducts = await db.product.findMany({
+        where: {
+          categoryId: { in: categoryIds },
+        },
+      });
+      products.push(...categoryProducts);
+    }
+
+    // Add specific products
+    if (productIds && productIds.length > 0) {
+      const specificProducts = await db.product.findMany({
+        where: {
+          id: { in: productIds },
+        },
+      });
+      products.push(...specificProducts);
+    }
+
+    // Ensure unique products
+    const uniqueProductIds = [
+      ...new Set(products.map((product) => product.id)),
+    ];
+
+    // Use a transaction to ensure atomicity
+    const transactionResult = await db.$transaction(async (tx) => {
+      // Create the new offer
+      const newOffer = await tx.offer.create({
+        data: {
+          title,
+          description,
+          discountPercentage,
+          validFrom: new Date(validFrom),
+          validUntil: new Date(validUntil),
+          products: {
+            connect: uniqueProductIds.map((productId) => ({ id: productId })),
+          },
+          brands :brandIds,
+          categories :categoryIds
+        },
+      });
+
+      // Update each product's offerId array
+      await Promise.all(
+        uniqueProductIds.map(async (productId) => {
+          const product = await tx.product.findUnique({
+            where: { id: productId },
+            select: { offerId: true }, // Get the current offerId array
+          });
+
+          if (!product.offerId.includes(newOffer.id)) {
+            await tx.product.update({
+              where: { id: productId },
+              data: {
+                offerId: {
+                  push: newOffer.id, // Only push if it doesn't already exist
+                },
+              },
+            });
+          }
+        })
+      );
+
+      return newOffer;
     });
 
-    return NextResponse.json({ offer: updatedOffer }, { status: 200 });
+    return NextResponse.json({ offer: transactionResult }, { status: 201 });
   } catch (error) {
-    console.error("Error updating offer:", error);
+    console.error("Error creating offer:", error);
     return NextResponse.json(
-      { message: "Failed to update offer" },
+      { message: "Failed to create offer" },
       { status: 500 }
     );
   }
 }
+
 
 // DELETE request to soft delete an offer by ID// DELETE request to soft delete an offer by ID
 export async function DELETE(req, { params }) {

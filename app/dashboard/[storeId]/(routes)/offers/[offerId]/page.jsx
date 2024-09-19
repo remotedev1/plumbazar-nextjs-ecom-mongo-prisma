@@ -15,9 +15,16 @@ const OfferPage = async ({ params }) => {
       where: {
         id: params.offerId,
       },
+      include: {
+        products: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     });
   }
-
 
   const brands = await getBrands();
   const categories = await getCategories();
@@ -25,7 +32,11 @@ const OfferPage = async ({ params }) => {
   return (
     <div className="flex-col ">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <OfferForm initialData={offer} brands={brands} categories={categories} />
+        <OfferForm
+          initialData={offer}
+          brands={brands}
+          categories={categories}
+        />
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import Select from "react-select";
 import axios from "axios";
 import { useDebounce } from "@/hooks/useDebounce";
 
-const ProductMultiSelect = ({ value, onChange }) => {
+const ProductMultiSelect = ({ value, onChange}) => {
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
   
