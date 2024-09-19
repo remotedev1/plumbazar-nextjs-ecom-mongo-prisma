@@ -140,8 +140,8 @@ model Product {
   globalRating   Int?
   numReviews     Int?
   features       Features[]
-  offersId       String[]    @db.ObjectId
-  offers         Offer       @relation(fields: [offersId], references: [id])
+  offerId        String[]    @db.ObjectId
+  offers         Offer[]     @relation(fields: [offerId], references: [id])
   description    String?
   gst            Int         @default(18)
   orderItems     OrderItem[]
@@ -156,11 +156,14 @@ model Product {
 
 model Offer {
   id                 String    @id @default(auto()) @map("_id") @db.ObjectId
+  title              String
   description        String
   discountPercentage Float
   validFrom          DateTime
   validUntil         DateTime
-  product            Product[]
+  productId          String[]  @db.ObjectId
+  products           Product[] @relation(fields: [productId], references: [id])
+  deletedAt          DateTime? // Soft delete field
 }
 
 type Features {

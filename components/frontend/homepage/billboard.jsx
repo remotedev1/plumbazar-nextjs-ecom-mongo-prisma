@@ -9,12 +9,7 @@ const Billboard = ({ data }) => {
       >
         {/* Hero content */}
         <div className="text-center text-white p-6">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            Your Hero Title
-          </h1>
-          <p className="text-lg md:text-xl mb-6">
-            Catchy subtitle or description goes here.
-          </p>
+         
           <a
             href="#cta"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

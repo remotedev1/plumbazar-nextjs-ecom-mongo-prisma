@@ -75,15 +75,11 @@ export const BillboardForm = ({ initialData, categories }) => {
       });
 
       if (initialData) {
-        await axios.patch(
-          `/api/${params.storeId}/billboards/${params.billboardId}`,
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
+        await axios.patch(`/api/billboards/${params.billboardId}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
       } else {
-        await axios.post(`/api/${params.storeId}/billboards`, formData, {
+        await axios.post(`/api/billboards`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }
@@ -91,7 +87,7 @@ export const BillboardForm = ({ initialData, categories }) => {
       router.refresh();
       toast.success("Billboard created/updated successfully");
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
@@ -102,9 +98,7 @@ export const BillboardForm = ({ initialData, categories }) => {
     try {
       setLoading(true);
       // Delete store
-      await axios.delete(
-        `/api/${params.storeId}/billboards/${params.billboardId}`
-      );
+      await axios.delete(`/api/billboards/${params.billboardId}`);
       router.refresh();
 
       router.push("/");

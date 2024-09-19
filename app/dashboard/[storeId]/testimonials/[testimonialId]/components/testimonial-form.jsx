@@ -72,14 +72,14 @@ export const TestimonialForm = ({ initialData }) => {
 
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/testimonials/${params.testimonialId}`,
+          `/api/testimonials/${params.testimonialId}`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
       } else {
-        await axios.post(`/api/${params.storeId}/testimonials`, formData, {
+        await axios.post(`/api/testimonials`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }
@@ -97,7 +97,7 @@ export const TestimonialForm = ({ initialData }) => {
       setLoading(true);
       // Delete store
       await axios.delete(
-        `/api/${params.storeId}/testimonials/${params.testimonialId}`
+        `/api/testimonials/${params.testimonialId}`
       );
       router.refresh();
 

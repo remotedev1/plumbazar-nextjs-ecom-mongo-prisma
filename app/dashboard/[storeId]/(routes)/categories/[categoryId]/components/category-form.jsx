@@ -67,14 +67,14 @@ export const CategoryForm = ({ initialData }) => {
 
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/categories/${params.categoryId}`,
+          `/api/categories/${params.categoryId}`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
       } else {
-        await axios.post(`/api/${params.storeId}/categories`, formData, {
+        await axios.post(`/api/categories`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }
@@ -94,7 +94,7 @@ export const CategoryForm = ({ initialData }) => {
       setLoading(true);
       // Delete store
       await axios.delete(
-        `/api/${params.storeId}/categories/${params.categoryId}`
+        `/api/categories/${params.categoryId}`
       );
       router.refresh();
 

@@ -52,14 +52,34 @@ export const ProductSchema = z.object({
     })
     .optional(),
   description: z.string().optional(),
-  gst: z.number().min(0, "GST must be a positive number")
-  .refine(value => value === 18 || value > 0, {
-    message: "GST must be either 18 or a positive number",
-  })
-  .default(18)
-  .optional(),
+  gst: z
+    .number()
+    .min(0, "GST must be a positive number")
+    .refine((value) => value === 18 || value > 0, {
+      message: "GST must be either 18 or a positive number",
+    })
+    .default(18)
+    .optional(),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
+});
+
+export const OfferSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+  discountPercentage: z.number().min(0, "Discount percentage cannot be negative").max(100, "Discount percentage cannot exceed 100"),
+  validFrom: z.date(),
+  validUntil: z.date()
+    .refine(date => date > new Date(), "Valid until date must be in the future"),
+  productIds: z.array(z.string()).optional(),
+}).superRefine(({ validFrom, validUntil }, ctx) => {
+  if (validUntil <= validFrom) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Valid until date must be after the start date",
+      path: ['validUntil'], // Path to the field that has the issue
+    });
+  }
 });
 
 export const StockInSchema = z.object({

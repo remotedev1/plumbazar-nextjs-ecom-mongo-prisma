@@ -9,9 +9,7 @@ export async function POST(req, { params }) {
     if (user.role !== "ADMIN") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-    if (!params.storeId) {
-      return new NextResponse("Store id is required", { status: 400 });
-    }
+
 
     const formData = await req.formData();
 
@@ -66,13 +64,9 @@ export async function POST(req, { params }) {
 
 export async function GET(req, { params }) {
   try {
-    if (!params.storeId) {
-      return new NextResponse("Store id is required", { status: 400 });
-    }
 
-    const testimonial = await db.testimonial.findMany();
-
-    return NextResponse.json(testimonial);
+    const testimonials = await db.testimonial.findMany();
+    return NextResponse.json(testimonials);
   } catch (error) {
     console.log("[TESTIMONIAL_GET]", error);
     return new NextResponse("Internal error", { status: 500 });

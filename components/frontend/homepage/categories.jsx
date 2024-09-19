@@ -48,7 +48,7 @@ const CategoryList = () => {
   return (
     <div className="relative px-6 py-8">
       <div className="flex flex-col items-start space-y-4 mb-8">
-        <h2 className="text-xl md:text-3xl font-bold text-left ">
+        <h2 className="text-md md:text-3xl font-bold text-left ">
           Shop by Categories
         </h2>
       </div>

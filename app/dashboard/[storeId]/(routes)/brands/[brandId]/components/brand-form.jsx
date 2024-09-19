@@ -63,14 +63,14 @@ export const BrandForm = ({ initialData }) => {
       });
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/brands/${params.brandId}`,
+          `/api/brands/${params.brandId}`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
       } else {
-        await axios.post(`/api/${params.storeId}/brands`, formData, {
+        await axios.post(`/api/brands`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }
@@ -87,7 +87,7 @@ export const BrandForm = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/brands/${params.brandId}`);
+      await axios.delete(`/api/brands/${params.brandId}`);
       router.refresh();
       router.push("/");
       toast.success("Brand deleted successfully");
