@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
 // PATCH request to add a new offer
-export async function PATCH(req) {
+export async function PATCH(req, { params }) {
   try {
     const body = await req.json();
 
@@ -67,10 +67,44 @@ export async function PATCH(req) {
       ...new Set(products.map((product) => product.id)),
     ];
 
+    // Fetch existing offer
+    const existingOffer = await db.offer.findUnique({
+      where: { id: params.offerId },
+      include: { products: true }, // Include existing products in the offer
+    });
+
+    if (!existingOffer) {
+      return NextResponse.json({ message: "Offer not found" }, { status: 404 });
+    }
+
+    const existingProductIds = existingOffer.products.map(
+      (product) => product.id
+    );
+
+    // Find products to disconnect (products that are not in the updated product list)
+    const productsToRemove = existingProductIds.filter(
+      (id) => !uniqueProductIds.includes(id)
+    );
+
     // Use a transaction to ensure atomicity
     const transactionResult = await db.$transaction(async (tx) => {
-      // Create the new offer
-      const newOffer = await tx.offer.create({
+      // Remove the offer from products that are no longer part of the offer
+      await Promise.all(
+        productsToRemove.map(async (productId) => {
+          await tx.product.update({
+            where: { id: productId },
+            data: {
+              offers: {
+                disconnect: { id: params.offerId }, // Remove the offer from the product
+              },
+            },
+          });
+        })
+      );
+
+      // Update the offer with new data
+      const updatedOffer = await tx.offer.update({
+        where: { id: params.offerId },
         data: {
           title,
           description,
@@ -80,8 +114,8 @@ export async function PATCH(req) {
           products: {
             connect: uniqueProductIds.map((productId) => ({ id: productId })),
           },
-          brands :brandIds,
-          categories :categoryIds
+          brands: brandIds,
+          categories: categoryIds,
         },
       });
 
@@ -93,12 +127,12 @@ export async function PATCH(req) {
             select: { offerId: true }, // Get the current offerId array
           });
 
-          if (!product.offerId.includes(newOffer.id)) {
+          if (!product.offerId.includes(params.offerId)) {
             await tx.product.update({
               where: { id: productId },
               data: {
-                offerId: {
-                  push: newOffer.id, // Only push if it doesn't already exist
+                offers: {
+                  connect: { id: params.offerId },
                 },
               },
             });
@@ -106,19 +140,18 @@ export async function PATCH(req) {
         })
       );
 
-      return newOffer;
+      return updatedOffer;
     });
 
-    return NextResponse.json({ offer: transactionResult }, { status: 201 });
+    return NextResponse.json({ offer: transactionResult }, { status: 200 });
   } catch (error) {
-    console.error("Error creating offer:", error);
+    console.error("Error updating offer:", error);
     return NextResponse.json(
-      { message: "Failed to create offer" },
+      { message: "Failed to update offer" },
       { status: 500 }
     );
   }
 }
-
 
 // DELETE request to soft delete an offer by ID// DELETE request to soft delete an offer by ID
 export async function DELETE(req, { params }) {
@@ -126,7 +159,7 @@ export async function DELETE(req, { params }) {
     const offerId = params.offerId;
 
     // Remove the association between the offer and all products
-    await db.product.updateMany({
+    await db.product.update({
       where: {
         offers: {
           some: {

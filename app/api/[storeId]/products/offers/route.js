@@ -80,8 +80,8 @@ export async function POST(req) {
           products: {
             connect: uniqueProductIds.map((productId) => ({ id: productId })),
           },
-          brands :brandIds,
-          categories :categoryIds
+          brands: brandIds,
+          categories: categoryIds,
         },
       });
 
@@ -97,8 +97,8 @@ export async function POST(req) {
             await tx.product.update({
               where: { id: productId },
               data: {
-                offerId: {
-                  push: newOffer.id, // Only push if it doesn't already exist
+                offers: {
+                  connect: newOffer.id,
                 },
               },
             });
