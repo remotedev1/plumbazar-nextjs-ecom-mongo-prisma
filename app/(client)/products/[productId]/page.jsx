@@ -7,6 +7,7 @@ import ProductRating from "@/components/frontend/product-rating";
 
 import Container from "@/components/ui/container";
 import { FaSpinner } from "react-icons/fa";
+import { calculateDiscountAndGST } from "@/lib/helpers";
 
 // Individual Product page
 
@@ -18,6 +19,8 @@ const ProductPage = async ({ params }) => {
   // });
 
 
+  const { discountPercentage, discountAmount, gstAmount, noOffer } =
+    calculateDiscountAndGST(product);
 
   if (!product) {
     return (
@@ -36,12 +39,12 @@ const ProductPage = async ({ params }) => {
             {/* Gallery */}
             <Gallery images={product.images} />
             <div className="z-10 absolute uppercase left-2.5 right-2.5 md:left-4 top-4 text-white items-center font-semibold text-center rounded-full back bg-red-600  flex justify-center  w-12 h-12 text-sm">
-              71% OFF
+              {discountPercentage}% OFF
             </div>
             
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
               {/* Info */}
-              <Info data={product} />
+              <Info data={{...product, msp:discountAmount, gstAmount, noOffer,discountPercentage}} />
 
               {/* additional Info */}
               <ProductAdditionalInfo data={product} />

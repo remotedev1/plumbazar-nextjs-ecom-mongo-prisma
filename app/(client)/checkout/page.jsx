@@ -22,8 +22,7 @@ export default function Checkout() {
       cart.items.map((item) => ({
         productId: item.id,
         quantity: item.quantity,
-        price: item.price,
-        size: item.size,
+        price: item.msp,
       })),
     [cart.items]
   );
@@ -32,7 +31,7 @@ export default function Checkout() {
   const total = useMemo(
     () =>
       cart.items.reduce(
-        (total, item) => total + Number(item.price) * Number(item.quantity),
+        (total, item) => total + Number(item.msp) * Number(item.quantity),
         0
       ),
     [cart.items]

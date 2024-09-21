@@ -8,7 +8,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useSession } from "next-auth/react";
 import Currency from "../ui/currency";
 import { Button } from "../ui/button";
-import { calculateDiscountAndGST, calculateDiscountPercentage } from "@/lib/helpers";
+import { calculateDiscountAndGST } from "@/lib/helpers";
 
 const ProductCard = ({ data }) => {
   const wishlist = useWishlist();
@@ -25,13 +25,20 @@ const ProductCard = ({ data }) => {
   //   previewModal.onOpen(data);
   // };
 
+  const { discountPercentage, discountAmount, gstAmount, noOffer } =
+    calculateDiscountAndGST(data);
+
   const onAddToWishlist = (e) => {
     e.stopPropagation();
-    wishlist.addItem(data);
+    wishlist.addItem({
+      ...data,
+      msp: discountAmount,
+      gstAmount,
+      noOffer,
+      discountPercentage,
+    });
   };
 
-
-  const { discountPercentage,discountAmount, gstAmount } =  calculateDiscountAndGST(data);
   return (
     <div
       className="relative  w-full   overflow-hidden rounded-lg bg-white  shadow-md cursor-pointer h-full"
@@ -71,21 +78,29 @@ const ProductCard = ({ data }) => {
         </h5>
 
         <div className=" flex items-start flex-wrap leading-none text-red-600  font-bold ">
-            <span className="flex w-full text-sm md:text-base">
-              <Currency value={discountAmount} />
+          <span className="flex w-full text-sm md:text-base">
+            <Currency value={discountAmount} />
+          </span>
+        </div>
+        <div className="md:mt-1.5  text-[10px] md:text-base uppercase text-gray-500 flex flex-col">
+          {!noOffer && (
+            <span className="font-normal">
+              <span className="">msp</span>&nbsp;
+              <Currency value={data.msp} />
             </span>
-            <span className="text-[10px] md:text-sm md:mt-1 mb-1  text-gray-500 font-normal">
-              <Currency value={discountAmount+gstAmount} /> incl. GST
-            </span>
+          )}
+          <span className="text-[10px] md:text-sm md:mt-1 mb-1  text-gray-500 font-normal lowercase">
+            <Currency value={discountAmount + gstAmount} /> incl. GST
+          </span>
         </div>
         <div className="md:mt-1.5  text-[10px] md:text-base uppercase text-gray-500 ">
-            <span className="">mrp</span>
-            <span className="ml-1 font-normal">
-              <Currency value={data?.mrp} lineThrough={true} />
-            </span>
-            <span className="text-red-600 text-xs font-medium px-1 italic uppercase">
-              ({discountPercentage} OFF)
-            </span>
+          <span className="">mrp</span>
+          <span className="ml-1 font-normal">
+            <Currency value={data?.mrp} lineThrough={true} />
+          </span>
+          <span className="text-red-600 text-xs font-medium px-1 italic uppercase">
+            ({discountPercentage} % OFF)
+          </span>
         </div>
         {/* <div className="mt-2.5 mb-5 flex items-center">
           <span className="mr-2 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">

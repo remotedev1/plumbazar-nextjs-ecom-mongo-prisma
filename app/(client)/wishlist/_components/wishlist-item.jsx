@@ -32,7 +32,7 @@ const WishListItem = ({ data }) => {
             <p className=" text-lg font-semibold text-black">{data.name}</p>
           </div>
 
-          <Currency value={data.price} />
+          <Currency value={data.msp} />
         </div>
         <AddCart product={data} onRemove={onRemove} />
       </div>

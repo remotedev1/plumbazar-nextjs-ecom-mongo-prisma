@@ -5,7 +5,6 @@ import { X } from "lucide-react";
 import useCart from "@/hooks/use-cart";
 import IconButton from "@/components/ui/icon-button";
 import Currency from "@/components/ui/currency";
-import { Button } from "@/components/ui/button";
 import { AddCart } from "@/components/frontend/add-cart";
 
 const CartItem = ({ data, remove = true }) => {
@@ -45,10 +44,10 @@ const CartItem = ({ data, remove = true }) => {
 
           
           <div className="flex">
-            <h5>{data.quantity} * &nbsp; </h5> <Currency value={data.price} />
+            <h5>{data.quantity} * &nbsp; </h5> <Currency value={data.msp} />
           </div>
         </div>
-        {remove ? <AddCart product={data} /> : <Currency value={data.price * data.quantity} />}
+        {remove ? <AddCart product={data} /> : <Currency value={data.msp * data.quantity} />}
       </div>
     </li>
   );
