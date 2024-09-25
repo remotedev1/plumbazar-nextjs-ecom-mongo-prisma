@@ -46,6 +46,11 @@ export function MainNav({ className, ...props }) {
       active: pathname === `/dashboard/${params.storeId}/products`,
     },
     {
+      href: `/dashboard/${params.storeId}/products/mass-edit`,
+      label: "mass edit",
+      active: pathname === `/dashboard/${params.storeId}/products/mass-edit`,
+    },
+    {
       href: `/dashboard/${params.storeId}/offers`,
       label: "Offers",
       active: pathname === `/dashboard/${params.storeId}/offers`,
@@ -65,11 +70,11 @@ export function MainNav({ className, ...props }) {
       label: "Testimonials",
       active: pathname === `/dashboard/${params.storeId}/testimonials`,
     },
-    {
-      href: `/dashboard/${params.storeId}/settings`,
-      label: "Settings",
-      active: pathname === `/dashboard/${params.storeId}/settings`,
-    },
+    // {
+    //   href: `/dashboard/${params.storeId}/settings`,
+    //   label: "Settings",
+    //   active: pathname === `/dashboard/${params.storeId}/settings`,
+    // },
   ];
 
   return (
