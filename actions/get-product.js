@@ -10,6 +10,7 @@ export const getProduct = async (id) => {
     include: {
       // include the relations to get the full data of the product
       brand: true,
+      offers: true,
     },
   });
 

@@ -33,9 +33,8 @@ const ProductCard = ({ data }) => {
     wishlist.addItem({
       ...data,
       msp: discountAmount,
-      gstAmount,
       noOffer,
-      discountPercentage,
+      offerId,
     });
   };
 

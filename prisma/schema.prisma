@@ -222,16 +222,15 @@ model Order {
 }
 
 model OrderItem {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  orderId   String  @db.ObjectId
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String  @db.ObjectId
-  product   Product @relation(fields: [productId], references: [id])
-  quantity  Int
-  msp       Int
-  pp        Int
-  gst       Int
-  offerId   String? @db.ObjectId
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  orderId       String  @db.ObjectId
+  order         Order   @relation(fields: [orderId], references: [id])
+  productId     String  @db.ObjectId
+  product       Product @relation(fields: [productId], references: [id])
+  quantity      Int
+  msp           Int
+  purchasePrice Int?
+  offerId       String? @db.ObjectId
 
   @@index([orderId, productId])
 }

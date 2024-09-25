@@ -23,6 +23,7 @@ const CartItem = ({ data, remove = true }) => {
   };
 
 
+
   return (
     <li className="flex py-6 border-b">
       <div className="relative h-24 w-24 rounded-md overflow-hidden ">

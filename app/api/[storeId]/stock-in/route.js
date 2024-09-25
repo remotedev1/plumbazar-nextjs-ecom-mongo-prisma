@@ -31,7 +31,7 @@ export async function POST(req) {
       await Promise.all(
         products.map((product) =>
           prisma.product.update({
-            where: { id: product.id },
+            where: { id: product.productId },
             data: {
               stock: {
                 increment: product.quantity, // Increment the stock quantity

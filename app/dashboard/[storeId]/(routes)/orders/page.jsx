@@ -29,7 +29,6 @@ import { getTotalRevenue } from "@/actions/get-total-revenue";
 import { getSalesCount } from "@/actions/get-sales-count";
 
 const OrdersPage = async ({ params }) => {
-  
   const totalRevenue = await getTotalRevenue(params.storeId);
   const { numberOfUnpaidOrders, totalUnpaidAmount } = await getPendingAmount(
     params.storeId
@@ -59,14 +58,13 @@ const OrdersPage = async ({ params }) => {
       .join(", "),
     totalPrice: rupeeFormatter.format(
       item.orderItems.reduce((total, item) => {
-        return total + Number(item.product.price) * Number(item.quantity);
+        return total + Number(item.msp) * Number(item.quantity);
       }, 0)
     ),
     isPaid: item.isPaid,
     deliveryStatus: item.deliveryStatus,
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
   }));
-  
 
   return (
     <div className="flex-col">

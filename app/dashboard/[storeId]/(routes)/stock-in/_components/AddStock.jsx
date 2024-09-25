@@ -32,19 +32,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FormMessage } from "@/components/ui/form";
 
-export const AddStock = ({
-  items = [
-    {
-      id: "",
-      name:"",
-      quantity: 0,
-      purchasePrice: 0,
-      mrp: 0,
-      msp: 0,
-      total: 0,
-    },
-  ],
-}) => {
+export const AddStock = ({ items }) => {
   const params = useParams();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -57,11 +45,9 @@ export const AddStock = ({
     resolver: zodResolver(StockInSchema),
     defaultValues: {
       notes: "",
-      products: items,
+      products: [{ ...items, productId: items.id } || []],
     },
   });
-
-
 
   const {
     control,
@@ -77,10 +63,11 @@ export const AddStock = ({
     name: ITEMS_NAME,
   });
 
+
   const addNewField = () => {
     append({
-      id: "",
-      name:"",
+      productId: "",
+      name: "",
       quantity: 0,
       purchasePrice: 0,
       mrp: 0,

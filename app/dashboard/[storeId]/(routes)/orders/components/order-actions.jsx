@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { AddStock } from "../../stock-in/_components/AddStock";
@@ -16,32 +15,39 @@ const OrderActions = ({
   orderCommitted,
 }) => {
   const [loading, setLoading] = useState(false);
-const router = useRouter()
+  const router = useRouter();
   const processOrder = productComparison.some(
     (item) => item.canBeFulfilled === false
   );
-
 
   const itemsToStockIn = productComparison
     .filter((item) => item.canBeFulfilled === false)
     .map((data) => {
       return {
-        id: data.id,
+        productId: data.id,
         name: data.name,
-        price: data.price,
+        msp: data.msp,
+        mrp: data.mrp,
         stock: data.stock,
+        purchasePrice: data.purchasePrice,
         total: 0,
       };
     });
 
   const handleProcessOrder = async () => {
+    setLoading(true);
+
     try {
-      const response = await axios.patch(`/api/${storeId}/orders/order-process`, {
-        orderId,
-      });
+      const response = await axios.patch(
+        `/api/${storeId}/orders/${orderId}/order-process`,
+        {
+          orderId,
+          data: productComparison.map((item) => item.id),
+        }
+      );
       if (response.status === 200) {
         toast.success("Order processed successfully");
-        router.refresh()
+        router.refresh();
       } else {
         throw new Error("Failed to process order");
       }

@@ -97,7 +97,7 @@ export const StockInSchema = z.object({
   notes: z.string().optional(),
   products: z.array(
     z.object({
-      id: z.string().min(1, "Product must be selected"), // Ensures productId is a non-empty string
+      productId: z.string().min(1, "Product must be selected"), // Ensures productId is a non-empty string
       quantity: z
         .number()
         .int()

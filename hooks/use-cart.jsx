@@ -18,7 +18,20 @@ const useCart = create(
           existingItem.quantity++; // Increment quantity if item already exists
           set({ items: [...currentItems] });
         } else {
-          set({ items: [...currentItems, { ...data, quantity: 1 }] });
+          set({
+            items: [
+              ...currentItems,
+              {
+                name: data.name,
+                id: data.id,
+                offerId: data.offerId,
+                msp: data.msp,
+                mrp: data.mrp,
+                images: data.images,
+                quantity: 1,
+              },
+            ],
+          });
           toast.success("Item added to cart.");
         }
       },
@@ -30,7 +43,9 @@ const useCart = create(
       removeAll: () => set({ items: [] }),
       decrementItem: (id) => {
         const currentItems = get().items;
-        const existingItemIndex = currentItems.findIndex((item) => item.id === id);
+        const existingItemIndex = currentItems.findIndex(
+          (item) => item.id === id
+        );
 
         if (existingItemIndex !== -1) {
           if (currentItems[existingItemIndex].quantity > 1) {

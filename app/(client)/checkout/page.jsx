@@ -22,10 +22,12 @@ export default function Checkout() {
       cart.items.map((item) => ({
         productId: item.id,
         quantity: item.quantity,
-        price: item.msp,
+        msp: item.msp,
+        offerId: item.offerId,
       })),
     [cart.items]
   );
+
 
   // Calculate total using useMemo to optimize
   const total = useMemo(
@@ -64,6 +66,7 @@ export default function Checkout() {
     }
 
     const values = { address: updatedAddress, cartItems };
+
 
     startTransition(() => {
       postOrder(values).then((data) => {

@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { SendAdminOrderNotification } from "@/lib/mailService";
 
 export const postOrder = async (values) => {
   if (values.cartItems.length === 0) {
@@ -21,7 +22,7 @@ export const postOrder = async (values) => {
     // Here you need to extract relevant data from the values object
     const { cartItems, address } = values;
     const total = cartItems?.reduce((total, item) => {
-      return total + Number(item.price) * Number(item.quantity);
+      return total + Number(item.msp) * Number(item.quantity);
     }, 0);
 
     // You need to ensure you're passing the correct data to create the order
@@ -33,6 +34,8 @@ export const postOrder = async (values) => {
         total,
       },
     });
+
+    await SendAdminOrderNotification("enquiry@plumbazar.com", createdOrder);
 
     return { success: "Order created successfully", order: createdOrder };
   } catch (error) {

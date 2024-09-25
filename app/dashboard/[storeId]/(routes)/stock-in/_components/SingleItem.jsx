@@ -55,7 +55,6 @@ const SingleItem = ({
     control,
   });
 
-
   // Calculate total whenever purchasePrice or quantity changes
   useEffect(() => {
     if (purchasePrice !== undefined && quantity !== undefined) {
@@ -130,16 +129,16 @@ const SingleItem = ({
 
   const handleSelectChange = useCallback(
     (selectedOption) => {
-      setValue(`${name}[${index}].id`, selectedOption?.value || "");
+      setValue(`${name}[${index}].productId`, selectedOption?.value || "");
       if (selectedOption) {
         setValue(`${name}[${index}].name`, selectedOption?.label || "");
         setValue(`${name}[${index}].stock`, selectedOption?.stock || 0);
-        setValue(`${name}[${index}].msp`, selectedOption.msp || 0); 
-        setValue(`${name}[${index}].mrp`, selectedOption.mrp || 0); 
+        setValue(`${name}[${index}].msp`, selectedOption.msp || 0);
+        setValue(`${name}[${index}].mrp`, selectedOption.mrp || 0);
         setValue(
           `${name}[${index}].purchasePrice`,
           selectedOption.purchasePrice || 0
-        ); 
+        );
       }
     },
     [setValue, name, index]
@@ -210,7 +209,7 @@ const SingleItem = ({
                 onInputChange={handleInputChange}
                 onChange={handleSelectChange}
                 value={
-                  options.find((product) => product.value === field.value) ||
+                  options.find((product) => product.value === field.value ?? field.value) ||
                   null
                 }
                 placeholder="Search and select item"
@@ -270,7 +269,7 @@ const SingleItem = ({
           )}
         />
 
-        {/* mrp Price */}
+        {/* retail Price */}
         <Controller
           name={`${name}[${index}].mrp`}
           control={control}
@@ -281,10 +280,10 @@ const SingleItem = ({
                 {...field}
                 onChange={(e) => field.onChange(parseFloat(e.target.value))}
                 type="number"
-                placeholder="retail price"
+                placeholder="Selling price"
                 className="w-[8rem]"
               />
-              {errors?.[name]?.[index]?.mrp && (
+              {errors?.[name]?.[index]?.msp && (
                 <FormMessage>{errors[name][index].price.message}</FormMessage>
               )}
             </div>

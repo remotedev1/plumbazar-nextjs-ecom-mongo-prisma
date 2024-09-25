@@ -6,7 +6,6 @@ import Link from "next/link";
 
 const OrderSummary = async ({ params }) => {
   const order = await getOrder(params.orderId);
-  console.log(order);
   if (!order) {
     return (
       <div className="flex items-center justify-center font-extrabold text-5xl min-h-[80vh]">
@@ -61,9 +60,6 @@ const OrderSummary = async ({ params }) => {
                       <div className="">
                         <h2 className="font-semibold text-xl leading-8 text-black mb-3">
                           {item.product.name}
-                          <span className="text-3xl font-bold text-gray-900 capitalize">
-                            &nbsp; ({item.size})
-                          </span>
                         </h2>
                         <p className="font-normal text-lg leading-8 text-gray-500 mb-3 ">
                           Category: {item.product.category.name}
@@ -73,14 +69,14 @@ const OrderSummary = async ({ params }) => {
                         </p>
                       </div>
                     </div>
-                    <div className="grid grid-cols-5">
+                    <div className="grid grid-cols-7">
                       <div className="col-span-5 lg:col-span-1 flex items-center max-lg:mt-3">
                         <div className="flex gap-3 lg:block">
                           <p className="font-medium text-sm leading-7 text-black">
                             price
                           </p>
                           <p className="lg:mt-4 font-medium text-sm leading-7 text-indigo-600">
-                            <Currency value={item.price} />
+                            <Currency value={item.msp} />
                           </p>
                         </div>
                       </div>
@@ -91,6 +87,16 @@ const OrderSummary = async ({ params }) => {
                           </p>
                           <p className="font-medium text-sm leading-6 whitespace-nowrap py-0.5 px-3 rounded-full lg:mt-3 bg-emerald-50 text-emerald-600 text-center">
                             {item.quantity}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="col-span-5 lg:col-span-2 flex items-center max-lg:mt-3 ">
+                        <div className="flex gap-3 lg:block">
+                          <p className="font-medium text-sm leading-7 text-black">
+                            Total
+                          </p>
+                          <p className="lg:mt-4 font-medium text-sm leading-7 text-indigo-600">
+                            <Currency value={item.quantity * item.msp} />
                           </p>
                         </div>
                       </div>

@@ -45,6 +45,7 @@ const OrderDetails = async ({ params }) => {
 
   // Create the array showing id, name, stock, and order quantity
   const productComparison = order.orderItems.map((item) => {
+
     const stock = productStockMap[item.productId];
     const canBeFulfilled = stock >= item.quantity;
 
@@ -52,11 +53,14 @@ const OrderDetails = async ({ params }) => {
       id: item.productId,
       name: item.product.name,
       stock: stock,
-      price: item.price,
+      msp: item.msp,
       quantityOrdered: item.quantity,
+      mrp: item.product.mrp,
+      purchasePrice: item.product.purchasePrice,
       canBeFulfilled: canBeFulfilled,
     };
   });
+
 
   return (
     <section className="py-14 relative min-h-[80vh]">
@@ -115,14 +119,14 @@ const OrderDetails = async ({ params }) => {
                         </p>
                       </div>
                     </div>
-                    <div className="grid grid-cols-3">
+                    <div className="grid grid-cols-5">
                       <div className="col-span-5 lg:col-span-1 flex items-center max-lg:mt-3">
                         <div className="flex gap-3 lg:block">
                           <p className="font-medium text-sm leading-7 text-black">
                             price
                           </p>
                           <div className="lg:mt-4 font-medium text-sm leading-7 text-indigo-600">
-                            <Currency value={item.price} />
+                            <Currency value={item.msp} />
                           </div>
                         </div>
                       </div>
@@ -133,6 +137,16 @@ const OrderDetails = async ({ params }) => {
                           </p>
                           <p className="font-medium text-sm leading-6 whitespace-nowrap py-0.5 px-3 rounded-full lg:mt-3 bg-emerald-50 text-emerald-600 text-center">
                             {item.quantity}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="col-span-5 lg:col-span-2 flex items-center max-lg:mt-3 ">
+                        <div className="flex gap-3 lg:block">
+                          <p className="font-medium text-sm leading-7 text-black">
+                            Total
+                          </p>
+                          <p className="lg:mt-4 font-medium text-sm leading-7 text-indigo-600">
+                            <Currency value={item.quantity * item.msp} />
                           </p>
                         </div>
                       </div>

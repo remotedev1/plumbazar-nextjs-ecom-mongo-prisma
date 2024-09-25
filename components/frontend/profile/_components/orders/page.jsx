@@ -36,7 +36,7 @@ const OrdersPage = async () => {
       .join(", "),
     totalPrice: rupeeFormatter.format(
       item.orderItems.reduce((total, item) => {
-        return total + Number(item.product.price);
+        return total + (Number(item.msp) * Number(item.quantity));
       }, 0)
     ),
     isPaid: item.isPaid,

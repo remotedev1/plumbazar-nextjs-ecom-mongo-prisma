@@ -18,10 +18,6 @@ const ProductPage = async ({ params }) => {
   //   categoryId: product?.category?.id,
   // });
 
-
-  const { discountPercentage, discountAmount, gstAmount, noOffer } =
-    calculateDiscountAndGST(product);
-
   if (!product) {
     return (
       <section className="py-14 relative overflow-x-hidden min-h-[80vh]">
@@ -31,6 +27,16 @@ const ProductPage = async ({ params }) => {
       </section>
     );
   }
+
+  let discountData = {};
+  if (product) {
+    discountData = calculateDiscountAndGST(product);
+  }
+
+  const { discountPercentage, discountAmount, gstAmount, offerId } =
+    discountData;
+
+
   return (
     <div className="bg-white">
       <Container>
@@ -41,10 +47,18 @@ const ProductPage = async ({ params }) => {
             <div className="z-10 absolute uppercase left-2.5 right-2.5 md:left-4 top-4 text-white items-center font-semibold text-center rounded-full back bg-red-600  flex justify-center  w-12 h-12 text-sm">
               {discountPercentage}% OFF
             </div>
-            
+
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
               {/* Info */}
-              <Info data={{...product, msp:discountAmount, gstAmount, noOffer,discountPercentage}} />
+              <Info
+                data={{
+                  ...product,
+                  msp: discountAmount,
+                  gstAmount: gstAmount,
+                  discountPercentage: discountPercentage,
+                  offerId: offerId,
+                }}
+              />
 
               {/* additional Info */}
               <ProductAdditionalInfo data={product} />

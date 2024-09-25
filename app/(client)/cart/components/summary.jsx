@@ -23,7 +23,7 @@ export const Summary = () => {
         </div>
       </div>
       <Button
-        onClick={()=>router.push("/checkout")}
+        onClick={() => router.push("/checkout")}
         disabled={items.length === 0}
         className="w-full mt-6"
       >
