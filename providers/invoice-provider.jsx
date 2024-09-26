@@ -260,6 +260,23 @@ export const InvoiceContextProvider = ({ children }) => {
     }
   };
 
+  const postApproval = async (draftId) => {
+    const data = getValues();
+    try {
+      const response = await axios.patch(
+        `/api/rfq/${data.details.rfqId}/post-approval`,
+        {
+          draftId: draftId,
+        }
+      );
+      toast.success("approval request sent successfully");
+      router.refresh();
+    } catch (error) {
+      console.error("Error updating invoice:", error);
+      toast.error("Error updating invoice");
+    }
+  };
+
   const commitOrder = async (draftId) => {
     const data = getValues();
     //TODO - update the invoice and commit order
@@ -363,6 +380,7 @@ export const InvoiceContextProvider = ({ children }) => {
         commitOrder,
         saveInvoice,
         getApproval,
+        postApproval,
         deleteInvoice,
         sendPdfToMail,
         exportInvoiceAs,

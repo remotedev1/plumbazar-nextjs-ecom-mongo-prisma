@@ -31,7 +31,7 @@ import PdfViewer from "./actions/PdfViewer";
 import InvoiceExportModal from "./actions/InvoiceExportModel";
 
 const InvoiceActions = ({ draftInvoiceData, rfq }) => {
-  const { invoicePdfLoading, generatePdf, getApproval, generateInvoice } =
+  const { invoicePdfLoading, generatePdf, getApproval,postApproval } =
     useInvoiceContext();
   const {
     data: { user },
@@ -150,6 +150,7 @@ const InvoiceActions = ({ draftInvoiceData, rfq }) => {
               <BaseButton
                 tooltipLabel="Approve your invoice"
                 disabled={invoicePdfLoading}
+                onClick={() => postApproval(draftInvoiceData?.id)}
                 loadingText="Approve your invoice"
                 className="bg-blue-500"
               >

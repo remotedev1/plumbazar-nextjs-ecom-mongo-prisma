@@ -31,6 +31,7 @@ import SingleItem from "./SingleItem";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FormMessage } from "@/components/ui/form";
+import Items from "../../rfq/[rfqId]/_components/invoice/form/sections/Items";
 
 export const AddStock = ({ items }) => {
   const params = useParams();
@@ -45,9 +46,11 @@ export const AddStock = ({ items }) => {
     resolver: zodResolver(StockInSchema),
     defaultValues: {
       notes: "",
-      products: [{ ...items, productId: items.id } || []],
+      products: items || [],
     },
   });
+
+  // console.log(form.getValues("products"));
 
   const {
     control,
@@ -62,7 +65,6 @@ export const AddStock = ({ items }) => {
     control,
     name: ITEMS_NAME,
   });
-
 
   const addNewField = () => {
     append({

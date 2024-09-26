@@ -209,9 +209,15 @@ const SingleItem = ({
                 onInputChange={handleInputChange}
                 onChange={handleSelectChange}
                 value={
-                  options.find((product) => product.value === field.value ?? field.value) ||
-                  null
+                  options.find((product) =>
+                    console.log(product.value, field.value, itemName)
+                  ) || null
                 }
+                // value={
+                //   options.find(
+                //     (product) => product.value === field.value ?? itemName
+                //   ) || null
+                // }
                 placeholder="Search and select item"
                 isSearchable
                 isClearable
@@ -236,6 +242,7 @@ const SingleItem = ({
                 type="number"
                 placeholder="Quantity"
                 className="w-[8rem]"
+                disabled={!itemName}
               />
               {errors?.[name]?.[index]?.quantity && (
                 <FormMessage>
@@ -259,6 +266,7 @@ const SingleItem = ({
                 type="number"
                 placeholder="Purchase Price"
                 className="w-[8rem]"
+                disabled={!itemName}
               />
               {errors?.[name]?.[index]?.purchasePrice && (
                 <FormMessage>
@@ -275,13 +283,14 @@ const SingleItem = ({
           control={control}
           render={({ field }) => (
             <div className="inline">
-              <FormLabel>Retail price</FormLabel>
+              <FormLabel>MRP</FormLabel>
               <Input
                 {...field}
                 onChange={(e) => field.onChange(parseFloat(e.target.value))}
                 type="number"
-                placeholder="Selling price"
+                placeholder="purchase price"
                 className="w-[8rem]"
+                disabled={!itemName}
               />
               {errors?.[name]?.[index]?.msp && (
                 <FormMessage>{errors[name][index].price.message}</FormMessage>
@@ -295,13 +304,14 @@ const SingleItem = ({
           control={control}
           render={({ field }) => (
             <div className="inline">
-              <FormLabel>Selling price</FormLabel>
+              <FormLabel>MSP</FormLabel>
               <Input
                 {...field}
                 onChange={(e) => field.onChange(parseFloat(e.target.value))}
                 type="number"
                 placeholder="Selling price"
                 className="w-[8rem]"
+                disabled={!itemName}
               />
               {errors?.[name]?.[index]?.msp && (
                 <FormMessage>{errors[name][index].price.message}</FormMessage>
@@ -326,7 +336,7 @@ const SingleItem = ({
         <div className="flex flex-col gap-2">
           <Label>Total</Label>
           <Input
-            value={`${total} INR`}
+            value={`${total || 0} INR`}
             readOnly
             placeholder="Item total"
             className="border-none font-medium text-lg bg-transparent"

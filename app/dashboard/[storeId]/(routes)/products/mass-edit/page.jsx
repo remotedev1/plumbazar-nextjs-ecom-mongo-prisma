@@ -122,12 +122,11 @@ const MassUpdateProducts = () => {
         />
       </div>
       {loading && <p>Loading...</p>}
-
       {/* Product List with editable MSP and MRP */}
       {data.map((product) => (
         <div
           key={product.id}
-          className="border p-4 mb-2 flex items-center justify-between"
+          className="grid grid-cols-2 sm:grid-cols-3  gap-1 border p-4 mb-2"
         >
           <div className="flex flex-col">
             <span>{product.name}</span>
@@ -142,8 +141,8 @@ const MassUpdateProducts = () => {
               className="object-cover object-center"
             />
           </div>
-          <div className="flex flex-col">
-            <Label htmlFor={`mrp-${product.id}`}>MRP</Label>
+          <div className="flex flex-col justify-center items-center gap-3">
+            <Label htmlFor={`mrp-${product.id}`}>MRP &nbsp;
             <input
               id={`mrp-${product.id}`}
               type="number"
@@ -153,30 +152,25 @@ const MassUpdateProducts = () => {
               placeholder="MRP"
               min="0" // Prevent negative values
             />
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="flex flex-col">
-              <Label htmlFor={`msp-${product.id}`}>MSP</Label>
-              <input
-                id={`msp-${product.id}`}
-                type="number"
-                value={product.msp}
-                onChange={(e) =>
-                  handleChange(product.id, "msp", e.target.value)
-                }
-                className="border rounded px-2 py-1"
-                placeholder="MSP"
-                min="0" // Prevent negative values
-              />
-            </div>
-
+            </Label>
+            <Label htmlFor={`msp-${product.id}`}>MSP &nbsp;
+            <input
+              id={`msp-${product.id}`}
+              type="number"
+              value={product.msp}
+              onChange={(e) => handleChange(product.id, "msp", e.target.value)}
+              className="border rounded px-2 py-1"
+              placeholder="MSP"
+              min="0" // Prevent negative values
+            />
+            </Label>
             <Button
               disabled={loading}
               onClick={() => handleUpdate(product.id, product.msp, product.mrp)}
+              className="w-fit"
             >
               Update
             </Button>
-
           </div>
         </div>
       ))}
@@ -198,7 +192,6 @@ const MassUpdateProducts = () => {
           Next
         </Button>
       </div>
-
     </div>
   );
 };

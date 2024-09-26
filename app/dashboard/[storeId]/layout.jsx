@@ -7,7 +7,7 @@ import InvoiceProvidersComponent from "./providers";
 export default async function DashboardLayout({ children, params }) {
   const { user } = await auth();
 
-  if (!user) {
+  if (!user || user.role === "USER") {
     redirect("/auth/login");
   }
 

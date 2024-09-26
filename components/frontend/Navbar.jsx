@@ -16,11 +16,11 @@ import { cn } from "@/lib/utils";
 import { SearchProducts } from "./search-products";
 
 export const Navbar = () => {
-  const { status, data: user } = useSession();
+  const { status, data } = useSession();
   const pathname = usePathname();
   const isHomepage = pathname === "/"; // Check if the current path is the homepage
 
-  const data = [
+  const navbarData = [
     {
       href: "/",
       label: "Home",
@@ -116,7 +116,7 @@ export const Navbar = () => {
                     <SearchProducts />
 
                     <span className="relative flex space-x-2 items-center justify-center">
-                      <MainNav data={data} />
+                      <MainNav data={navbarData} />
                     </span>
                     <span className="relative">
                       {status === "authenticated" && <NavbarWishlist />}
@@ -129,9 +129,10 @@ export const Navbar = () => {
                       label="Account settings"
                       title={"Accounts"}
                       buttonContent={[
-                        user?.user?.role === "ADMIN" && (
-                          <AdminDashLink key="admin" />
-                        ),
+                        status === "authenticated" &&
+                          data?.user?.role !== "USER" && (
+                            <AdminDashLink key="admin" />
+                          ),
                         <LoginButton key="login" />,
                       ]}
                     />
@@ -190,10 +191,11 @@ export const Navbar = () => {
                     </div>
                     <div className="space-y-6 py-6 px-5">
                       <div className="grid grid-cols-1 gap-y-4 gap-x-8">
-                        <MainNav data={[...data, ...dropdownOptions]} />
-                        {user?.user?.role === "ADMIN" && (
-                          <AdminDashLink key="admin" />
-                        )}
+                        <MainNav data={[...navbarData, ...dropdownOptions]} />
+                        {status === "authenticated" &&
+                          data?.user?.role !== "USER" && (
+                            <AdminDashLink key="admin" />
+                          )}
                         <LoginButton>Sign In</LoginButton>
                       </div>
                     </div>

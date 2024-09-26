@@ -11,8 +11,6 @@ import {
 
 const { auth } = NextAuth(authConfig);
 
-
-
 export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
@@ -22,6 +20,7 @@ export default auth((req) => {
 
   // Check if the requested route is a dynamic route
   const isDynamicProductRoute = nextUrl.pathname.startsWith("/products/");
+  const isDashboardRoute = nextUrl.pathname.startsWith("/dashboard/");
 
   if (isApiAuthRoute) {
     return null;

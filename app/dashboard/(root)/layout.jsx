@@ -5,7 +5,8 @@ import { redirect } from "next/navigation";
 export default async function SetupLayout({ children }) {
   const { user } = await auth();
 
-  if (!user || user.role !== "ADMIN") {
+
+  if (!user || user.role === "USER") {
     redirect("/");
   }
 

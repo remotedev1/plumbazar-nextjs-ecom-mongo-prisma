@@ -29,7 +29,6 @@ const ProductCarousel = ({ title, filter }) => {
     return queryParams.toString(); // Returns a query string for the API
   };
 
-  console.log(fetchedProducts)
 
   useEffect(() => {
     // Function to fetch products based on filter criteria
