@@ -17,6 +17,8 @@ const useCart = create(
         if (existingItem) {
           existingItem.quantity++; // Increment quantity if item already exists
           set({ items: [...currentItems] });
+          toast.success("Item increased.");
+
         } else {
           set({
             items: [
@@ -28,6 +30,7 @@ const useCart = create(
                 msp: data.msp,
                 mrp: data.mrp,
                 images: data.images,
+                gst: data.gst,
                 quantity: 1,
               },
             ],

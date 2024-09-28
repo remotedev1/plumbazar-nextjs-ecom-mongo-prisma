@@ -21,14 +21,27 @@ export const postOrder = async (values) => {
   try {
     // Here you need to extract relevant data from the values object
     const { cartItems, address } = values;
-    const total = cartItems?.reduce((total, item) => {
-      return total + Number(item.msp) * Number(item.quantity);
-    }, 0);
+
+    // Calculate total 
+    const total = cartItems?.reduce(
+      (total, item) =>
+        total +
+        (Number(item.msp) + (Number(item.gst) * Number(item.msp)) / 100) *
+          Number(item.quantity),
+      0
+    );
+
+    const modifiedCartItems = cartItems.map((item) => ({
+      msp: Number(item.msp),
+      offerId: item.offerId,
+      quantity: Number(item.quantity),
+      productId: item.productId,
+    }));
 
     // You need to ensure you're passing the correct data to create the order
     const createdOrder = await db.order.create({
       data: {
-        orderItems: { createMany: { data: cartItems } }, // Create the order items
+        orderItems: { createMany: { data: modifiedCartItems } }, // Create the order items
         address,
         user: { connect: { id: user.id } },
         total,

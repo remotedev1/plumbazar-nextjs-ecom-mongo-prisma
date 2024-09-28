@@ -29,7 +29,6 @@ const ProductCarousel = ({ title, filter }) => {
     return queryParams.toString(); // Returns a query string for the API
   };
 
-
   useEffect(() => {
     // Function to fetch products based on filter criteria
     const fetchProducts = async () => {
@@ -134,9 +133,12 @@ const ProductCarousel = ({ title, filter }) => {
           ))}
         </Carousel>
       </div>
-      <Link href={`/products?${buildQueryString(filter)}`} className="ml-auto w-fit p-2 text-center text-white hover:bg-primary/50 cursor-pointer bg-primary rounded-md block mt-5">
-  View more
-</Link>
+      <Link
+        href={`/products?${buildQueryString(filter)}`}
+        className="ml-auto w-fit p-2 text-center text-white hover:bg-primary/50 cursor-pointer bg-primary rounded-md block mt-5"
+      >
+        View more
+      </Link>
     </div>
   );
 };

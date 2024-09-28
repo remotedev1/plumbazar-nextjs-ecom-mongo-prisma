@@ -2,9 +2,9 @@
 
 import { Tab } from "@headlessui/react";
 
-
 import GalleryTab from "./gallery-tab";
 import Image from "next/image";
+import WishList from "../utils/WishList";
 
 const Gallery = ({ images = [] }) => {
   return (

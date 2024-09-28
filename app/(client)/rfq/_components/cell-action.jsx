@@ -26,21 +26,24 @@ export const CellAction = ({ data }) => {
   const onCancel = async () => {
     try {
       setLoading(true);
-      await axios.get(`/api/rfq/${data.id}/cancel`, { status: "CANCELLED" });
-      router.refresh();
+      await axios.patch(`/api/rfq/${data.id}/cancel-rfq`, { rfqId: data.id });
       toast.success("RFQ successfully canceled");
+      router.refresh();
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
       setOpen(false);
     }
   };
+
+
   return (
     <>
       <Modal
         title="Are you sure ?"
-        description="This action cannot be undone."
+        description="You're about to cancel this RFQ.  This action cannot be undone."
         isOpen={open}
         onClose={onCancel}
       >
@@ -49,17 +52,23 @@ export const CellAction = ({ data }) => {
             Cancel
           </Button>
           <Button disabled={loading} variant="destructive" onClick={onCancel}>
-            Edit
+            Proceed
           </Button>
         </div>
       </Modal>
       <div className="flex space-x-2">
         <ViewDrawer data={data} />
-
-        <Button onClick={() => setOpen(true)}>
-          <Trash className="mr-2 h-4 w-4" />
-          Cancel
-        </Button>
+        {data.status !== "CANCELED" ? (
+          <Button onClick={() => setOpen(true)}>
+            <Trash className="mr-2 h-4 w-4" />
+            Cancel
+          </Button>
+        ) : (
+          <Button disabled>
+            <Trash className="mr-2 h-4 w-4" />
+            Cancelled
+          </Button>
+        )}
       </div>
     </>
   );

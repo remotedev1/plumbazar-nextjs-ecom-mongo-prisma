@@ -63,15 +63,16 @@ export const CellAction = ({ data }) => {
       <div className="flex space-x-2">
         <ViewDrawer data={data} />
 
-        <Button onClick={() => setOpen(true)} variant="destructive">
+        {/* <Button onClick={() => setOpen(true)} variant="destructive">
           <Trash className="mr-2 h-4 w-4" />
           Cancel
-        </Button>
-        <Button variant="outline" onClick={onProcess} className="bg-blue-300">
-          <ArrowBigRightDash className="mr-2 h-4 w-4" />
-          Process
-        </Button>
-       
+        </Button> */}
+        {data.status !== "CANCELED" && (
+          <Button variant="outline" onClick={onProcess} className="bg-blue-300">
+            <ArrowBigRightDash className="mr-2 h-4 w-4" />
+            Process
+          </Button>
+        )}
       </div>
     </>
   );

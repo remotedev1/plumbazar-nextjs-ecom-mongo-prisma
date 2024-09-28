@@ -68,7 +68,7 @@ const CategoryList = () => {
           infinite
           additionalTransfrom={0}
           itemClass="p-2"
-          centerMode={false}
+          centerMode={true}
         >
           {categories.map((category, index) => (
             <div className="flex flex-col items-center" key={index}>

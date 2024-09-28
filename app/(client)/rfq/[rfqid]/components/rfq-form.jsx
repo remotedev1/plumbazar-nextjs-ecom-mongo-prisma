@@ -94,7 +94,7 @@ export const RfqForm = ({ initialData }) => {
         });
       }
 
-      router.refresh();
+      router.push("/rfq");
       toast.success("Quote created successfully");
     } catch (error) {
       console.log(error);

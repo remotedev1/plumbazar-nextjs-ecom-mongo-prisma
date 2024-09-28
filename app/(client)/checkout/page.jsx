@@ -24,16 +24,21 @@ export default function Checkout() {
         quantity: item.quantity,
         msp: item.msp,
         offerId: item.offerId,
+        gst: item.gst,
       })),
     [cart.items]
   );
+
 
 
   // Calculate total using useMemo to optimize
   const total = useMemo(
     () =>
       cart.items.reduce(
-        (total, item) => total + Number(item.msp) * Number(item.quantity),
+        (total, item) =>
+          total +
+          (Number(item.msp) + (Number(item.gst) * Number(item.msp)) / 100) * 
+            Number(item.quantity),
         0
       ),
     [cart.items]

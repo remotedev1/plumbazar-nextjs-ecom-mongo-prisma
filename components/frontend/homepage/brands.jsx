@@ -73,13 +73,13 @@ const BrandList = () => {
           renderButtonGroupOutside={true}
           customButtonGroup={<CustomButtonGroupAsArrows />}
           autoPlay
-          autoPlaySpeed={2000}
+          autoPlaySpeed={3000}
           shouldResetAutoplay
           pauseOnHover
           infinite
           additionalTransfrom={0}
           itemClass="p-2"
-          centerMode={false}
+          centerMode={true}
         >
           {brands.map((brand, index) => (
             <div className="flex flex-col items-center" key={index}>

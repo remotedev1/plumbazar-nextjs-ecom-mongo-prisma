@@ -8,6 +8,7 @@ import ProductRating from "@/components/frontend/product-rating";
 import Container from "@/components/ui/container";
 import { FaSpinner } from "react-icons/fa";
 import { calculateDiscountAndGST } from "@/lib/helpers";
+import WishList from "@/components/frontend/utils/WishList";
 
 // Individual Product page
 
@@ -36,17 +37,22 @@ const ProductPage = async ({ params }) => {
   const { discountPercentage, discountAmount, gstAmount, offerId } =
     discountData;
 
-
   return (
     <div className="bg-white">
       <Container>
         <div className="px-4 py-10 sm:px-6 lg:px-8">
           <div className="relative lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
             {/* Gallery */}
-            <Gallery images={product.images} />
-            <div className="z-10 absolute uppercase left-2.5 right-2.5 md:left-4 top-4 text-white items-center font-semibold text-center rounded-full back bg-red-600  flex justify-center  w-12 h-12 text-sm">
-              {discountPercentage}% OFF
+            <div className="relative">
+              <Gallery images={product.images} />
+                <WishList product={ product } discountData={ discountData } />
             </div>
+
+            {discountPercentage > 0 && (
+              <div className="z-10 absolute uppercase left-2.5 right-2.5 md:left-4 top-4 text-white items-center font-semibold text-center rounded-full back bg-red-600  flex justify-center  w-12 h-12 text-sm">
+                {discountPercentage}% OFF
+              </div>
+            )}
 
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
               {/* Info */}

@@ -17,13 +17,28 @@ const useWishlist = create(
 
         if (existingItem) {
           // If the item already exists, show a toast message
-          set({ items: [...get().items.filter((item) => item.id !== data.id)] }); // Filter out the item with the specified ID
+          set({
+            items: [...get().items.filter((item) => item.id !== data.id)],
+          }); // Filter out the item with the specified ID
 
           return toast.success("Item removed from wishlist.");
         }
 
         // If the item is not in the wishlist, add it to the wishlist
-        set({ items: [...get().items, data] });
+        set({
+          items: [
+            ...get().items,
+            {
+              msp: data.msp,
+              mrp: data.mrp,
+              id: data.id,
+              images: data.images,
+              name: data.name,
+              quantity: 0,
+              offerId: data.offerId,
+            },
+          ],
+        });
         toast.success("Item added to wishlist."); // Show a success toast message
       },
       removeItem: (id) => {

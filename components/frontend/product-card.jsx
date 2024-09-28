@@ -5,14 +5,13 @@ import { useRouter } from "next/navigation";
 import useWishlist from "@/hooks/use-wishlist";
 
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { useSession } from "next-auth/react";
 import Currency from "../ui/currency";
 import { Button } from "../ui/button";
 import { calculateDiscountAndGST } from "@/lib/helpers";
+import WishList from "./utils/WishList";
 
 const ProductCard = ({ data }) => {
   const wishlist = useWishlist();
-  const user = useSession();
 
   const router = useRouter();
   const handleClick = () => {
@@ -40,7 +39,7 @@ const ProductCard = ({ data }) => {
 
   return (
     <div
-      className="relative  w-full   overflow-hidden rounded-lg bg-white  shadow-md cursor-pointer h-full"
+      className="relative  w-full   overflow-hidden rounded-lg bg-white  shadow-md cursor-pointer h-full  "
       onClick={handleClick}
     >
       <div>
@@ -52,24 +51,18 @@ const ProductCard = ({ data }) => {
             className="object-contain"
           />
         </div>
-        <div className="z-10 absolute uppercase left-2.5 right-2.5 md:left-4 top-4 text-white items-center font-semibold text-center rounded-full back bg-red-600  flex justify-center  w-8 h-8 text-[9px]">
-          {discountPercentage}%
-          <br />
-          OFF
-        </div>
-        {user.status === "authenticated" && (
-          <Button
-            className=" z-10 w-10 h-10 p-2 rounded-full absolute top-2 right-2 shadow-sm"
-            onClick={onAddToWishlist}
-            variant="ghost"
-          >
-            {wishlist.isItemInWishlist(data.id) ? (
-              <FaHeart size={20} color="red" />
-            ) : (
-              <FaRegHeart size={20} />
-            )}
-          </Button>
+        {discountPercentage > 0 && !noOffer && (
+          <div className="z-10 absolute uppercase left-2.5 right-2.5 md:left-4 top-4 text-white items-center font-semibold text-center rounded-full  bg-red-600  flex justify-center  w-8 h-8 text-[9px]">
+            {discountPercentage}%
+            <br />
+            OFF
+          </div>
         )}
+
+        <WishList
+          product={data}
+          discountData={{ discountAmount, gstAmount, offerId: data.offerId }}
+        />
       </div>
       <div className="px-1 w-full flex flex-col pl-2.5 justify-start space-y-2 pb-3">
         <h5 className="text-[10px] xs:text-xs md:text-lg font-semibold tracking-tight text-slate-900">
@@ -81,25 +74,27 @@ const ProductCard = ({ data }) => {
             <Currency value={discountAmount} />
           </span>
         </div>
-        <div className="md:mt-1.5  text-[10px] md:text-base uppercase text-gray-500 flex flex-col">
+        {/* <div className="md:mt-1.5  text-[10px] md:text-base uppercase text-gray-500 flex flex-col">
           {!noOffer && (
             <span className="font-normal">
               <span className="">msp</span>&nbsp;
               <Currency value={data.msp} />
             </span>
           )}
-          <span className="text-[10px] md:text-sm md:mt-1 mb-1  text-gray-500 font-normal lowercase">
+          <span className="text-[8px] md:text-[12px]  mb-1  text-gray-500 font-normal lowercase">
             <Currency value={discountAmount + gstAmount} /> incl. GST
           </span>
-        </div>
+        </div> */}
         <div className="md:mt-1.5  text-[10px] md:text-base uppercase text-gray-500 ">
           <span className="">mrp</span>
           <span className="ml-1 font-normal">
             <Currency value={data?.mrp} lineThrough={true} />
           </span>
-          <span className="text-red-600 text-xs font-medium px-1 italic uppercase">
-            ({discountPercentage} % OFF)
-          </span>
+          {discountPercentage > 0 && (
+            <span className="text-red-600 text-xs font-medium px-1 italic uppercase ">
+              ({discountPercentage} % OFF)
+            </span>
+          )}
         </div>
         {/* <div className="mt-2.5 mb-5 flex items-center">
           <span className="mr-2 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">

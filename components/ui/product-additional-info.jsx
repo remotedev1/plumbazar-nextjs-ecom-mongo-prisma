@@ -33,14 +33,8 @@ const ProductAdditionalInfo = ({ data }) => {
           <AccordionContent>
             <div className="bg-slate-200 dark:bg-slate-700 p-4 rounded-md">
               <p className="font-semibold text-md leading-6">
-                Introducing the latest addition to our Company™ collection: Our
-                Black Zip Pocket Shirt effortlessly combines the edgy vibes of
-                hip-hop culture with the sleek sophistication of modern
-                workwear. Inspired by the raw energy of skateboarding culture,
-                this shirt is wrinkle-free and machine-washable.
+                {data?.description}
                 <br />
-                <br />
-                Genderless Apparel by Company®
               </p>
             </div>
           </AccordionContent>

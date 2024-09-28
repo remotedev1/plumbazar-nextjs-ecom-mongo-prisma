@@ -13,6 +13,7 @@ const OrderSummary = async ({ params }) => {
       </div>
     );
   }
+  
   return (
     <section className="py-14 relative min-h-[80vh]">
       <div className="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto">
