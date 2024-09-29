@@ -27,16 +27,6 @@ const ProductCard = ({ data }) => {
   const { discountPercentage, discountAmount, gstAmount, noOffer } =
     calculateDiscountAndGST(data);
 
-  const onAddToWishlist = (e) => {
-    e.stopPropagation();
-    wishlist.addItem({
-      ...data,
-      msp: discountAmount,
-      noOffer,
-      offerId,
-    });
-  };
-
   return (
     <div
       className="relative  w-full   overflow-hidden rounded-lg bg-white  shadow-md cursor-pointer h-full  "
@@ -59,10 +49,7 @@ const ProductCard = ({ data }) => {
           </div>
         )}
 
-        <WishList
-          product={data}
-          discountData={{ discountAmount, gstAmount, offerId: data.offerId }}
-        />
+        <WishList product={data} />
       </div>
       <div className="px-1 w-full flex flex-col pl-2.5 justify-start space-y-2 pb-3">
         <h5 className="text-[10px] xs:text-xs md:text-lg font-semibold tracking-tight text-slate-900">

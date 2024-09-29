@@ -4,6 +4,7 @@ import Sessions from "@/providers/session-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { ModalProvider } from "@/providers/modal-provider";
 import { ToastProvider } from "@/providers/toast-provider";
+import { DataProvider } from "@/providers/data-provider";
 
 const font = Urbanist({ subsets: ["latin"] });
 
@@ -26,8 +27,7 @@ export default async function RootLayout({ children, params: { locale } }) {
           >
             <ModalProvider />
             <ToastProvider />
-
-            {children}
+            <DataProvider>{children}</DataProvider>
           </ThemeProvider>
         </body>
       </html>

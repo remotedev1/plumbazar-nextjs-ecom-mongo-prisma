@@ -78,8 +78,8 @@ const MassUpdateProducts = () => {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("mrp", updatedMsp);
-      formData.append("msp", updatedMrp);
+      formData.append("msp", updatedMsp);
+      formData.append("mrp", updatedMrp);
       await axios.patch(`/api/${storeId}/products/${productId}`, formData);
       toast.success("Product updated successfully!");
     } catch (error) {

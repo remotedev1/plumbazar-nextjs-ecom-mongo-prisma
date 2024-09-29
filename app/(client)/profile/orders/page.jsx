@@ -13,13 +13,14 @@ const OrderDetails = async ({ searchParams }) => {
       </div>
     );
   }
+
   return (
     <section className="py-14 relative min-h-[80vh]">
       <div className="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto">
         <h2 className="font-manrope font-bold text-4xl leading-10 text-black text-center mb-5">
           Order Details
         </h2>
-       
+
         <div className="main-box border border-gray-200 rounded-xl pt-6 max-w-xl max-lg:mx-auto lg:max-w-full">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between px-6 pb-6 border-b border-gray-200">
             <div className="data">
@@ -34,9 +35,9 @@ const OrderDetails = async ({ searchParams }) => {
                 </span>
               </p>
               <p className="font-semibold text-base leading-7 text-black mt-4">
-                 Payment :{" "}
+                Payment :{" "}
                 <span className="text-gray-400 font-medium">
-                 {order.isPaid  ? "Paid" : "Unpaid"}
+                  {order.isPaid ? "Paid" : "Unpaid"}
                 </span>
               </p>
             </div>
@@ -65,11 +66,9 @@ const OrderDetails = async ({ searchParams }) => {
                         <h2 className="font-semibold text-xl leading-8 text-black mb-3">
                           {item.product.name}
                         </h2>
-                    
-                       
                       </div>
                     </div>
-                    <div className="grid grid-cols-7 gap-1">
+                    <div className="grid grid-cols-5 gap-1">
                       <div className="col-span-5 lg:col-span-1 flex items-center max-lg:mt-3">
                         <div className="flex gap-3 lg:block">
                           <p className="font-medium text-sm leading-7 text-black">
@@ -95,13 +94,13 @@ const OrderDetails = async ({ searchParams }) => {
                           <p className="font-medium text-sm leading-7 text-black">
                             Total
                           </p>
-                    
+
                           <p className="lg:mt-4 font-medium text-sm leading-7 text-indigo-600">
                             <Currency value={item.quantity * item.msp} />
                           </p>
                         </div>
                       </div>
-                      <div className="col-span-5 lg:col-span-2 flex items-center max-lg:mt-3">
+                      {/* <div className="col-span-5 lg:col-span-2 flex items-center max-lg:mt-3">
                         <div className="flex gap-3 lg:block">
                           <p className="font-medium text-sm whitespace-nowrap leading-6 text-black">
                             Expected Delivery Time
@@ -110,7 +109,7 @@ const OrderDetails = async ({ searchParams }) => {
                             23rd March 2021
                           </p>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -141,12 +140,20 @@ const OrderDetails = async ({ searchParams }) => {
                 Cash on Delivery
               </p>
             </div>
-            <p className="flex font-semibold text-lg text-black py-6">
-              Total Price : &nbsp;
-              <span className="text-indigo-600">
-                <Currency value={order.total} />
-              </span>
-            </p>
+            <div>
+              <p className="flex font-semibold text-lg text-black py-6">
+                Total : &nbsp;
+                <span className="text-indigo-600">
+                  <Currency value={order.total} />
+                </span>
+              </p>
+              <p className="flex font-semibold text-lg text-black py-6">
+                Sub-total : &nbsp;
+                <span className="text-indigo-600">
+                  <Currency value={order.total} />
+                </span>
+              </p>
+            </div>
           </div>
         </div>
       </div>

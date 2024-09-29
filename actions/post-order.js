@@ -22,7 +22,7 @@ export const postOrder = async (values) => {
     // Here you need to extract relevant data from the values object
     const { cartItems, address } = values;
 
-    // Calculate total 
+    // Calculate total
     const total = cartItems?.reduce(
       (total, item) =>
         total +
@@ -36,6 +36,9 @@ export const postOrder = async (values) => {
       offerId: item.offerId,
       quantity: Number(item.quantity),
       productId: item.productId,
+      total:
+        (Number(item.msp) + (Number(item.gst) * Number(item.msp)) / 100) *
+        Number(item.quantity),
     }));
 
     // You need to ensure you're passing the correct data to create the order

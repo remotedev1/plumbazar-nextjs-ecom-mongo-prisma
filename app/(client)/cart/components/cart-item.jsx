@@ -10,7 +10,6 @@ import { useMemo } from "react";
 
 const CartItem = ({ data, remove = true }) => {
   const cart = useCart();
-
   const onRemove = () => {
     cart.removeItem(data.id);
   };
@@ -29,15 +28,19 @@ const CartItem = ({ data, remove = true }) => {
 
   const total = (msp + (msp * gst) / 100) * quantity;
 
+  console.log(data);
+
   return (
     <li className="flex py-6 border-b">
       <div className="relative h-24 w-24 rounded-md overflow-hidden ">
-        <Image
-          fill
-          src={data.images[0]}
-          alt=""
-          className="object-cover object-center"
-        />
+        {data?.images && (
+          <Image
+            fill
+            src={data?.images[0]}
+            alt=""
+            className="object-cover object-center"
+          />
+        )}
       </div>
       <div className="relative ml-4 flex flex-1 flex-col justify-between sm:ml-6">
         <div className="absolute z-10 right-0 -top-4">

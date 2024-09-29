@@ -4,12 +4,12 @@ import React from "react";
 const Profile = async () => {
   const { user } = await auth();
   return (
-    <div className="max-w-72 px-4 mx-auto">
-      <div className="relative flex flex-col min-w-0 break-words border-2 w-full mb-6 shadow-xl rounded-lg mt-16">
+    <div className="max-w-72 px-4 mx-auto ">
+      <div className="relative flex flex-col min-w-0 break-words border-2 w-full mb-6 shadow-xl rounded-lg mt-16 bg-white">
         <div className="px-6">
           <div className="flex flex-wrap justify-center">
             <div className="w-full px-4 flex justify-center">
-              <div className="absolute w-[4.5rem] h-[4.5rem] -top-5  overflow-hidden bg-gray-300 rounded-full dark:bg-gray-600">
+              <div className="absolute w-[4.5rem] h-[4.5rem] -top-5  overflow-hidden  rounded-full bg-slate-200">
                 <svg
                   className=" text-gray-400 w-[4rem] h-[4rem] mx-auto"
                   fill="currentColor"

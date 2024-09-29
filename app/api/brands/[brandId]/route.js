@@ -34,7 +34,6 @@ export async function DELETE(req, { params }) {
       return new NextResponse("Brand id is required", { status: 400 });
     }
 
-    
     const brand = await db.brand.findUnique({
       where: {
         id: params.brandId,
@@ -53,7 +52,7 @@ export async function DELETE(req, { params }) {
       })
     );
 
-   await db.brand.delete({
+    await db.brand.delete({
       where: {
         id: params.brandId,
       },

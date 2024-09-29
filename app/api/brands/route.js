@@ -63,10 +63,6 @@ export async function POST(req, { params }) {
 
 export async function GET(req, { params }) {
   try {
-    if (!params.storeId) {
-      return new NextResponse("Store id is required", { status: 400 });
-    }
-
     const brands = await db.brand.findMany();
 
     return NextResponse.json(brands);

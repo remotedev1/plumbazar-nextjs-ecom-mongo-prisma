@@ -31,6 +31,7 @@ const useWishlist = create(
             {
               msp: data.msp,
               mrp: data.mrp,
+              gst: data.gst,
               id: data.id,
               images: data.images,
               name: data.name,

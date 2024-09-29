@@ -26,7 +26,6 @@ export const SearchProducts = ({ params }) => {
   // Debounced search value
   const debouncedSearch = useDebounce(searchQuery, 500);
 
-  const storeId = "667ec838d471b19705804a1e";
 
   const fetchProducts = useCallback(async () => {
     if (debouncedSearch) {
@@ -50,7 +49,7 @@ export const SearchProducts = ({ params }) => {
     } else {
       setOptions([]);
     }
-  }, [debouncedSearch, storeId]);
+  }, [debouncedSearch]);
 
   useEffect(() => {
     fetchProducts();

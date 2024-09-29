@@ -4,18 +4,14 @@ import { Button } from "@/components/ui/button";
 import useWishlist from "@/hooks/use-wishlist";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-const WishList = ({ product, discountData }) => {
+const WishList = ({ product }) => {
   const wishlist = useWishlist();
 
   const onAddToWishlist = (e) => {
     e.stopPropagation();
-    wishlist.addItem({
-      ...product,
-      msp: discountData.discountAmount,
-
-      offerId: discountData.offerId,
-    });
+    wishlist.addItem(product);
   };
+
   return (
     <div>
       <Button

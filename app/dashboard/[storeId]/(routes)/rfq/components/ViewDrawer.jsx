@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/drawer";
 import { convertTimestampToFormattedDate } from "@/lib/utils";
 import Image from "next/image";
+import Gallery from "@/components/frontend/gallery";
 
 export function ViewDrawer({ data }) {
   return (
@@ -34,17 +35,8 @@ export function ViewDrawer({ data }) {
             <DrawerDescription>Status : {data?.status}</DrawerDescription>
           </DrawerHeader>
           <div className="p-4 pb-0">
-            <div className="flex  flex-col items-center justify-center space-x-2">
-              {data?.images.map((image) => (
-                <div key={image}>
-                  <Image
-                    src={image}
-                    width={500}
-                    height={500}
-                    alt="plumbazar-rfq"
-                  />
-                </div>
-              ))}
+            <div className="w-96">
+              <Gallery images={data?.images} />
             </div>
           </div>
           <DrawerFooter>

@@ -6,25 +6,10 @@ import { responsiveBrandsCarousel } from "@/lib/variables";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-
-const brands = [
-  { title: "Tiles", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Electricals", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Power & Hand Tools", imageUrl: "https://placehold.jp/150x150.png" },
-  {
-    title: "Plywood & Laminates",
-    imageUrl: "https://placehold.jp/150x150.png",
-  },
-  { title: "Hardware", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Paints", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Lighting & Fans", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Bathroom", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Plumbing", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Kitchen", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Appliances", imageUrl: "https://placehold.jp/150x150.png" },
-];
+import { useData } from "@/providers/data-provider";
 
 const BrandList = () => {
+  const { brands, loading, error } = useData();
   const CustomButtonGroupAsArrows = ({
     next,
     previous,
@@ -85,8 +70,9 @@ const BrandList = () => {
             <div className="flex flex-col items-center" key={index}>
               <div className="w-16 h-16 md:w-28 md:h-28 rounded-md overflow-hidden relative">
                 <Image
-                  src={brand.imageUrl}
-                  alt={brand.title}
+                  // src={brand.images[0]}
+                  src="https://placehold.jp/150x150.png"
+                  alt={brand.name}
                   layout="fill"
                   objectFit="cover"
                   quality={100}
@@ -94,7 +80,7 @@ const BrandList = () => {
                 />
               </div>
               <span className="mt-2 text-center text-sm md:text-md font-semibold">
-                {brand.title}
+                {brand.name}
               </span>
             </div>
           ))}

@@ -6,15 +6,10 @@ import { responsiveBrandsCarousel } from "@/lib/variables";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-
-const categories = [
-  { title: "Category 1", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Category 2", imageUrl: "https://placehold.jp/150x150.png" },
-  { title: "Category 3", imageUrl: "https://placehold.jp/150x150.png" },
-  // Add more categories here
-];
+import { useData } from "@/providers/data-provider";
 
 const CategoryList = () => {
+  const { categories, loading, error } = useData();
   const CustomButtonGroupAsArrows = ({
     next,
     previous,
@@ -24,6 +19,8 @@ const CategoryList = () => {
     const {
       carouselState: { currentSlide },
     } = rest;
+
+
     return (
       <div className="carousel-button-group absolute right-3 top-12 -translate-y-1/2 space-x-1">
         <Button
@@ -74,8 +71,10 @@ const CategoryList = () => {
             <div className="flex flex-col items-center" key={index}>
               <div className="w-16 h-16 md:w-28 md:h-28 rounded-md overflow-hidden relative">
                 <Image
-                  src={category.imageUrl}
-                  alt={category.title}
+                  // TODO
+                  // src={category.images[0]}
+                  src="https://placehold.jp/150x150.png"
+                  alt={category.name}
                   layout="fill"
                   objectFit="cover"
                   quality={100}
@@ -83,7 +82,7 @@ const CategoryList = () => {
                 />
               </div>
               <span className="mt-2 text-center font-semibold">
-                {category.title}
+                {category.name}
               </span>
             </div>
           ))}

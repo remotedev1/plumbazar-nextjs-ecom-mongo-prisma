@@ -8,7 +8,6 @@ import useCart from "@/hooks/use-cart";
 import CartItem from "./components/cart-item";
 import { Summary } from "./components/summary";
 
-
 const CartPage = () => {
   const [isMounted, setIsMounted] = useState(false);
   const cart = useCart();
@@ -17,9 +16,28 @@ const CartPage = () => {
     setIsMounted(true);
   }, []);
 
+  // Call fetchProducts only once when the component is mounted
+  useEffect(() => {
+    if (isMounted && cart.items.length > 0) {
+      cart.fetchProducts();
+    }
+  }, [isMounted]); // Only runs when `isMounted` changes to true
+
   if (!isMounted) {
     return null;
   }
+
+  if (cart.items.length === 0) {
+    return (
+      <div className="flex items-center justify-center font-extrabold text-5xl min-h-[80vh]">
+        Cart is empty
+      </div>
+    );
+  }
+
+  
+
+
 
   return (
     <div className="bg-white  min-h-[80vh] py-14">

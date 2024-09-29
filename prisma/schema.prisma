@@ -144,7 +144,7 @@ model Product {
   offers         Offer[]     @relation(fields: [offerId], references: [id])
   description    String?
   gst            Int         @default(18)
-  igst            Int?      
+  igst           Int?
   orderItems     OrderItem[]
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
@@ -230,6 +230,7 @@ model OrderItem {
   product       Product @relation(fields: [productId], references: [id])
   quantity      Int
   msp           Int
+  total         Int
   purchasePrice Int?
   offerId       String? @db.ObjectId
 

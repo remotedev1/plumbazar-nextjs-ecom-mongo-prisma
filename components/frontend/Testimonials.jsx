@@ -1,30 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Container from "../ui/container";
 import { responsiveTestimonialsCarousel } from "@/lib/variables";
+import { useData } from "@/providers/data-provider";
 
 export const Testimonials = () => {
-  const [testimonialsData, setTestimonialsData] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get("/api/testimonials");
-        setTestimonialsData(response.data);
-      } catch (error) {
-        console.error("Failed to fetch testimonials:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
+  const { testimonials, loading, error } = useData();
 
   return (
     <div className="min-w-screen flex items-center justify-center py-8 md:py-16">
@@ -38,7 +20,9 @@ export const Testimonials = () => {
           </div>
 
           {loading ? (
-            <div className="text-center text-gray-600">Loading testimonials...</div>
+            <div className="text-center text-gray-600">
+              Loading testimonials...
+            </div>
           ) : (
             <div className="max-w-[85vw]">
               <Carousel
@@ -50,7 +34,7 @@ export const Testimonials = () => {
                 infinite
                 itemClass="p-2"
               >
-                {testimonialsData.map((d, i) => (
+                {testimonials.map((d, i) => (
                   <div className="px-3" key={`${d.name}-${i}`}>
                     <div className="w-full mx-auto rounded-lg bg-white border border-gray-200 p-5 text-gray-800 font-light mb-6">
                       <div className="w-full flex mb-4 items-center">
@@ -74,7 +58,10 @@ export const Testimonials = () => {
                           <div className="mt-3 text-lg font-semibold">
                             {d.name}
                           </div>
-                          <div> {d.organization}, {d.designation} </div>
+                          <div>
+                            {" "}
+                            {d.organization}, {d.designation}{" "}
+                          </div>
                         </div>
                       </div>
                       <div className="flex-1">
@@ -92,18 +79,17 @@ export const Testimonials = () => {
               </Carousel>
             </div>
           )}
-
         </div>
         <div className="flex justify-center">
-        <video
-          width="800"
-          height="450"
-          controls
-          className="max-w-full rounded-md"
-        >
-          <source src="https://youtu.be/PmYocEA5gsU" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+          <video
+            width="800"
+            height="450"
+            controls
+            className="max-w-full rounded-md"
+          >
+            <source src="https://youtu.be/PmYocEA5gsU" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </div>
       </Container>
     </div>

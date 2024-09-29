@@ -19,6 +19,8 @@ const CartPage = () => {
     return null;
   }
 
+  
+
   return (
     <div className="bg-white min-h-[80vh]  py-14">
       <Container>

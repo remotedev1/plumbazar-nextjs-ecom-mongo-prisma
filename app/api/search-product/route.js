@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
@@ -26,15 +28,15 @@ export async function GET(req) {
     }
 
     // Add query filter for name (case-insensitive)
-if (query && query.trim() !== "") {
-  const terms = query.trim().split(/\s+/); // Split query into terms by whitespace
-  filters.OR = terms.map(term => ({
-    name: {
-      contains: term,
-      mode: "insensitive",
-    },
-  }));
-}
+    if (query && query.trim() !== "") {
+      const terms = query.trim().split(/\s+/); // Split query into terms by whitespace
+      filters.OR = terms.map((term) => ({
+        name: {
+          contains: term,
+          mode: "insensitive",
+        },
+      }));
+    }
 
     // Add category filter if provided
     if (category && category.trim() !== "") {
@@ -81,8 +83,6 @@ if (query && query.trim() !== "") {
       },
     });
 
-
-
     // Check if there are more products to load
     const hasMore = products.length === take;
 
@@ -92,7 +92,6 @@ if (query && query.trim() !== "") {
       ...(fetchCount ? { total: totalProducts } : {}), // Include total count only if requested
       hasMore,
     });
-
   } catch (error) {
     console.error("[PRODUCTS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });

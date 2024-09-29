@@ -42,22 +42,13 @@ export const RfqForm = ({ initialData }) => {
 
   const title = initialData ? "Edit RFQ" : "Create a new RFQ";
 
-  const toastMessage = initialData
-    ? "Quote updated successfully"
-    : "Quote created successfully";
-
   const action = initialData ? "Save Quote" : "Create RFQ";
 
-  const defaultValues = initialData
-    ? {
-        ...initialData,
-        price: parseFloat(String(initialData?.price)),
-      }
-    : {
-        images: [],
-        phone:  address?.phone,
-        notes: "",
-      };
+  const defaultValues = {
+    notes: initialData?.notes ?? "",
+    images: initialData?.images ?? [],
+    phone: initialData?.phone ?? address?.phone,
+  };
 
   const form = useForm({
     resolver: zodResolver(RfqSchema),
@@ -127,8 +118,9 @@ export const RfqForm = ({ initialData }) => {
                   <ImageUpload
                     value={field.value.map((image) => image)}
                     onChange={(newImage) => {
-                      field.onChange([newImage]);
+                      field.onChange([...field.value, newImage]);
                     }}
+                    disabled={loading}
                     onRemove={(id) => {
                       field.onChange(
                         field.value.filter(
@@ -138,7 +130,6 @@ export const RfqForm = ({ initialData }) => {
                         )
                       );
                     }}
-                    disabled={loading}
                   />
                 </FormControl>
                 <FormMessage />

@@ -14,9 +14,11 @@ import { CustomDropdownMenu } from "../common/custom-dropdown";
 import AdminDashLink from "./AdminNavLink";
 import { cn } from "@/lib/utils";
 import { SearchProducts } from "./search-products";
+import { useData } from "@/providers/data-provider";
 
 export const Navbar = () => {
   const { status, data } = useSession();
+  const { categories, loading, error } = useData();
   const pathname = usePathname();
   const isHomepage = pathname === "/"; // Check if the current path is the homepage
 
@@ -30,26 +32,6 @@ export const Navbar = () => {
       label: "Shop",
     },
     { label: "Rfq", href: "/rfq" },
-  ];
-
-  const categories = [
-    "Tap",
-    "Tiles",
-    "Electricals",
-    "Power & Hand Tools",
-    "Plywood & Laminates",
-    "Hardware",
-    "Paints",
-    "Lighting & Fans",
-    "Bathroom",
-    "Plumbing",
-    "Kitchen",
-    "Appliances",
-    "Furniture",
-    "Gardening",
-    "Flooring",
-    "Outdoor Equipment",
-    "Interior Design",
   ];
 
   const dropdownOptions = [
@@ -208,17 +190,21 @@ export const Navbar = () => {
           {isHomepage && (
             <div className="hidden md:block py-2 px-3 bg-slate-200 w-full">
               <div className="flex overflow-x-auto whitespace-nowrap scrollbar-hide">
-                {categories.map((category, index) => (
-                  <Link
-                    key={index}
-                    href={`/products?category=${encodeURIComponent(category)}`}
-                    passHref
-                  >
-                    <div className="px-6 text-center text-black hover:text-primary/50 cursor-pointer">
-                      {category}
-                    </div>
-                  </Link>
-                ))}
+                {categories
+                  .map((category) => category.name)
+                  .map((category, index) => (
+                    <Link
+                      key={index}
+                      href={`/products?category=${encodeURIComponent(
+                        category
+                      )}`}
+                      passHref
+                    >
+                      <div className="px-6 text-center text-black hover:text-primary/50 cursor-pointer capitalize">
+                        {category}
+                      </div>
+                    </Link>
+                  ))}
               </div>
             </div>
           )}
