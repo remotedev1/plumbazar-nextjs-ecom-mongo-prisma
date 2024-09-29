@@ -18,7 +18,6 @@ export async function PATCH(req, { params }) {
       categoryIds,
     } = body;
 
-
     // Validate required fields
     if (
       !title ||
@@ -158,24 +157,23 @@ export async function PATCH(req, { params }) {
 export async function DELETE(req, { params }) {
   try {
     const offerId = params.offerId;
+    const { productIds } = await req.json();
 
     // Remove the association between the offer and all products
-    await db.product.update({
-      where: {
-        offers: {
-          some: {
-            id: offerId,
+    await Promise.all(
+      productIds.map(async (productId) => {
+        return await db.product.update({
+          where: { id: productId },
+          data: {
+            offers: {
+              disconnect: { id: offerId }, // Remove the offer from the product
+            },
           },
-        },
-      },
-      data: {
-        offers: {
-          disconnect: { id: offerId }, // Disconnect the offer from products
-        },
-      },
-    });
+        });
+      })
+    );
 
-    // Soft delete the offer
+    // Soft delete the offer and clear associations
     await db.offer.update({
       where: { id: offerId },
       data: {
@@ -195,3 +193,4 @@ export async function DELETE(req, { params }) {
     );
   }
 }
+

@@ -32,8 +32,16 @@ export const CellAction = ({ data }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      // Delete store
-      await axios.delete(`/api/${params.storeId}/products/offers/${data.id}`);
+      const productIds = data.products.map((product) => product.id);
+      await axios.delete(
+        `/api/${params.storeId}/products/offers/${data.id}`,{
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: {
+            productIds,
+          },
+        });
       toast.success("Offer deleted successfully");
       router.refresh();
     } catch (error) {
