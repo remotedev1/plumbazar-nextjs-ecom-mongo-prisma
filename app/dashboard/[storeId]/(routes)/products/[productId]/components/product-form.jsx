@@ -86,8 +86,8 @@ export const ProductForm = ({ initialData, brands, categories }) => {
       formData.append("description", data.description);
       formData.append("gst", data.gst);
       formData.append("categoryId", data.categoryId);
-      formData.append("isFeatured", data.isFeatured ? "true" : "false");
-      formData.append("isArchived", data.isArchived ? "true" : "false");
+      formData.append("isFeatured", data.isFeatured ? true : false);
+      formData.append("isArchived", data.isArchived ? true : false);
 
       // Append images, which can be either URLs or files
       data.images.forEach((fileOrUrl, index) => {

@@ -38,19 +38,12 @@ const OrderActions = ({
     setLoading(true);
 
     try {
-      const response = await axios.patch(
-        `/api/${storeId}/orders/${orderId}/order-process`,
-        {
-          orderId,
-          data: productComparison.map((item) => item.id),
-        }
-      );
-      if (response.status === 200) {
-        toast.success("Order processed successfully");
-        router.refresh();
-      } else {
-        throw new Error("Failed to process order");
-      }
+      await axios.patch(`/api/${storeId}/orders/${orderId}/order-process`, {
+        orderId,
+        data: productComparison.map((item) => item.id),
+      });
+      toast.success("Order processed successfully");
+      router.refresh();
     } catch (error) {
       console.error("Failed to process order:", error);
       toast.error("Failed to process order. Please try again later.");

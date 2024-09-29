@@ -28,12 +28,12 @@ export const billboardSchema = z.object({
 });
 
 export const BrandSchema = z.object({
-  name: z.string().min(3).max(25),
+  name: z.string().max(25),
   images: z.array(z.any()).max(1),
 });
 
 export const CategorySchema = z.object({
-  name: z.string().min(3).max(35),
+  name: z.string().max(35),
   images: z.array(z.any()).max(1),
 });
 
@@ -247,26 +247,19 @@ const ItemSchema = z.object({
   id: fieldValidators.stringMin1,
   name: fieldValidators.stringMin1,
   quantity: fieldValidators.quantity,
-  purchasePrice: fieldValidators.unitPrice,
-  price: fieldValidators.stringToNumberWithMax,
+  msp: fieldValidators.stringToNumberWithMax,
   total: fieldValidators.stringToNumber,
 });
 
-const PaymentInformationSchema = z.object({
-  bankName: fieldValidators.stringOptional,
-  accountName: fieldValidators.stringOptional,
-  accountNumber: fieldValidators.stringOptional,
-  transactionId: fieldValidators.stringOptional,
-  ptc: fieldValidators.stringOptional,
-});
+
 
 const InvoiceDetailsSchema = z.object({
   invoiceNumber: fieldValidators.stringMin1,
   rfqId: fieldValidators.stringMin1,
   draftId: fieldValidators.stringOptional,
   invoiceDate: fieldValidators.date,
+  dueDate: fieldValidators.date,
   items: z.array(ItemSchema),
-  paymentInformation: PaymentInformationSchema.optional(),
   taxAmount: fieldValidators.stringToNumberWithMax,
   discountAmount: fieldValidators.stringToNumberWithMax,
   shippingAmount: fieldValidators.stringToNumberWithMax,

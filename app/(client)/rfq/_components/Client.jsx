@@ -23,7 +23,7 @@ const RfqClient = ({ data }) => {
           <Plus className="mr-2 h-4 w-4"/>
         </Button>
       </div>
-      <DataTable searchKey="createdAt" columns={columns} data={data} />
+      <DataTable searchKey="createdAt" columns={columns} data={data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))} />
     </>
   );
 };

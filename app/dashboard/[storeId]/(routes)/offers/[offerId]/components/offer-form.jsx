@@ -27,7 +27,9 @@ export const OfferForm = ({ initialData, brands, categories }) => {
   const router = useRouter();
   const params = useParams();
   const [loading, setLoading] = useState(false);
-  const [selectedProducts, setSelectedProducts] = useState(initialData?.products ?? []);
+  const [selectedProducts, setSelectedProducts] = useState(
+    initialData?.products ?? []
+  );
 
   const form = useForm({
     resolver: zodResolver(OfferSchema),
@@ -68,9 +70,11 @@ export const OfferForm = ({ initialData, brands, categories }) => {
     const updatedProductIds = selectedProducts
       .filter((product) => product.id !== productId)
       .map((product) => product.id); // Ensure it's the ID that you pass to form
-    
+
     // Update the state and form
-    setSelectedProducts((prev) => prev.filter((product) => product.id !== productId));
+    setSelectedProducts((prev) =>
+      prev.filter((product) => product.id !== productId)
+    );
     form.setValue("productIds", updatedProductIds);
   };
 
@@ -248,11 +252,26 @@ export const OfferForm = ({ initialData, brands, categories }) => {
         </Form>
         {initialData && (
           <div className="flex-1">
-            <h1 className="text-3xl">Products</h1>
-            {selectedProducts.map((product) => (
-              <div className="flex items-center gap-2 mb-2" key={product.id}>
-                <div>{product.name}</div>
-                <div>{product.id}</div>
+            <h1 className="text-3xl mb-4">Products</h1>
+            <div className="overflow-x-auto">
+              <table className="table-auto w-full border-collapse">
+                <thead>
+                  <tr className="bg-gray-100 text-left">
+                    <th className="p-2 border-b">No.</th>
+                    <th className="p-2 border-b">Name</th>
+                    <th className="p-2 border-b">ID</th>
+                    {/* Uncomment if needed */}
+                    {/* <th className="p-2 border-b">Actions</th> */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedProducts.map((product, index) => (
+                    <tr key={product.id} className="hover:bg-gray-50">
+                      <td className="p-2 border-b">{index + 1}</td>
+                      <td className="p-2 border-b">{product.name}</td>
+                      <td className="p-2 border-b">{product.id}</td>
+                      {/* Uncomment if needed */}
+                      {/* <td className="p-2 border-b">
                 <Button
                   type="button"
                   onClick={() => handleRemoveProduct(product.id)}
@@ -260,8 +279,12 @@ export const OfferForm = ({ initialData, brands, categories }) => {
                 >
                   Remove
                 </Button>
-              </div>
-            ))}
+              </td> */}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>

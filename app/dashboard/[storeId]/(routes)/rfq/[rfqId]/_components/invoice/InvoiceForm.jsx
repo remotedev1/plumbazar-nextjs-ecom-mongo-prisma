@@ -1,9 +1,9 @@
 "use client";
 
-import {  useEffect } from "react";
+import { useEffect } from "react";
 
 // RHF
-import { useFormContext} from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 // ShadCn
 import {
@@ -22,15 +22,12 @@ import WizardStep from "./form/wizard/WizardStep";
 //components
 import BillToSection from "./form/sections/BillToSection";
 import InvoiceDetails from "./form/sections/InvoiceDetails";
-import PaymentInformation from "./form/sections/PaymentInformation";
 import InvoiceSummary from "./form/sections/InvoiceSummary";
 import Items from "./form/sections/Items";
 import { generateInvoiceNumber } from "@/lib/helpers";
 
 const InvoiceForm = () => {
-
-  const { setValue, getValues } = useFormContext();
-
+  const { setValue, getValues, formState } = useFormContext();
   // Set the default value for invoiceNumber when the component mounts
   useEffect(() => {
     const invoiceNumber = generateInvoiceNumber();
@@ -40,14 +37,6 @@ const InvoiceForm = () => {
 
   // Get invoice number variable
   const invoiceNumber = getValues("details.invoiceNumber");
-
-  // const invoiceNumberLabel = useMemo(() => {
-  //   if (invoiceNumber) {
-  //     return `#${invoiceNumber}`;
-  //   } else {
-  //     return "form.newInvBadge";
-  //   }
-  // }, [invoiceNumber]);
 
   return (
     <div className="w-[85%]">
@@ -79,10 +68,6 @@ const InvoiceForm = () => {
 
               <WizardStep>
                 <Items />
-              </WizardStep>
-
-              <WizardStep>
-                <PaymentInformation />
               </WizardStep>
 
               <WizardStep>

@@ -33,13 +33,14 @@ export async function POST(req, { params }) {
             set: {
               invoiceNumber: details.invoiceNumber,
               invoiceDate: new Date(details.invoiceDate),
+              dueDate: new Date(details.dueDate),
               items: details.items.map((item) => ({
                 id: item.id,
                 name: item.name,
                 quantity: item.quantity,
-                price: item.price,
-                purchasePrice: item.purchasePrice,
-                total: item.quantity * item.price,
+                msp: item.msp,
+                gst: item.gst,
+                total: item.quantity * item.msp,
               })),
               currency: details.currency || "INR",
               taxAmount: parseFloat(details.taxAmount),

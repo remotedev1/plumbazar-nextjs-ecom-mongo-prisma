@@ -13,7 +13,7 @@ const RfqClient = ({ data, isPending }) => {
       {isPending ? (
         <h2 className="text-center font-bold text-2xl p-5">Loading...</h2>
       ) : data?.length > 0 && (
-        <DataTable searchKey="createdAt" columns={columns} data={data} />
+        <DataTable searchKey="createdAt" columns={columns} data={data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))} />
       ) }
     </>
   );

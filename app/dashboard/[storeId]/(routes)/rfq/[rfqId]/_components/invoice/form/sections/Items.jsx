@@ -31,12 +31,14 @@ import SingleItem from "../SingleItem";
 import BaseButton from "../../../BaseButton";
 
 const Items = () => {
-  const { control, setValue, formState: { errors } } = useFormContext();
+  const { control, setValue, formState: { errors }, getValues } = useFormContext();
   const ITEMS_NAME = "details.items";
   const { fields, append, remove, move } = useFieldArray({
     control: control,
     name: ITEMS_NAME,
   });
+
+console.log(getValues("details.items"));
 
 
   const addNewField = () => {
@@ -44,7 +46,7 @@ const Items = () => {
       name: "",
       description: "",
       quantity: null,
-      price: null,
+      msp: null,
       total: 0,
     });
   };

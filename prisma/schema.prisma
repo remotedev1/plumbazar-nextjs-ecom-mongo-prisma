@@ -298,6 +298,7 @@ type Receiver {
 type Details {
   invoiceNumber   String
   invoiceDate     DateTime
+  dueDate         DateTime
   items           Json
   currency        String   @default("INR")
   taxAmount       Int

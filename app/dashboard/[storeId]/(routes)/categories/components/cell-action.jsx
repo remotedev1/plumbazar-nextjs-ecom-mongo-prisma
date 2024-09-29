@@ -34,7 +34,7 @@ export const CellAction = ({ data }) => {
     try {
       setLoading(true);
       // Delete store
-      await axios.delete(`/api/${params.storeId}/categories/${data.id}`);
+      await axios.delete(`/api/categories/${data.id}`);
       router.refresh();
 
       toast.success("Category deleted successfully");
@@ -79,10 +79,10 @@ export const CellAction = ({ data }) => {
             Update
           </DropdownMenuItem>
 
-          <DropdownMenuItem onClick={() => setOpen(true)}>
+          {/* <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" />
             Delete
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

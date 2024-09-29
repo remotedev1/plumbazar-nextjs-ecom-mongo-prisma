@@ -83,6 +83,15 @@ const InvoiceTemplate = (data) => {
               </h3>
             </div>
             <div className="flex">
+              <h3 className="flex-1 text-gray-800">Due date:</h3>
+              <h3 className="flex-1 font-semibold  text-gray-800">
+                {new Date(details.dueDate).toLocaleDateString(
+                  "en-US",
+                  DATE_OPTIONS
+                )}
+              </h3>
+            </div>
+            <div className="flex">
               <h3 className="flex-1 text-gray-800">Email:</h3>
               <h3 className="flex-1  font-semibold text-gray-800">
                 {receiver.email}
@@ -134,7 +143,7 @@ const InvoiceTemplate = (data) => {
               Cost/Unit
             </div>
             <div className="text-left text-xs font-medium  uppercase">Qty</div>
-            <div className="text-left text-xs font-medium  uppercase">GST</div>
+            <div className="text-left text-xs font-medium  uppercase">Incl. GST</div>
             <div className="text-right text-xs font-medium  uppercase">
               Amount
             </div>
@@ -149,7 +158,7 @@ const InvoiceTemplate = (data) => {
 
                 <div className="border-b border-gray-300">
                   <p className="text-gray-800">
-                    {item.price && item.price + " " + details.currency}
+                    {item.msp && item.msp + " " + details.currency}
                   </p>
                 </div>
 
@@ -158,15 +167,14 @@ const InvoiceTemplate = (data) => {
                 </div>
                 <div className="border-b border-gray-300">
                   <p className="text-gray-800">
-                     {((item.price * item.quantity) / 100) * (18 / 100) +
-                      " " +
-                      details.currency}
-                       {("(18%)")}
+                    {/* Calculate the GST and display it */}
+                    {item.msp + (item.msp * item.gst) / 100}
                   </p>
                 </div>
-                <div className="border-b border-gray-300">  
+                <div className="border-b border-gray-300">
                   <p className="sm:text-right text-gray-800">
-                    {item.quantity * item.price} {details.currency}
+                    {(item.msp + (item.msp * item.gst) / 100) * item.quantity}
+                    {details.currency}
                   </p>
                 </div>
               </React.Fragment>

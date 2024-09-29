@@ -18,6 +18,7 @@ export async function PATCH(req, { params }) {
       categoryIds,
     } = body;
 
+
     // Validate required fields
     if (
       !title ||

@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import cloudinary from "@/lib/cloudinary";
 import { db } from "@/lib/db";
+import { generateSlug } from "@/lib/helpers";
 import { NextResponse } from "next/server";
 
 export async function POST(req, { params }) {
@@ -84,6 +85,7 @@ export async function POST(req, { params }) {
         description,
         categoryId,
         images: uploadedImages,
+        slug: generateSlug(name),
       },
     });
 

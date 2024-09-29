@@ -112,9 +112,11 @@ export const ChargesContextProvider = ({ children }) => {
     // at the beginning of subTotal caused by toFixed(2) in item.total in single item
     // Reason: toFixed(2) returns string, not a number instance
     const totalSum = itemsArray?.reduce(
-      (sum, item) => sum + Number(item.quantity * item.price),
+      (sum, item) => sum + (Number(item.msp) + (Number(item.gst) * Number(item.msp)) / 100) * 
+      Number(item.quantity),
       0
     );
+
 
     setValue("details.subTotal", totalSum);
     setSubTotal(totalSum);

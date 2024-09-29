@@ -48,14 +48,17 @@ const SingleItem = ({
     control,
   });
 
-  // Watching fields for dynamic updates
-  const purchasePrice = useWatch({
-    name: `${name}[${index}].purchasePrice`,
+  const quantity = useWatch({
+    name: `${name}[${index}].quantity`,
+    control,
+  });
+  const gst = useWatch({
+    name: `${name}[${index}].gst`,
     control,
   });
 
-  const quantity = useWatch({
-    name: `${name}[${index}].quantity`,
+  const msp = useWatch({
+    name: `${name}[${index}].msp`,
     control,
   });
 
@@ -77,11 +80,14 @@ const SingleItem = ({
 
   // Calculate total whenever purchasePrice or quantity changes
   useEffect(() => {
-    if (purchasePrice !== undefined && quantity !== undefined) {
-      const calculatedTotal = (purchasePrice * quantity).toFixed(2);
+    if (msp !== undefined && quantity !== undefined) {
+      const calculatedTotal = (
+        msp +
+        ((msp * gst) / 100) * Number(quantity)
+      ).toFixed(2);
       setValue(`${name}[${index}].total`, calculatedTotal);
     }
-  }, [purchasePrice, quantity, setValue, name, index]);
+  }, [quantity, setValue, name, index]);
 
   // Fetch product options from the API
   useEffect(() => {
@@ -94,9 +100,9 @@ const SingleItem = ({
           const products = response.data.map((product) => ({
             label: product.name,
             value: product.id,
-            price: product.price,
-            purchasePrice: product.purchasePrice,
+            msp: product.msp,
             stock: product.stock,
+            gst: product.gst,
           }));
           setOptions(products);
         } catch (error) {
@@ -141,11 +147,8 @@ const SingleItem = ({
         setValue(`${name}[${index}].id`, selectedOption?.value || "");
         setValue(`${name}[${index}].name`, selectedOption?.label || "");
         setValue(`${name}[${index}].stock`, selectedOption?.stock || 0);
-        setValue(`${name}[${index}].price`, selectedOption.price || 0);
-        setValue(
-          `${name}[${index}].purchasePrice`,
-          selectedOption.purchasePrice || 0
-        );
+        setValue(`${name}[${index}].msp`, selectedOption.msp || 0);
+        setValue(`${name}[${index}].gst`, selectedOption.gst || 0);
       }
     },
     [setValue, name, index]
@@ -254,32 +257,9 @@ const SingleItem = ({
           )}
         />
 
-        {/* Purchase Price */}
-        <Controller
-          name={`${name}[${index}].purchasePrice`}
-          control={control}
-          render={({ field }) => (
-            <div className="inline">
-              <FormLabel>Purchase price</FormLabel>
-              <Input
-                {...field}
-                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                type="number"
-                placeholder="Purchase Price"
-                className="w-[8rem]"
-              />
-              {errors?.details?.items?.[index]?.purchasePrice && (
-                <FormMessage>
-                  {errors?.details?.items?.[index].purchasePrice.message}
-                </FormMessage>
-              )}
-            </div>
-          )}
-        />
-
         {/* Selling Price */}
         <Controller
-          name={`${name}[${index}].price`}
+          name={`${name}[${index}].msp`}
           control={control}
           render={({ field }) => (
             <div className="inline">
@@ -291,9 +271,9 @@ const SingleItem = ({
                 placeholder="Selling price"
                 className="w-[8rem]"
               />
-              {errors?.details?.items?.[index]?.price && (
+              {errors?.details?.items?.[index]?.msp && (
                 <FormMessage>
-                  {errors?.details?.items?.[index].price.message}
+                  {errors?.details?.items?.[index].msp.message}
                 </FormMessage>
               )}
             </div>

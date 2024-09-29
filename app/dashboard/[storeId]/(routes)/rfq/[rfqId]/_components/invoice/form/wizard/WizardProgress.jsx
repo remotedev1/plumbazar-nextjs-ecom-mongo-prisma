@@ -16,11 +16,11 @@ const WizardProgress = ({ wizard }) => {
   const step1Valid = !errors.sender && !errors.receiver;
   const step2Valid =
     !errors.details?.invoiceNumber &&
-    !errors.details?.invoiceDate
+    !errors.details?.invoiceDate &&
+    !errors.details?.dueDate;
 
   const step3Valid = !errors.details?.items;
-  const step4Valid = !errors.details?.paymentInformation;
-  const step5Valid =
+  const step4Valid =
     !errors.details?.paymentDue &&
     !errors.details?.subTotal &&
     !errors.details?.totalAmount &&
@@ -73,15 +73,11 @@ const WizardProgress = ({ wizard }) => {
       label: "Line Items",
       isValid: step3Valid,
     },
+
     {
       id: 3,
-      label: "Payment Info",
-      isValid: step4Valid,
-    },
-    {
-      id: 4,
       label: "Summary",
-      isValid: step5Valid,
+      isValid: step4Valid,
     },
   ];
 

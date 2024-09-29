@@ -36,9 +36,8 @@ export const CellAction = ({ data }) => {
       setLoading(true);
       // Delete store
       await axios.delete(`/api/${params.storeId}/products/${data.id}`);
-      router.refresh();
-      router.push(`/dashboard/${params.storeId}/products`);
       toast.success("Product deleted successfully");
+      router.refresh();
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -78,10 +77,10 @@ export const CellAction = ({ data }) => {
             Update
           </DropdownMenuItem>
 
-          <DropdownMenuItem onClick={() => setOpen(true)}>
+          {/* <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" />
             Delete
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

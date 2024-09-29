@@ -13,7 +13,7 @@ const OrderSummary = async ({ params }) => {
       </div>
     );
   }
-  
+
   return (
     <section className="py-14 relative min-h-[80vh]">
       <div className="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto">
@@ -37,9 +37,9 @@ const OrderSummary = async ({ params }) => {
                 </span>
               </p>
             </div>
-            {/* <button className="rounded-full py-3 px-7 font-semibold text-sm leading-7 text-white bg-indigo-600 max-lg:mt-5 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-700 hover:shadow-indigo-400">
-              Track Your Order
-            </button> */}
+            <div className="rounded-full py-3 px-7 font-semibold text-sm leading-7 text-white bg-indigo-600 max-lg:mt-5 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-700 hover:shadow-indigo-400">
+              Order status : {order.deliveryStatus}
+            </div>
           </div>
           <div className="w-full px-3 min-[400px]:px-6">
             {order.orderItems.map((item) => (

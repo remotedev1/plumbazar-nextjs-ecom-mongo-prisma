@@ -64,9 +64,9 @@ export async function PATCH(req, { params }) {
     if (formData.has("categoryId"))
       updateData.categoryId = formData.get("categoryId");
     if (formData.has("isFeatured"))
-      updateData.isFeatured = formData.get("isFeatured");
+      updateData.isFeatured = formData.get("isFeatured")=== "true";;
     if (formData.has("isArchived"))
-      updateData.isArchived = formData.get("isArchived");
+      updateData.isArchived = formData.get("isArchived")=== "true";;
 
     // Handle images separately as before
     const images = formData.getAll("images");

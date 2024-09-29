@@ -25,8 +25,7 @@ export async function GET(req, { params }) {
 export async function DELETE(req, { params }) {
   try {
     const { user } = await auth();
-
-    if (user.role !== "ADMIN") {
+    if (user.role !== "ADMIN" || user.role !== "SUPERADMIN") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -98,40 +97,40 @@ export async function PATCH(req, { params }) {
       return new NextResponse("Category not found", { status: 404 });
     }
 
-   // Find images to delete (present in DB but not in the images array from the form)
-   const imagesToDelete = currentBrand.images.filter(
-    (dbImage) => !images.includes(dbImage) // Images in DB but not in the new array of URLs
-  );
+    // Find images to delete (present in DB but not in the images array from the form)
+    const imagesToDelete = currentCategory.images.filter(
+      (dbImage) => !images.includes(dbImage) // Images in DB but not in the new array of URLs
+    );
 
-  // Delete images from Cloudinary
-  await Promise.all(
-    imagesToDelete.map(async (image) => {
-      const publicId = image.split("/").pop().split(".")[0];
-      await cloudinary.uploader.destroy(`brands/${publicId}`);
-    })
-  );
+    // Delete images from Cloudinary
+    await Promise.all(
+      imagesToDelete.map(async (image) => {
+        const publicId = image.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(`brands/${publicId}`);
+      })
+    );
 
-  const folderPath = "brands";
+    const folderPath = "brands";
 
-  // Upload new images to Cloudinary
-  const uploadedImages = await Promise.all(
-    newImages.map(async (image) => {
-      if (image instanceof File) {
-        const arrayBuffer = await image.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-        const result = await cloudinary.uploader.upload(
-          `data:${image.type};base64,${buffer.toString("base64")}`,
-          { folder: folderPath }
-        );
-        return result.secure_url;
-      } else {
-        throw new Error("Invalid file format");
-      }
-    })
-  );
+    // Upload new images to Cloudinary
+    const uploadedImages = await Promise.all(
+      newImages.map(async (image) => {
+        if (image instanceof File) {
+          const arrayBuffer = await image.arrayBuffer();
+          const buffer = Buffer.from(arrayBuffer);
+          const result = await cloudinary.uploader.upload(
+            `data:${image.type};base64,${buffer.toString("base64")}`,
+            { folder: folderPath }
+          );
+          return result.secure_url;
+        } else {
+          throw new Error("Invalid file format");
+        }
+      })
+    );
 
-  // Combine new uploaded images and the existing images that weren't deleted
-  const finalImages = [...images, ...uploadedImages].flat();
+    // Combine new uploaded images and the existing images that weren't deleted
+    const finalImages = [...images, ...uploadedImages].flat();
 
     const category = await db.category.update({
       where: {

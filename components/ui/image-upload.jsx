@@ -16,9 +16,9 @@ const ImageUpload = ({ disabled, onChange, onRemove, value }) => {
     const previews = value.map((image, index) => {
       if (image instanceof Blob) {
         const url = URL.createObjectURL(image);
-        return { url, id: index }; 
+        return { url, id: index };
       }
-      return { url: image, id: image.publicId || index }; 
+      return { url: image, id: image.publicId || index };
     });
     setImagePreviews(previews);
 
@@ -34,7 +34,7 @@ const ImageUpload = ({ disabled, onChange, onRemove, value }) => {
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
-
+    if (!file) return;
     try {
       onChange(file);
     } catch (error) {
@@ -64,12 +64,7 @@ const ImageUpload = ({ disabled, onChange, onRemove, value }) => {
                 <Trash className="h-4 w-4" />
               </Button>
             </div>
-            <Image
-              fill
-              className="object-cover"
-              alt="Image"
-              src={image.url}
-            />
+            <Image fill className="object-cover" alt="Image" src={image.url} />
           </div>
         ))}
       </div>

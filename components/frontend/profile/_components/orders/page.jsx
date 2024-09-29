@@ -45,7 +45,7 @@ const OrdersPage = async () => {
 
   return (
     <div className="flex-col">
-      <OrderClient data={formattedOrders} />
+      <OrderClient data={formattedOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))} />
     </div>
   );
 };
