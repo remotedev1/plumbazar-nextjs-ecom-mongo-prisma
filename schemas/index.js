@@ -21,8 +21,6 @@ export const newPasswordSchema = z.object({
 });
 
 export const billboardSchema = z.object({
-  title: z.string().min(3, { message: "title is required" }),
-  description: z.string().min(3, { message: "description is required" }),
   action: z.string(),
   images: z.array(z.any()).min(1).max(1),
 });

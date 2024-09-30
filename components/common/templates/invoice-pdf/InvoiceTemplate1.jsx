@@ -22,8 +22,8 @@ const InvoiceTemplate = (data) => {
   return (
     <InvoiceLayout data={data}>
       <div className="flex flex-col items-center">
-        <Image alt="plumbazar" src="/light-logo.png" width={75} height={75} />
-        <Separator className="my-2 bg-gray-400" />
+        <img alt="plumbazar" src="/light-logo.png" className="w-24 " />
+        <hr className="my-2 bg-gray-400" />
         <div className="flex flex-col w-full justify-start">
           <h2 className="text-xl md:text-1xl font-semibold text-blue-800 text-uppercase">
             ESTIMATE
@@ -33,7 +33,7 @@ const InvoiceTemplate = (data) => {
             <span className="font-semibold">{details.invoiceNumber}</span>
           </span>
         </div>
-        <Separator className="my-2 bg-gray-400" />
+        <hr className="my-2 bg-gray-400" />
       </div>
 
       <div className="mt-6 grid sm:grid-cols-2 gap-5">
@@ -143,7 +143,9 @@ const InvoiceTemplate = (data) => {
               Cost/Unit
             </div>
             <div className="text-left text-xs font-medium  uppercase">Qty</div>
-            <div className="text-left text-xs font-medium  uppercase">Incl. GST</div>
+            <div className="text-left text-xs font-medium  uppercase">
+              Incl. GST
+            </div>
             <div className="text-right text-xs font-medium  uppercase">
               Amount
             </div>

@@ -121,7 +121,6 @@ const ProductCarousel = ({ title, filter }) => {
           itemClass="p-1"
           centerMode={false}
         >
-          {/* Map through products and display them in the carousel */}
 
           {loading &&
             !productsToDisplay &&

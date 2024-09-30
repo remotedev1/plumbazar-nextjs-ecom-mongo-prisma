@@ -80,14 +80,11 @@ const SingleItem = ({
 
   // Calculate total whenever purchasePrice or quantity changes
   useEffect(() => {
-    if (msp !== undefined && quantity !== undefined) {
-      const calculatedTotal = (
-        msp +
-        ((msp * gst) / 100) * Number(quantity)
-      ).toFixed(2);
-      setValue(`${name}[${index}].total`, calculatedTotal);
+    if (msp !== null && quantity !== null) {
+      const calculatedTotal = (msp + (msp * gst) / 100) * quantity.toFixed(2);
+      setValue(`${name}[${index}].total`, Number(calculatedTotal));
     }
-  }, [quantity, setValue, name, index]);
+  }, [quantity, setValue, name, index, gst, msp]);
 
   // Fetch product options from the API
   useEffect(() => {
@@ -143,16 +140,18 @@ const SingleItem = ({
 
   const handleSelectChange = useCallback(
     (selectedOption) => {
+
       if (selectedOption) {
         setValue(`${name}[${index}].id`, selectedOption?.value || "");
         setValue(`${name}[${index}].name`, selectedOption?.label || "");
         setValue(`${name}[${index}].stock`, selectedOption?.stock || 0);
-        setValue(`${name}[${index}].msp`, selectedOption.msp || 0);
-        setValue(`${name}[${index}].gst`, selectedOption.gst || 0);
+        setValue(`${name}[${index}].msp`, selectedOption.msp);
+        setValue(`${name}[${index}].gst`, selectedOption.gst);
       }
     },
     [setValue, name, index]
   );
+
 
   return (
     <div
@@ -281,7 +280,7 @@ const SingleItem = ({
         />
 
         {/* in stock */}
-        <div className="inline">
+        {/* <div className="inline">
           <FormLabel>In stock</FormLabel>
           <p
             className={cn(
@@ -291,7 +290,7 @@ const SingleItem = ({
           >
             {stock}
           </p>
-        </div>
+        </div> */}
 
         <div className="flex flex-col gap-2">
           <div>

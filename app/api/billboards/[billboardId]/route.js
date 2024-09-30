@@ -35,18 +35,11 @@ export async function PATCH(req, { params }) {
 
     const formData = await req.formData();
 
-    const title = formData.get("title");
-    const description = formData.get("description");
     const action = formData.get("action");
     const images = formData.getAll("images"); // URLs of existing images
     const newImages = formData.getAll("newImages"); // New images as File objects
 
-    if (!title) {
-      return new NextResponse("Title is required", { status: 400 });
-    }
-    if (!description) {
-      return new NextResponse("Description is required", { status: 400 });
-    }
+ 
     if (!images || !newImages) {
       return new NextResponse("Images are required", { status: 400 });
     }
@@ -63,7 +56,7 @@ export async function PATCH(req, { params }) {
     }
 
     // Find images to delete (present in DB but not in the images array from the form)
-    const imagesToDelete = currentBrand.images.filter(
+    const imagesToDelete = currentBillboard.images.filter(
       (dbImage) => !images.includes(dbImage) // Images in DB but not in the new array of URLs
     );
 
@@ -71,7 +64,7 @@ export async function PATCH(req, { params }) {
     await Promise.all(
       imagesToDelete.map(async (image) => {
         const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`brands/${publicId}`);
+        await cloudinary.uploader.destroy(`billboards/${publicId}`);
       })
     );
 
@@ -84,7 +77,7 @@ export async function PATCH(req, { params }) {
           const buffer = Buffer.from(arrayBuffer);
           const result = await cloudinary.uploader.upload(
             `data:${image.type};base64,${buffer.toString("base64")}`,
-            { folder: "brands" }
+            { folder: "billboards" }
           );
           return result.secure_url;
         } else {
@@ -103,8 +96,6 @@ export async function PATCH(req, { params }) {
       },
       data: {
         postedBy: user.id,
-        title,
-        description,
         action,
         images: finalImages, // Updated array with old and new images
       },

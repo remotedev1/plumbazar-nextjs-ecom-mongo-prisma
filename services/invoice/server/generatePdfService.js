@@ -21,17 +21,14 @@ import { CHROMIUM_EXECUTABLE_PATH, ENV, TAILWIND_CDN } from "@/lib/variables";
  */
 export async function generatePdfService(req) {
   const body = await req.json();
-
   // Create a browser instance
   let browser;
-
   try {
     const ReactDOMServer = (await import("react-dom/server")).default;
 
     // Get the selected invoice template
-    const templateId = body.details.pdfTemplate;
+    // const templateId = body.details.pdfTemplate;
     const InvoiceTemplate = await getInvoiceTemplate(1);
-    console.log(InvoiceTemplate);
     // Read the HTML template from a React component
     const htmlTemplate = ReactDOMServer.renderToStaticMarkup(
       InvoiceTemplate(body)
@@ -103,8 +100,6 @@ export async function generatePdfService(req) {
 
     return response;
   } catch (error) {
-    console.error(error);
-
     // Return an error response
     return new NextResponse(`Error generating PDF: \n${error}`, {
       status: 500,

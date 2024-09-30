@@ -86,7 +86,7 @@ export async function PATCH(req, { params }) {
 
     // Update the DraftInvoice with new data
     const updatedDraftInvoice = await db.draftInvoice.update({
-      where: { id: details.draftId }, 
+      where: { id: details.draftId },
       data: {
         userId: user.id,
         receiver: {
@@ -107,9 +107,9 @@ export async function PATCH(req, { params }) {
               id: item.id,
               name: item.name,
               quantity: item.quantity,
-              price: item.price,
-              purchasePrice: item.purchasePrice,
-              total: item.quantity * item.price,
+              msp: item.msp,
+              gst: item.gst,
+              total: item.quantity * item.msp,
             })),
             taxAmount: parseFloat(details.taxAmount),
             discountAmount: parseFloat(details.discountAmount),

@@ -8,24 +8,15 @@ export async function POST(req, { params }) {
     const { user } = await auth(); // we have access to the user id here that wants to create new store using our api
     const formData = await req.formData();
 
-    const title = formData.get("title");
-    const description = formData.get("description");
     const action = formData.get("action");
     const images = formData.getAll("newImages");
 
-    if (!title) {
-      return new NextResponse("title is required", { status: 400 });
-    }
-    if (!description) {
-      return new NextResponse("description is required", { status: 400 });
-    }
+ 
     if (!images) {
       return new NextResponse("images is required", { status: 400 });
     }
 
-    if (!params.storeId) {
-      return new NextResponse("Store ID is required", { status: 400 });
-    }
+
 
     // Upload images to Cloudinary path
     const folderPath = "billboards";
@@ -51,8 +42,6 @@ export async function POST(req, { params }) {
     const billboard = await db.billboard.create({
       data: {
         postedBy: user.id,
-        title,
-        description,
         action,
         images: uploadedImages.map((img) => img.url),
       },
@@ -75,9 +64,6 @@ export async function GET(req, { params }) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (!params.storeId) {
-      return new NextResponse("Store ID is required", { status: 400 });
-    }
 
     // get all the billboard
 

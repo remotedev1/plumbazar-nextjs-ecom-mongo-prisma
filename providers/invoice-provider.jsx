@@ -80,6 +80,7 @@ export const InvoiceContextProvider = ({ children }) => {
 
   // Saved invoices
   const [savedInvoices, setSavedInvoices] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let savedInvoicesDefault;
@@ -134,9 +135,12 @@ export const InvoiceContextProvider = ({ children }) => {
    * @returns {Promise<void>} - A promise that resolves when the PDF is successfully generated.
    * @throws {Error} - If an error occurs during the PDF generation process.
    */
-  const generatePdf = useCallback(async (data) => {
-    setInvoicePdfLoading(true);
+  const generatePdf = useCallback(async () => {
+    const data = getValues();
+
     try {
+      setLoading(true);
+
       const response = await fetch(GENERATE_PDF_API, {
         method: "POST",
         body: JSON.stringify(data),
@@ -152,7 +156,7 @@ export const InvoiceContextProvider = ({ children }) => {
     } catch (err) {
       console.log(err);
     } finally {
-      setInvoicePdfLoading(false);
+      setLoading(false);
     }
   }, []);
 
@@ -211,6 +215,7 @@ export const InvoiceContextProvider = ({ children }) => {
   const saveInvoice = async () => {
     const data = getValues();
     try {
+      setLoading(true);
       const response = await axios.post(
         `/api/rfq/${data.details.rfqId}/save`,
         data
@@ -222,16 +227,20 @@ export const InvoiceContextProvider = ({ children }) => {
       console.error("Error saving invoice:", error);
       toast.error("Error saving invoice");
       // throw new Error(error.response?.data?.error || "Failed to save invoice");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const updateInvoice = async (data) => {
+  const updateInvoice = async () => {
+    const data = getValues();
+
     try {
+      setLoading(true);
+
       const response = await axios.patch(
         `/api/rfq/${data.details.rfqId}/save`,
-        {
-          ...data,
-        }
+        data
       );
       toast.success("invoice updated successfully");
 
@@ -240,6 +249,8 @@ export const InvoiceContextProvider = ({ children }) => {
       console.error("Error updating invoice:", error);
       toast.error("Error updating invoice");
       // throw new Error(error.response?.data?.error || "Failed to save invoice");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -281,8 +292,9 @@ export const InvoiceContextProvider = ({ children }) => {
     const data = getValues();
     //TODO - update the invoice and commit order
     try {
+      setLoading(true);
       const response = await axios.post(
-        `/api/${params.storeId}/orders/order-process`,
+        `/api/rfq/${data.details.rfqId}/move-to-order`,
         {
           draftId: draftId,
           data,
@@ -291,9 +303,10 @@ export const InvoiceContextProvider = ({ children }) => {
       toast.success("invoice updated successfully");
       router.refresh();
     } catch (error) {
-      console.error("Error updating invoice:", error);
       toast.error("Error updating invoice");
       // throw new Error(error.response?.data?.error || "Failed to save invoice");
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -385,6 +398,7 @@ export const InvoiceContextProvider = ({ children }) => {
         sendPdfToMail,
         exportInvoiceAs,
         formValues: getValues(),
+        loading,
       }}
     >
       {children}

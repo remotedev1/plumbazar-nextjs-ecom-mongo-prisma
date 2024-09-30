@@ -31,26 +31,27 @@ import SingleItem from "../SingleItem";
 import BaseButton from "../../../BaseButton";
 
 const Items = () => {
-  const { control, setValue, formState: { errors }, getValues } = useFormContext();
+  const {
+    control,
+    setValue,
+    formState: { errors },
+    getValues,
+  } = useFormContext();
   const ITEMS_NAME = "details.items";
   const { fields, append, remove, move } = useFieldArray({
     control: control,
     name: ITEMS_NAME,
   });
 
-console.log(getValues("details.items"));
-
-
   const addNewField = () => {
     append({
       name: "",
-      description: "",
       quantity: null,
       msp: null,
+      gst: null,
       total: 0,
     });
   };
-
 
   const removeField = (index) => {
     remove(index);
@@ -86,7 +87,6 @@ console.log(getValues("details.items"));
     },
     [fields, setValue]
   );
-
 
   return (
     <section className="flex flex-col gap-2 w-full">

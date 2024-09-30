@@ -48,8 +48,6 @@ export const BillboardForm = ({ initialData, categories }) => {
   const form = useForm({
     resolver: zodResolver(billboardSchema),
     defaultValues: initialData || {
-      title: "",
-      description: "",
       action: "",
       images: [],
     },
@@ -61,8 +59,6 @@ export const BillboardForm = ({ initialData, categories }) => {
     try {
       setLoading(true);
       const formData = new FormData();
-      formData.append("title", data.title);
-      formData.append("description", data.description);
       formData.append("action", data.action);
       data.images.forEach((fileOrUrl, index) => {
         if (typeof fileOrUrl === "string") {
@@ -173,40 +169,6 @@ export const BillboardForm = ({ initialData, categories }) => {
             )}
           />
           <div className="grid grid-cols-3 gap-8">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Billboard title"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      disabled={loading}
-                      placeholder="description..."
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="action"

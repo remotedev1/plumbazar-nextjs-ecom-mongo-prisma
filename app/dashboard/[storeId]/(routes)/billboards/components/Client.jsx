@@ -7,7 +7,6 @@ import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import {  columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
-// import { ApiList } from "@/components/ui/api-list";
 
 const BillboardClient = ({ data }) => {
   const router = useRouter();

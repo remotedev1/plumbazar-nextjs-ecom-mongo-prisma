@@ -91,14 +91,12 @@ model Store {
 }
 
 model Billboard {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  postedBy    String   @db.ObjectId
-  images      String[]
-  title       String
-  description String
-  action      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  postedBy  String   @db.ObjectId
+  images    String[]
+  action    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Brand {
