@@ -16,7 +16,7 @@ export const NewVerificationForm = () => {
 
   const onSubmit = useCallback(() => {
     if (!token) {
-      setError("Missing token!");
+      // setError("Missing token!");
       return;
     }
     newVerification(token)
@@ -41,7 +41,7 @@ export const NewVerificationForm = () => {
     >
       <div className="flex items-center justify-center w-full">
         {!success && !error && <Loader />}
-        <br/>
+        <br />
         <FormSuccess message={success} />
         <FormError message={error} />
       </div>

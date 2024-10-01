@@ -348,3 +348,15 @@ model Testimonial {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
+
+
+
+
+model Clientele {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  postedBy  String   @db.ObjectId
+  client  String   
+  images    String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

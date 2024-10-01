@@ -7,7 +7,7 @@ export async function POST(req, { params }) {
     const { user } = await auth();
 
     // Ensure the user is authenticated and is an ADMIN
-    if (!user || user.role !== "ADMIN") {
+    if (!user || user.role !== "SALES") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -61,12 +61,16 @@ export async function POST(req, { params }) {
       },
     });
 
+    // Update the rfq status
+    await db.rfq.update({
+      where: { id: data.details.rfqId },
+      data: { status: "PROCESSED" },
+    });
     // Update the draft invoice with the new order ID
-await db.draftInvoice.update({
+    await db.draftInvoice.update({
       where: { id: data.details.draftId },
       data: { orderId: createdOrder.id, status: "COMMITTED" },
     });
-
 
     // Return the created order
     return NextResponse.json(createdOrder);

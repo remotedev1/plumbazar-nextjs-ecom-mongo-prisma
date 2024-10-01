@@ -34,9 +34,7 @@ export const register = async (values, callbackUrl) => {
 
   const verificationToken = await generateVerificationToken(email);
   await SendVerificationEmail(
-    //TODO
-
-    "intelligentlederberg@fearlessmails.com",
+    email,
     verificationToken.token
   );
   return {

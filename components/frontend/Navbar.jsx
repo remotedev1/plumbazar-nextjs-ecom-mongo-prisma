@@ -40,6 +40,7 @@ export const Navbar = () => {
     { label: "Wishlist", href: "/wishlist" },
   ];
 
+
   return (
     <Popover
       className={cn(
@@ -187,7 +188,7 @@ export const Navbar = () => {
             </header>
           </Container>
 
-          {isHomepage && (
+          {isHomepage && categories.length > 0 && (
             <div className="hidden md:block py-2 px-3 bg-slate-200 w-full">
               <div className="flex overflow-x-auto whitespace-nowrap scrollbar-hide">
                 {categories
