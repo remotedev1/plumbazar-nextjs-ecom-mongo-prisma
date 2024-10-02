@@ -9,17 +9,16 @@ export const columns = [
     header: "Name",
   },
   {
+    accessorKey: "id",
+    header: "Id",
+  },
+  {
     accessorKey: "image",
     header: "Image",
     cell: ({ row }) => {
       if (row.original.image) {
         return (
-          <Image
-            width={50}
-            height={50}
-            src={row.original.image}
-            alt="image"
-          />
+          <Image width={50} height={50} src={row.original.image} alt="image" />
         );
       }
     },

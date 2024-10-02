@@ -106,11 +106,11 @@ export async function PATCH(req, { params }) {
     await Promise.all(
       imagesToDelete.map(async (image) => {
         const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`brands/${publicId}`);
+        await cloudinary.uploader.destroy(`categories/${publicId}`);
       })
     );
 
-    const folderPath = "brands";
+    const folderPath = "categories";
 
     // Upload new images to Cloudinary
     const uploadedImages = await Promise.all(

@@ -9,6 +9,10 @@ export const columns = [
     header: "Name",
   },
   {
+    accessorKey: "id",
+    header: "Id",
+  },
+  {
     accessorKey: "images",
     header: "Image",
     cell: ({ row }) => {

@@ -49,6 +49,10 @@ export const columns = [
     header: "MSP",
   },
   {
+    accessorKey: "gst",
+    header: "GST",
+  },
+  {
     accessorKey: "brand.name",
     header: "Brand",
   },

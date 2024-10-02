@@ -72,8 +72,8 @@ const CategoryList = () => {
               <div className="w-16 h-16 md:w-28 md:h-28 rounded-md overflow-hidden relative">
                 <Image
                   // TODO
-                  // src={category.images[0]}
-                  src="https://placehold.jp/150x150.png"
+                  src={category.images[0]}
+                  // src="https://placehold.jp/150x150.png"
                   alt={category.name}
                   layout="fill"
                   objectFit="cover"

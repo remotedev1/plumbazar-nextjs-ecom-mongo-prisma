@@ -68,15 +68,13 @@ const BrandList = () => {
         >
           {brands.map((brand, index) => (
             <div className="flex flex-col items-center" key={index}>
-              <div className="w-16 h-16 md:w-28 md:h-28 rounded-md overflow-hidden relative">
+              <div className="w-16 h-16 md:w-24 md:h-20 rounded-md overflow-hidden relative">
                 <Image
-                  // src={brand.images[0]}
-                  src="https://placehold.jp/150x150.png"
+                  src={brand.images[0]}
                   alt={brand.name}
                   layout="fill"
-                  objectFit="cover"
                   quality={100}
-                  className="rounded-md"
+                  className="rounded-md object-fill object-center"
                 />
               </div>
               <span className="mt-2 text-center text-sm md:text-md font-semibold">
