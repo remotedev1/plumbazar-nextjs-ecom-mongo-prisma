@@ -38,7 +38,6 @@ const ProductPage = async ({ params }) => {
     discountData;
 
 
-    console.log(discountPercentage, discountAmount, gstAmount, offerId);
 
   return (
     <div className="bg-white">

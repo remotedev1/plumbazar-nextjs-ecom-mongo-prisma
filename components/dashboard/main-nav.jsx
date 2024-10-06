@@ -70,6 +70,11 @@ export function MainNav({ className, ...props }) {
       label: "Testimonials",
       active: pathname === `/dashboard/${params.storeId}/testimonials`,
     },
+    {
+      href: `/dashboard/${params.storeId}/clientele`,
+      label: "Clientele",
+      active: pathname === `/dashboard/${params.storeId}/clientele`,
+    },
     // {
     //   href: `/dashboard/${params.storeId}/settings`,
     //   label: "Settings",

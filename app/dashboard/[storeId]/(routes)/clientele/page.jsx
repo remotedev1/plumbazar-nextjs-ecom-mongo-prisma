@@ -1,16 +1,16 @@
 import { format } from "date-fns";
 
+import ClienteleClient from "./components/Client";
 import { db } from "@/lib/db";
-import BrandClient from "./components/Client";
 
-const BrandsPage = async ({ params }) => {
-  const brand = await db.brand.findMany({
+const ClientelePage = async ({ params }) => {
+  const clienteles = await db.clientele.findMany({
     orderBy: {
       createdAt: "desc",
     },
   });
 
-  const formattedBrands = brand.map((item) => ({
+  const formattedClienteles = clienteles.map((item) => ({
     id: item.id,
     name: item.name,
     image: item.images[0],
@@ -20,10 +20,10 @@ const BrandsPage = async ({ params }) => {
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <BrandClient data={formattedBrands} />
+        <ClienteleClient data={formattedClienteles} />
       </div>
     </div>
   );
 };
 
-export default BrandsPage;
+export default ClientelePage;

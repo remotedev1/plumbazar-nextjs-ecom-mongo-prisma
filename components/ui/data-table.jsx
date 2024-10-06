@@ -38,7 +38,6 @@ export function DataTable({ columns, data, searchKey }) {
   const [sorting, setSorting] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
 
-
   const table = useReactTable({
     data,
     columns,
@@ -49,7 +48,11 @@ export function DataTable({ columns, data, searchKey }) {
     onColumnVisibilityChange: setColumnVisibility,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-
+    initialState: {
+      pagination: {
+        pageSize: 100,
+      },
+    },
     state: {
       columnFilters,
       sorting,

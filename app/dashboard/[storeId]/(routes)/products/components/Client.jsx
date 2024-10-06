@@ -25,6 +25,7 @@ const ProductsClient = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1); // Pagination state
   const [totalPages, setTotalPages] = useState(1); // Total number of pages
+  const [totalProducts, setTotalProducts] = useState(0); // Total product count
   const [searchTerm, setSearchTerm] = useState(""); // Search term from input
   const [debouncedSearch, setDebouncedSearch] = useState(""); // Debounced search term
   const [selectedBrand, setSelectedBrand] = useState(null); // Brand filter state
@@ -32,18 +33,26 @@ const ProductsClient = () => {
 
   const router = useRouter();
   const params = useParams();
-  const itemsPerPage = 20; // Number of products per page
+  const itemsPerPage = 100; // Number of products per page
 
-  // Fetch products when page or search changes
+  // Debounce search term to avoid excessive API calls while typing
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+      setPage(1); // Reset to the first page when the search term changes
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  // Fetch products when page, debounced search, brand, or category changes
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
 
       try {
-        // Calculate skip based on current page and items per page
         const skip = (page - 1) * itemsPerPage;
 
-        // Build filter object
         const filter = {
           query: debouncedSearch,
           brand: selectedBrand,
@@ -52,20 +61,20 @@ const ProductsClient = () => {
           take: itemsPerPage,
         };
 
-        // Build query string and make API request
         const queryString = buildQueryString(filter);
-        const response = await axios.get(`/api/search-product?${queryString}`);
+        const response = await axios.get(`/api/search-product?${queryString}&fetchCount=true`);
 
         const { products, totalProducts } = response.data;
 
         setData(products); // Set fetched products
+        setTotalProducts(totalProducts || 0); // Set the total product count
 
-        // Safely calculate total pages
+        // Calculate total pages
         const calculatedTotalPages = totalProducts
           ? Math.ceil(totalProducts / itemsPerPage)
           : 1;
 
-        setTotalPages(calculatedTotalPages); // Set total pages
+        setTotalPages(calculatedTotalPages);
       } catch (error) {
         console.error("Failed to fetch products", error);
       } finally {
@@ -76,17 +85,11 @@ const ProductsClient = () => {
     fetchProducts();
   }, [page, debouncedSearch, selectedBrand, selectedCategory]);
 
-  // Handler for the Search button click
-  const handleSearch = () => {
-    setDebouncedSearch(searchTerm); // Set the search term to trigger data fetching
-    setPage(1); // Reset to first page when searching
-  };
-
   return (
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Products (${data.length})`}
+          title={`Products (${totalProducts})`} // Show actual total product count
           description="Manage products for your store."
         />
 
@@ -110,7 +113,7 @@ const ProductsClient = () => {
           placeholder="Search products..."
           className="border rounded px-4 py-2"
         />
-        <Button onClick={handleSearch}>Search</Button>
+        <Button onClick={() => setPage(1)}>Search</Button>
       </div>
 
       {/* Render the DataTable component */}
@@ -128,7 +131,7 @@ const ProductsClient = () => {
           Page {page} of {totalPages || 1}
         </span>
         <Button
-          disabled={page === totalPages}
+          disabled={page === totalPages || totalPages === 0} // Disable next if no more pages
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
         >
           Next

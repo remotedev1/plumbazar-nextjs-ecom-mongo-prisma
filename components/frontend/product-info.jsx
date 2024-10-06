@@ -37,9 +37,11 @@ const Info = ({ data }) => {
           )}
         </div>
       </div>
-      <div className="mt-3">
-        <AddCart product={{ ...data }} />
-      </div>
+      {data.sellOnline && (
+        <div className="mt-3">
+          <AddCart product={{ ...data }} />
+        </div>
+      )}
     </div>
   );
 };

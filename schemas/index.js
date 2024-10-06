@@ -1,4 +1,3 @@
-import Products from "@/app/(client)/products/page";
 import * as z from "zod";
 
 export const LoginSchema = z.object({
@@ -31,6 +30,11 @@ export const BrandSchema = z.object({
 });
 
 export const CategorySchema = z.object({
+  name: z.string().max(35),
+  images: z.array(z.any()).max(1),
+});
+
+export const clienteleSchema = z.object({
   name: z.string().max(35),
   images: z.array(z.any()).max(1),
 });

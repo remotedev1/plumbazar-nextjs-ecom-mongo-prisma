@@ -8,13 +8,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Copy, Edit, MoreHorizontal } from "lucide-react";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import axios from "axios";
 import { AlertModal } from "@/components/models/alert-modal";
-
 
 export const CellAction = ({ data }) => {
   const router = useRouter();
@@ -26,21 +25,19 @@ export const CellAction = ({ data }) => {
 
   const onCopy = (id) => {
     navigator.clipboard.writeText(id);
-    toast.success("Category Id copied to clipboard.");
+    toast.success("clientele Id copied to clipboard.");
   };
 
   const onDelete = async () => {
     try {
       setLoading(true);
       // Delete store
-      await axios.delete(`/api/${params.storeId}/categories/${data.id}`);
+      await axios.delete(`/api/clientele/${data.id}`);
       router.refresh();
 
-      toast.success("Category deleted successfully");
+      toast.success("Clientele deleted successfully");
     } catch (error) {
-      toast.error(
-        "Make sure you removed all products using this category first. ",
-      );
+      toast.error("Some error occurred. ");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -71,17 +68,17 @@ export const CellAction = ({ data }) => {
           {/* Update */}
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/dashboard/${params.storeId}/brands/${data.id}`)
+              router.push(`/dashboard/${params.storeId}/clientele/${data.id}`)
             }
           >
             <Edit className="mr-2 h-4 w-4" />
             Update
           </DropdownMenuItem>
 
-          <DropdownMenuItem onClick={() => setOpen(true)}>
+          {/* <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" />
             Delete
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

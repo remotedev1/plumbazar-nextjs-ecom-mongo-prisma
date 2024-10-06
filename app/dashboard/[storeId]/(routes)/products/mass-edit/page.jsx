@@ -34,7 +34,7 @@ const MassUpdateProducts = () => {
 
   // Debounce the search term
   const debouncedSearch = useDebounce(searchTerm, 500); // This will delay search by 500ms
-  const itemsPerPage = 20;
+  const itemsPerPage = 50;
 
   useEffect(() => {
     setIsMounted(true); // This ensures the component renders only on the client.
@@ -53,7 +53,7 @@ const MassUpdateProducts = () => {
         take: itemsPerPage,
       };
       const queryString = buildQueryString(filter);
-      const response = await axios.get(`/api/search-product?${queryString}`);
+      const response = await axios.get(`/api/search-product?${queryString}&fetchCount=true`);
       const { products, totalProducts } = response.data;
 
       setData(products);
@@ -103,7 +103,7 @@ const MassUpdateProducts = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-5 mt-24">
+    <div className="max-w-7xl mx-auto px-5 mt-24 pb-20">
       <div className="flex items-center justify-between">
         <Heading
           title={`Products (${data.length})`}

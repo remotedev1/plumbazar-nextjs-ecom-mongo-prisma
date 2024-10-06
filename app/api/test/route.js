@@ -1,54 +1,33 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
-import productsList from "./products.json";
 
-export async function GET(req, { params }) {
+export async function GET() {
+  console.log(" iran")
   try {
     const { user } = await auth();
     if (!user) {
       return new NextResponse("Unauthenticated", { status: 403 });
     }
 
-    if (!Array.isArray(productsList)) {
-      return new NextResponse("Invalid data format. Expected an array of products.", { status: 400 });
-    }
+    // Update products that match the conditions
+    const updatedProducts = await db.product.updateMany({
+      where: {
+        OR: [
+          { categoryId: "66fc13d4be3bfeeffa32aa06" }, // Category condition
+          { AND: [ { msp: 0 }, { mrp: 0 } ] } // MSP and MRP condition
+        ],
+      },
+      data: {
+        sellOnline: false
+      }
+    });
 
-    const createdProducts = [];
-
-    for (const productData of productsList) {
-      const {
-        name,
-        price,
-        purchasedPrice,
-        isFeatured,
-        isArchived,
-        brandId,
-        categoryId,
-        storeId,
-        images
-      } = productData;
-
-      const product = await db.product.create({
-        data: {
-          name,
-          price: Number(price),
-          purchasedPrice: Number(purchasedPrice),
-          isFeatured,
-          isArchived,
-          brandId,
-          categoryId,
-          storeId,
-          images,
-        },
-      });
-
-      createdProducts.push(product);
-    }
-
-    return NextResponse.json(createdProducts);
+    return NextResponse.json({ 
+      message: `${updatedProducts.count} products updated successfully.` 
+    });
   } catch (error) {
-    console.log("[PRODUCTS_POST]", error);
-    return new NextResponse("Internal error", { status: 500 });
+    console.log("[PRODUCT_UPDATE_ERROR]", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

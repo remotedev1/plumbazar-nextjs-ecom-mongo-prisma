@@ -48,8 +48,7 @@ const ProductCard = ({ data }) => {
             OFF
           </div>
         )}
-
-        <WishList product={data} />
+        {data.sellOnline && <WishList product={data} />}
       </div>
       <div className="px-1 w-full flex flex-col pl-2.5 justify-start space-y-2 pb-3">
         <h5 className="text-[10px] xs:text-xs md:text-lg font-semibold tracking-tight text-slate-900">

@@ -133,6 +133,7 @@ model Product {
   purchasedPrice Float?
   isFeatured     Boolean     @default(false)
   isArchived     Boolean     @default(false)
+  sellOnline     Boolean     @default(true)
   images         String[]
   reviews        Review[]
   globalRating   Int?
@@ -349,13 +350,10 @@ model Testimonial {
   updatedAt    DateTime @updatedAt
 }
 
-
-
-
 model Clientele {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   postedBy  String   @db.ObjectId
-  client  String   
+  name      String
   images    String[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
