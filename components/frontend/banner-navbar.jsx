@@ -21,7 +21,7 @@ const TopNavbar = () => {
           } lg:flex lg:items-center lg:justify-between  transition-all duration-300 ease-in-out text-sm overflow-hidden lg:opacity-100 lg:max-h-full px-3 py-5 lg:p-0`}
           >
           {/* Contact Information */}
-          <div className="space-y-4 lg:flex lg:space-y-0 lg:space-x-8 text-primary lg:text-secondary">
+          <div className="space-y-4 lg:flex lg:space-y-0 lg:space-x-8 text-primary lg:text-secondary pl-2">
             <div className="flex items-center space-x-2">
               <Phone className="w-4 h-4" />
               <span>123456789</span>

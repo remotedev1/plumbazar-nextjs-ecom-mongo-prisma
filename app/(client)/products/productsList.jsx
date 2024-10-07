@@ -8,11 +8,12 @@ import { useDebounce } from "@/hooks/useDebounce"; // Import the debounce hook
 import ProductCard from "@/components/frontend/product-card";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { useData } from "@/providers/data-provider";
 
-const ProductsList = ({ searchParams, brands, categories }) => {
+const ProductsList = ({ searchParams }) => {
+  const { brands, categories, loading, error } = useData();
   const [products, setProducts] = useState([]); // Products state
-  const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState(""); // Error state
+  const [loadingProducts, setLoadingProducts] = useState(null);
   const [skip, setSkip] = useState(0); // Pagination: how many products to skip
   const [take] = useState(10); // Pagination: how many products to take per request
   const [searchQuery, setSearchQuery] = useState(searchParams.query || ""); // Search query
@@ -38,8 +39,7 @@ const ProductsList = ({ searchParams, brands, categories }) => {
 
   // Function to fetch products from the API
   const fetchProducts = async (isLoadMore = false) => {
-    setLoading(true); // Set loading to true while fetching
-
+    setLoadingProducts(true);
     try {
       const filter = {
         query: debouncedSearch, // Use debounced search query
@@ -69,7 +69,7 @@ const ProductsList = ({ searchParams, brands, categories }) => {
       setError("Error fetching products");
       console.error("Error fetching products:", err);
     } finally {
-      setLoading(false); // Set loading to false when done
+      setLoadingProducts(false);
     }
   };
 
@@ -105,17 +105,6 @@ const ProductsList = ({ searchParams, brands, categories }) => {
     fetchProducts(true); // Fetch products with the "load more" flag
   };
 
-  // If loading, display a spinner
-  if (loading && !products.length) {
-    return (
-      <section className="py-14 relative overflow-x-hidden min-h-[80vh]">
-        <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
-          <FaSpinner className="w-10 h-10 mx-auto text-black animate-spin" />
-        </div>
-      </section>
-    );
-  }
-
   return (
     <section className="py-8 overflow-x-hidden">
       <div className="w-full  mx-auto px-4 md:px-8 flex flex-col md:flex-row gap-4">
@@ -128,7 +117,7 @@ const ProductsList = ({ searchParams, brands, categories }) => {
             <div className="border-2 focus-within:border-gray-400 rounded-full px-6 py-3 flex">
               <input
                 type="text"
-                placeholder="Search something..."
+                placeholder="Search list"
                 className="w-full text-sm bg-transparent outline-none pr-2"
                 value={searchQuery}
                 onChange={handleSearchInputChange}
@@ -163,7 +152,7 @@ const ProductsList = ({ searchParams, brands, categories }) => {
                   onChange={handleBrandChange}
                   className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
                 >
-                  <option disabled>Select Brand</option>
+                  <option selected>Select Brand</option>
                   {/* Map through brand options */}
                   {brands.map((brand) => (
                     <option key={brand.name} value={brand.name}>
@@ -189,7 +178,7 @@ const ProductsList = ({ searchParams, brands, categories }) => {
                   onChange={handleCategoryChange}
                   className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
                 >
-                  <option disabled>Select Category</option>
+                  <option selected>Select Category</option>
                   {/* Map through category options */}
                   {categories.map((category) => (
                     <option key={category.name} value={category.name}>
@@ -204,9 +193,9 @@ const ProductsList = ({ searchParams, brands, categories }) => {
         {/* //mobile view */}
         <div className="md:hidden mx-auto ">
           <Drawer>
-            <DrawerTrigger  asChild>
+            <DrawerTrigger asChild>
               <Button variant="outline">Open filter</Button>
-            </DrawerTrigger >
+            </DrawerTrigger>
             <DrawerContent className="h-[80vh] w-full bg-primary/30 shadow-2xl">
               <div className="w-[80vw] mx-auto mt-4">
                 <div className=" rounded-xl  bg-white p-3 w-full md:max-w-sm">
@@ -295,11 +284,11 @@ const ProductsList = ({ searchParams, brands, categories }) => {
 
         <div className="flex-1">
           {/* Main content: Products List */}
-          {products.length === 0 && !loading ? (
+          {products.length === 0 && !loadingProducts ? (
             <NoResults />
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2">
-              {loading && products.length === 0
+              {loadingProducts && products.length === 0
                 ? [...Array(10).keys()].map((i) => <SkeletonCard key={i} />)
                 : products.map((product) => (
                     <ProductCard key={product.id} data={product} />
@@ -308,14 +297,18 @@ const ProductsList = ({ searchParams, brands, categories }) => {
           )}
           {/* Load More Button */}
           {hasMore && products.length > 0 && (
-            <div className="mt-10 text-center">
-              <button
-                onClick={handleLoadMore}
-                className="btn btn-outline bg-primary w-44 text-white p-4 rounded-sm shadow-sm"
-                disabled={loading}
-              >
-                {loading ? <FaSpinner className="animate-spin" /> : "Load More"}
-              </button>
+            <div className="mt-10 text-center flex justify-center">
+              {loadingProducts ? (
+                <FaSpinner className="animate-spin" />
+              ) : (
+                <button
+                  onClick={handleLoadMore}
+                  className="btn btn-outline bg-primary w-44 text-white p-4 rounded-sm shadow-sm"
+                  disabled={loading}
+                >
+                  Load More
+                </button>
+              )}
             </div>
           )}
         </div>

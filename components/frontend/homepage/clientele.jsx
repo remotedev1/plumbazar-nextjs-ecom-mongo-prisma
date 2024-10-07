@@ -2,15 +2,14 @@
 import Image from "next/image";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { responsiveCategoriesCarousel } from "@/lib/variables";
+import { responsiveClienteleCarousel } from "@/lib/variables";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useData } from "@/providers/data-provider";
-import Link from "next/link";
 
-const CategoryList = () => {
-  const { categories, loading, error } = useData();
+const ClienteleList = () => {
+  const { clientele, loading, error } = useData();
   const CustomButtonGroupAsArrows = ({
     next,
     previous,
@@ -46,19 +45,19 @@ const CategoryList = () => {
     <div className="relative px-6 py-8">
       <div className="flex flex-col items-start space-y-4 mb-8">
         <h2 className="text-md md:text-3xl font-bold text-left ">
-          Shop by Categories
+          Our clients
         </h2>
       </div>
       <div className="w-[90vw] mx-auto">
         <Carousel
           showDots={false}
-          responsive={responsiveCategoriesCarousel}
+          responsive={responsiveClienteleCarousel}
           swipeable
           minimumTouchDrag={80}
           arrows={false}
           renderButtonGroupOutside={true}
           autoPlay
-          autoPlaySpeed={4000}
+          autoPlaySpeed={3000}
           shouldResetAutoplay
           pauseOnHover
           infinite
@@ -66,29 +65,22 @@ const CategoryList = () => {
           itemClass="p-1"
           centerMode={false}
         >
-          {categories.map((category, index) => (
-            <Link
-              key={index}
-              href={`/products?category=${encodeURIComponent(category.name)}`}
-              passHref
-            >
-              <div className="flex flex-col items-center">
-                <div className="w-16 h-16 md:w-28 md:h-28 rounded-md overflow-hidden relative">
-                  <Image
-                    // TODO
-                    src={category.images[0]}
-                    alt={category.name}
-                    layout="fill"
-                    objectFit="cover"
-                    quality={100}
-                    className="rounded-md"
-                  />
-                </div>
-                <span className="mt-2 text-center font-semibold">
-                  {category.name}
-                </span>
+          {clientele.map((client, index) => (
+            <div className="flex flex-col items-center" key={index}>
+              <div className="w-16 h-16 md:w-28 md:h-28 rounded-md overflow-hidden relative">
+                <Image
+                  src={client.images[0]}
+                  alt={client.name}
+                  layout="fill"
+                  objectFit="cover"
+                  quality={100}
+                  className="rounded-md"
+                />
               </div>
-            </Link>
+              <span className="mt-2 text-center font-semibold">
+                {client.name}
+              </span>
+            </div>
           ))}
         </Carousel>
       </div>
@@ -96,4 +88,4 @@ const CategoryList = () => {
   );
 };
 
-export default CategoryList;
+export default ClienteleList;

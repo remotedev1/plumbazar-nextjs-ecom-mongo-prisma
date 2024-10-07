@@ -7,6 +7,7 @@ import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useData } from "@/providers/data-provider";
+import Link from "next/link";
 
 const BrandList = () => {
   const { brands, loading, error } = useData();
@@ -43,12 +44,12 @@ const BrandList = () => {
   return (
     <div className="relative  px-6 py-8">
       <div className="flex flex-col items-start space-y-4 mb-8">
-        <h2 className="text-xl md:text-3xl font-bold text-left ">
+        <h2 className="text-md md:text-3xl font-bold text-left ">
           Shop by Brands
         </h2>
       </div>
 
-      <div className="w-[95vw] mx-auto">
+      <div className="w-[90vw] mx-auto">
         <Carousel
           showDots={false}
           responsive={responsiveBrandsCarousel}
@@ -62,25 +63,31 @@ const BrandList = () => {
           shouldResetAutoplay
           pauseOnHover
           infinite
-          additionalTransfrom={0}
-          itemClass="p-2"
-          centerMode={true}
+          additionalTransform={0}
+          itemClass="p-1"
+          centerMode={false}
         >
           {brands.map((brand, index) => (
-            <div className="flex flex-col items-center" key={index}>
-              <div className="w-16 h-16 md:w-24 md:h-20 rounded-md overflow-hidden relative">
-                <Image
-                  src={brand.images[0]}
-                  alt={brand.name}
-                  layout="fill"
-                  quality={100}
-                  className="rounded-md object-fill object-center"
-                />
+            <Link
+              key={index}
+              href={`/products?brand=${encodeURIComponent(brand.name)}`}
+              passHref
+            >
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 md:w-24 md:h-20 rounded-md overflow-hidden relative">
+                  <Image
+                    src={brand.images[0]}
+                    alt={brand.name}
+                    layout="fill"
+                    quality={100}
+                    className="rounded-md object-contain object-center"
+                  />
+                </div>
+                <span className="mt-2 text-center text-xs md:text-md font-semibold">
+                  {brand.name}
+                </span>
               </div>
-              <span className="mt-2 text-center text-sm md:text-md font-semibold">
-                {brand.name}
-              </span>
-            </div>
+            </Link>
           ))}
         </Carousel>
       </div>

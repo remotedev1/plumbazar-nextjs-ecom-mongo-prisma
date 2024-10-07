@@ -55,6 +55,12 @@ const ProductCard = ({ data }) => {
           {data.name}
         </h5>
 
+        <div className="flex items-start flex-wrap leading-none  ">
+          <span className="flex w-full text-sm md:text-base">
+            Brand: {data?.brand?.name}
+          </span>
+        </div>
+
         <div className=" flex items-start flex-wrap leading-none text-red-600  font-bold ">
           <span className="flex w-full text-sm md:text-base">
             <Currency value={discountAmount} />
@@ -71,17 +77,21 @@ const ProductCard = ({ data }) => {
             <Currency value={discountAmount + gstAmount} /> incl. GST
           </span>
         </div> */}
-        <div className="md:mt-1.5  text-[10px] md:text-base uppercase text-gray-500 ">
-          <span className="">mrp</span>
-          <span className="ml-1 font-normal">
-            <Currency value={data?.mrp} lineThrough={true} />
-          </span>
-          {discountPercentage > 0 && (
-            <span className="text-red-600 text-xs font-medium px-1 italic uppercase ">
-              ({discountPercentage} % OFF)
+
+        {data.mrp > data.msp && (
+          <div className="md:mt-1.5 text-[10px] md:text-base uppercase text-gray-500">
+            <span className="">mrp</span>
+            <span className="ml-1 font-normal">
+              <Currency value={data?.mrp} lineThrough={true} />
             </span>
-          )}
-        </div>
+            {discountPercentage > 0 && (
+              <span className="text-red-600 text-xs font-medium px-1 italic uppercase">
+                ({discountPercentage} % OFF)
+              </span>
+            )}
+          </div>
+        )}
+
         {/* <div className="mt-2.5 mb-5 flex items-center">
           <span className="mr-2 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">
             5.0

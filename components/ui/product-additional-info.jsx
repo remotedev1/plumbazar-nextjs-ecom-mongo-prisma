@@ -10,7 +10,7 @@ const ProductAdditionalInfo = ({ data }) => {
   return (
     <div>
       <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-1">
+        {/* <AccordionItem value="item-1">
           <AccordionTrigger className="hover:text-[#007bff] !no-underline">
             CORE FEATURES
           </AccordionTrigger>
@@ -25,7 +25,7 @@ const ProductAdditionalInfo = ({ data }) => {
               </ul>
             </div>
           </AccordionContent>
-        </AccordionItem>
+        </AccordionItem> */}
         <AccordionItem value="item-2">
           <AccordionTrigger className="hover:text-[#007bff] !no-underline">
             DESCRIPTION
@@ -39,7 +39,7 @@ const ProductAdditionalInfo = ({ data }) => {
             </div>
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="item-3">
+        {/* <AccordionItem value="item-3">
           <AccordionTrigger className="hover:text-[#007bff] !no-underline">
             SHIPPING & RETURNS
           </AccordionTrigger>
@@ -66,7 +66,7 @@ const ProductAdditionalInfo = ({ data }) => {
               </div>
             </div>
           </AccordionContent>
-        </AccordionItem>
+        </AccordionItem> */}
       </Accordion>
     </div>
   );

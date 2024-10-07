@@ -102,7 +102,7 @@ const ProductCarousel = ({ title, filter }) => {
         <h2 className="text-xl md:text-3xl font-bold text-left ">{title}</h2>
       </div>
 
-      <div className="w-[95vw] mx-auto">
+      <div className="w-[90vw] mx-auto">
         {/* Carousel Component */}
         <Carousel
           showDots={false}

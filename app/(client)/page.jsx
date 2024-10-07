@@ -4,6 +4,7 @@ import { Testimonials } from "@/components/frontend/Testimonials";
 import Billboard from "@/components/frontend/homepage/billboard";
 import BrandList from "@/components/frontend/homepage/brands";
 import CategoryList from "@/components/frontend/homepage/categories";
+import ClienteleList from "@/components/frontend/homepage/clientele";
 import OurServices from "@/components/frontend/homepage/our-services";
 import { PartnerProgram } from "@/components/frontend/homepage/partner-program";
 import { WhyChooseUs } from "@/components/frontend/homepage/why-choose-us";
@@ -25,18 +26,13 @@ export default async function Home() {
         </span>
         <OurServices />
         <WhyChooseUs />
-      
+
         <ProductCarousel
           title={"Jaquar Products"}
           filter={{ brand: "jaquar" }}
         />
-          <span className="w-full bg-gray-50 ">
-          <ProductCarousel
-            title={"Bathroom Products"}
-            filter={{ category: "tap" }}
-          />
-        </span>
-        <PartnerProgram/>
+        <ClienteleList />
+        <PartnerProgram />
         <Testimonials />
       </div>
     </main>

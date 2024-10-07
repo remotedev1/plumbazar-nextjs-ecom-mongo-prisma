@@ -7,6 +7,11 @@ const Info = ({ data }) => {
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-900">{data.name}</h1>
+      <div className="flex items-start flex-wrap leading-none  ">
+        <span className="flex w-full text-sm md:text-base">
+          Brand: {data?.brand?.name}
+        </span>
+      </div>
 
       <div className="flex flex-col gap-y-6">
         <div className=" flex items-start flex-wrap leading-none text-red-600  font-bold ">
