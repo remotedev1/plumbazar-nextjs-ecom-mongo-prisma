@@ -51,7 +51,9 @@ const ProductsList = ({ searchParams }) => {
 
       // Build the query string and make the API request
       const queryString = buildQueryString(filter);
-      const response = await axios.get(`/api/search-product?${queryString}`);
+      const response = await axios.get(
+        `/api/search-product?${queryString}&fetchCount=true`
+      );
 
       const { products: fetchedProducts, hasMore: apiHasMore } = response.data;
 
@@ -66,7 +68,6 @@ const ProductsList = ({ searchParams }) => {
       // Update hasMore state based on API response
       setHasMore(apiHasMore);
     } catch (err) {
-      setError("Error fetching products");
       console.error("Error fetching products:", err);
     } finally {
       setLoadingProducts(false);
@@ -100,7 +101,41 @@ const ProductsList = ({ searchParams }) => {
     setSelectedCategory("");
   };
 
-  // Load more products
+  // Infinite scrolling logic with debounce
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      const windowHeight = window.innerHeight;
+      const fullHeight = document.documentElement.offsetHeight;
+
+      // Check if user has scrolled within 200px of the bottom
+      if (
+        fullHeight - (scrollTop + windowHeight) < 200 &&
+        hasMore &&
+        !loadingProducts
+      ) {
+        handleLoadMore(); // Call load more when within 200px of the bottom
+      }
+    };
+
+    const debounceScroll = () => {
+      let timer;
+      return function () {
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => handleScroll(), 100); // Debounce with 100ms
+      };
+    };
+
+    const handleDebouncedScroll = debounceScroll();
+
+    window.addEventListener("scroll", handleDebouncedScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleDebouncedScroll); // Cleanup
+    };
+  }, [hasMore, loadingProducts]);
+
   const handleLoadMore = () => {
     fetchProducts(true); // Fetch products with the "load more" flag
   };
@@ -151,6 +186,7 @@ const ProductsList = ({ searchParams }) => {
                   value={selectedBrand}
                   onChange={handleBrandChange}
                   className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
+                  disabled={!!selectedCategory}
                 >
                   <option selected>Select Brand</option>
                   {/* Map through brand options */}
@@ -177,6 +213,7 @@ const ProductsList = ({ searchParams }) => {
                   value={selectedCategory}
                   onChange={handleCategoryChange}
                   className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
+                  disabled={!!selectedBrand}
                 >
                   <option selected>Select Category</option>
                   {/* Map through category options */}
@@ -240,7 +277,7 @@ const ProductsList = ({ searchParams }) => {
                         onChange={handleBrandChange}
                         className=" border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full  p-2 bg-white"
                       >
-                        <option disabled>Select Brand</option>
+                        <option value="">Select Brand</option>
                         {/* Map through brand options */}
                         {brands.map((brand) => (
                           <option key={brand.name} value={brand.name}>
@@ -266,7 +303,7 @@ const ProductsList = ({ searchParams }) => {
                         onChange={handleCategoryChange}
                         className=" border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
                       >
-                        <option disabled>Select Category</option>
+                        <option value="">Select Category</option>
                         {/* Map through category options */}
                         {categories.map((category) => (
                           <option key={category.name} value={category.name}>

@@ -26,7 +26,7 @@ const Billboard = ({ data }) => {
         showDots={false}
         swipeable
         minimumTouchDrag={80}
-        arrows={false}
+        arrows={true}
         autoPlay
         autoPlaySpeed={5000}
         shouldResetAutoplay
@@ -39,7 +39,7 @@ const Billboard = ({ data }) => {
         {billboardData.map((item, index) => (
           <div
             key={index}
-            className="relative h-[30vh] sm:h-[50vh] lg:h-[90vh] w-full"
+            className="relative h-[20vh] md:h-[40vh] lg:h-[80vh] w-full"
           >
             {/* Wrapper div to maintain aspect ratio */}
             <Link href={item.action} className="w-full h-full">
@@ -49,8 +49,7 @@ const Billboard = ({ data }) => {
                   alt={`Banner ${index + 1}`}
                   fill
                   priority={true} // Priority loading for the first images
-                  quality={100}
-                  className="object-cover object-center"
+                  className="object-contain object-center"
                 />
               </div>
             </Link>
@@ -58,16 +57,7 @@ const Billboard = ({ data }) => {
         ))}
       </Carousel>
 
-      {/* SVG wave effect */}
-      <div className="absolute -bottom-8 left-0 right-0">
-        <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
-          <path
-            fill="#ffffff"
-            fillOpacity="1"
-            d="M0,160L80,170.7C160,181,320,203,480,208C640,213,800,203,960,181.3C1120,160,1280,128,1360,112L1440,96V320H1360C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320H0Z"
-          ></path>
-        </svg>
-      </div>
+     
     </div>
   );
 };

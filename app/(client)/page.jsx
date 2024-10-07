@@ -20,17 +20,18 @@ export default async function Home() {
     <main className="flex   overflow-hidden min-h-dvh flex-col items-center justify-between  text-black">
       <div className="flex w-full flex-col">
         <Billboard data={billboard} />
-        <CategoryList />
-        <span className="w-full bg-gray-50">
-          <BrandList data={brands} />
+        <span className="w-full bg-gray-50 py-5">
+          <CategoryList />
         </span>
+        <BrandList data={brands} />
+
         <OurServices />
         <WhyChooseUs />
 
-        <ProductCarousel
+        {/* <ProductCarousel
           title={"Jaquar Products"}
           filter={{ brand: "jaquar" }}
-        />
+        /> */}
         <ClienteleList />
         <PartnerProgram />
         <Testimonials />

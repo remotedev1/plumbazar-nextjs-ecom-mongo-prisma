@@ -21,7 +21,7 @@ export default async function RootLayout({ children, params: { locale } }) {
         <body className={font.className}>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >
