@@ -24,15 +24,15 @@ const TopNavbar = () => {
           <div className="space-y-4 lg:flex lg:space-y-0 lg:space-x-8 text-primary lg:text-secondary pl-2">
             <div className="flex items-center space-x-2">
               <Phone className="w-4 h-4" />
-              <span>123456789</span>
+              <span>6366019800</span>
             </div>
             <div className="flex items-center space-x-2">
               <Mail className="w-4 h-4" />
-              <span>support@plumbit.com</span>
+              <span>enquiry@plumbazar.com</span>
             </div>
             <div className="flex items-center space-x-2">
               <Clock className="w-4 h-4" />
-              <span>Mon-Fri 8am - 5pm</span>
+              <span>Mon-Fri 9am - 7pm</span>
             </div>
           </div>
 

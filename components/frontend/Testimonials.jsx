@@ -7,7 +7,6 @@ import { useData } from "@/providers/data-provider";
 
 export const Testimonials = () => {
   const { testimonials, loading, error } = useData();
-
   return (
     <div className="min-w-screen flex items-center justify-center py-8 md:py-16">
       <Container>
@@ -24,12 +23,12 @@ export const Testimonials = () => {
               Loading testimonials...
             </div>
           ) : (
-            <div className="max-w-[85vw]">
+            <div className="max-w-[95vw]">
               <Carousel
                 responsive={responsiveTestimonialsCarousel}
                 swipeable
                 autoPlay
-                autoPlaySpeed={3000}
+                autoPlaySpeed={5000}
                 pauseOnHover
                 infinite
                 itemClass="p-2"
@@ -59,8 +58,8 @@ export const Testimonials = () => {
                             {d.name}
                           </div>
                           <div>
-                            {" "}
-                            {d.organization}, {d.designation}{" "}
+                            {d.organization},{" "}
+                            {d.designation !== "undefined" && d.designation}
                           </div>
                         </div>
                       </div>

@@ -43,11 +43,9 @@ const ClienteleList = () => {
 
   return (
     <div className="relative px-6 py-8">
-      <div className="flex flex-col items-start space-y-4 mb-8">
-        <h2 className="text-md md:text-3xl font-bold text-left ">
-          Our clients
-        </h2>
-      </div>
+      <h1 className="text-2xl md:text-5xl font-bold mb-8 text-gray-600 text-center ">
+        Our clients
+      </h1>
       <div className="w-[90vw] mx-auto">
         <Carousel
           showDots={false}

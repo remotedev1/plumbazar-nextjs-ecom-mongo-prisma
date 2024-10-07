@@ -48,7 +48,9 @@ const CartItem = ({ data, remove = true }) => {
         </div>
         <div className="relative pr-9 sm:grid sm:gap-x-6 sm:pr-0">
           <div>
-            <p className="text-lg font-semibold text-black">{data.name}</p>
+            <p className="text-sm md:text-lg font-semibold text-black">
+              {data.name}
+            </p>
 
             <h5 className="flex justify-between items-center">
               <span>Unit cost:</span>

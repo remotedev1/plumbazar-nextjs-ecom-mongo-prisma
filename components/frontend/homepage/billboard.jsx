@@ -51,7 +51,6 @@ const Billboard = ({ data }) => {
                   priority={true} // Priority loading for the first images
                   quality={100}
                   className="object-cover object-center"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Responsive sizing for better image loading
                 />
               </div>
             </Link>
