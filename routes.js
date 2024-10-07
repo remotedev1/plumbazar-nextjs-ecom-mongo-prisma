@@ -16,6 +16,12 @@ export const publicRoutes = [
   "/api/brands",
   "/api/categories",
   "/api/testimonials",
+  "/api/clientele",
+  "/privacy-policy",
+  "/refund-and-cancel",
+  "/return-policy",
+  "/terms-and-conditions",
+  "/shipping-policy"
 ];
 
 /**
