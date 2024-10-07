@@ -28,24 +28,24 @@ const OrdersPage = async () => {
 
   const formattedOrders = orders.map((item) => ({
     id: item.isPaid.valueOf() ? item.id : `${item.id} (Unpaid)`,
-
+    deliveryStatus: item.deliveryStatus,
     phone: item.phone,
     address: item.address,
     products: item.orderItems
       .map((orderItem) => orderItem.product.name)
       .join(", "),
-    totalPrice: rupeeFormatter.format(
-      item.orderItems.reduce((total, item) => {
-        return total + (Number(item.msp) * Number(item.quantity));
-      }, 0)
-    ),
+    totalPrice: rupeeFormatter.format(item.total),
     isPaid: item.isPaid,
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
   }));
 
   return (
     <div className="flex-col">
-      <OrderClient data={formattedOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))} />
+      <OrderClient
+        data={formattedOrders.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        )}
+      />
     </div>
   );
 };

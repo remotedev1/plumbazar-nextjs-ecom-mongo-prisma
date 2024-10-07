@@ -37,16 +37,22 @@ export async function PATCH(req, { params }) {
     });
 
     // Map through each product and update the purchasePrice of the corresponding orderItem
-    const updatedItems = products.map((product) => {
+    const updatedItems = products.map(async (product) => {
       const existingOrderItem = order.orderItems.find(
         (orderItem) => orderItem.productId === product.id
       );
 
       if (existingOrderItem) {
         // Update purchasePrice for the existing item
-        return db.orderItem.update({
+        await db.orderItem.update({
           where: { id: existingOrderItem.id },
           data: { purchasePrice: product.purchasedPrice }, // Update with product's purchase price
+        });
+
+        // Reduce the product stock by the quantity of the order item
+        await db.product.update({
+          where: { id: product.id },
+          data: { stock: product.stock - existingOrderItem.quantity }, // Reduce stock
         });
       }
     });
@@ -67,12 +73,6 @@ export async function PATCH(req, { params }) {
     return NextResponse.json(updatedOrder);
   } catch (error) {
     console.log("[ORDER_PATCH]", error);
-
-    // Handle specific database errors if needed (e.g., if the order does not exist)
-    if (error.code === "P2025") {
-      return new NextResponse("Order not found", { status: 404 });
-    }
-
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

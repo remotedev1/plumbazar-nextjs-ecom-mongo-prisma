@@ -70,8 +70,8 @@ const OrderSummary = async ({ params }) => {
                         </p>
                       </div>
                     </div>
-                    <div className="grid grid-cols-7">
-                      <div className="col-span-5 lg:col-span-1 flex items-center max-lg:mt-3">
+                    <div className="grid grid-cols-6">
+                      <div className="col-span-5 lg:col-span-2 flex items-center max-lg:mt-3">
                         <div className="flex gap-3 lg:block">
                           <p className="font-medium text-sm leading-7 text-black">
                             price
@@ -101,7 +101,7 @@ const OrderSummary = async ({ params }) => {
                           </p>
                         </div>
                       </div>
-                      <div className="col-span-5 lg:col-span-2 flex items-center max-lg:mt-3">
+                      {/* <div className="col-span-5 lg:col-span-2 flex items-center max-lg:mt-3">
                         <div className="flex gap-3 lg:block">
                           <p className="font-medium text-sm whitespace-nowrap leading-6 text-black">
                             Expected Delivery Time
@@ -110,7 +110,7 @@ const OrderSummary = async ({ params }) => {
                             23rd March 2021
                           </p>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -137,9 +137,9 @@ const OrderSummary = async ({ params }) => {
                 </svg>
                 Cancel Order
               </button>
-              <p className="font-medium text-lg text-gray-900 pl-6 py-3 max-lg:text-center">
+              {/* <p className="font-medium text-lg text-gray-900 pl-6 py-3 max-lg:text-center">
                 Cash on Delivery
-              </p>
+              </p> */}
             </div>
             <span className="flex font-semibold text-lg text-black py-6">
               Total Price : &nbsp;

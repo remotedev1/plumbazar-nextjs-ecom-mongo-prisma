@@ -69,10 +69,8 @@ export async function GET(req) {
       totalProducts = await db.product.count({
         where: filters,
       });
-    console.log(totalProducts)
-
+      console.log(totalProducts);
     }
-
 
     // Fetch products with pagination
     const products = await db.product.findMany({

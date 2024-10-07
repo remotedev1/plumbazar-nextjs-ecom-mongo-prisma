@@ -56,11 +56,7 @@ const OrdersPage = async ({ params }) => {
     products: item.orderItems
       .map((orderItem) => orderItem.product.name)
       .join(", "),
-    totalPrice: rupeeFormatter.format(
-      item.orderItems.reduce((total, item) => {
-        return total + Number(item.msp) * Number(item.quantity);
-      }, 0)
-    ),
+    totalPrice: rupeeFormatter.format(item.total),
     isPaid: item.isPaid,
     deliveryStatus: item.deliveryStatus,
     createdAt: format(item.createdAt, "MMMM do, yyyy"),

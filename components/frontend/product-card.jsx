@@ -60,12 +60,13 @@ const ProductCard = ({ data }) => {
             Brand: {data?.brand?.name}
           </span>
         </div>
-
-        <div className=" flex items-start flex-wrap leading-none text-red-600  font-bold ">
-          <span className="flex w-full text-sm md:text-base">
-            <Currency value={discountAmount} />
-          </span>
-        </div>
+        {data.msp > 0 && (
+          <div className=" flex items-start flex-wrap leading-none text-red-600  font-bold ">
+            <span className="flex w-full text-sm md:text-base">
+              <Currency value={discountAmount} />
+            </span>
+          </div>
+        )}
         {/* <div className="md:mt-1.5  text-[10px] md:text-base uppercase text-gray-500 flex flex-col">
           {!noOffer && (
             <span className="font-normal">

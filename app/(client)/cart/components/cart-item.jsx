@@ -28,7 +28,6 @@ const CartItem = ({ data, remove = true }) => {
 
   const total = (msp + (msp * gst) / 100) * quantity;
 
-  console.log(data);
 
   return (
     <li className="flex py-6 border-b">

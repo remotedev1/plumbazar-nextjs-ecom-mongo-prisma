@@ -29,7 +29,7 @@ export const Summary = () => {
       </div>
       <Button
         onClick={() => router.push("/checkout")}
-        disabled={items.length === 0}
+        disabled={isNaN(total)}
         className="w-full mt-6"
       >
         Checkout

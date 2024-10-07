@@ -53,7 +53,7 @@ export const columns = [
   },
   {
     accessorKey: "isPaid",
-    header: "Status",
+    header: "Payment",
     cell: ({ row }) => {
       const order = row.original;
 
@@ -65,10 +65,14 @@ export const columns = [
             }`}
             aria-hidden="true"
           />
-          {order.isPaid ? "Successful" : "Processing"}
+          {order.isPaid ? "paid" : "not paid"}
         </div>
       );
     },
+  },
+  {
+    accessorKey: "deliveryStatus",
+    header: "status",
   },
   {
     id: "actions",

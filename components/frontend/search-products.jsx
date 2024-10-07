@@ -26,7 +26,6 @@ export const SearchProducts = ({ params }) => {
   // Debounced search value
   const debouncedSearch = useDebounce(searchQuery, 500);
 
-
   const fetchProducts = useCallback(async () => {
     if (debouncedSearch) {
       try {
@@ -64,7 +63,6 @@ export const SearchProducts = ({ params }) => {
     router.push(`/products/${id}`);
     setIsOpen(false); // Close the modal after navigation
   };
-
 
   return (
     <div className="w-full max-w-md max-h-[80vh]">
@@ -121,7 +119,7 @@ export const SearchProducts = ({ params }) => {
                       </span>
                       <div className=" flex items-start flex-wrap leading-none text-red-600  font-bold ">
                         <span className="flex w-full text-sm md:text-base">
-                          <Currency value={product?.price} />
+                          <Currency value={product?.msp} />
                         </span>
                       </div>
                       {/* View Product Button */}
