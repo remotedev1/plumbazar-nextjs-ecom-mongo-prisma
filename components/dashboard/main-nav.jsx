@@ -47,7 +47,7 @@ export function MainNav({ className, ...props }) {
     },
     {
       href: `/dashboard/${params.storeId}/products/mass-edit`,
-      label: "mass edit",
+      label: "Mass-edit",
       active: pathname === `/dashboard/${params.storeId}/products/mass-edit`,
     },
     {
@@ -84,7 +84,7 @@ export function MainNav({ className, ...props }) {
 
   return (
     <nav
-      className={cn("flex items-center space-x-4 lg:space-x-6 ml-6", className)}
+      className={cn("flex items-center space-x-2 ml-6", className)}
       {...props}
     >
       {routes.map((route) => (

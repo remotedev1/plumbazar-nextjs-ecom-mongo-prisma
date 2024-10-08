@@ -27,7 +27,7 @@ const BillboardClient = ({ data }) => {
         </Button>
       </div>
       <Separator />
-      <DataTable searchKey="label" columns={columns} data={data} />
+      <DataTable  columns={columns} data={data} />
       {/* <Heading
         title="API"
         description="API calls for Billboards. You can also use the endpoints to get the billboards of a specific store."

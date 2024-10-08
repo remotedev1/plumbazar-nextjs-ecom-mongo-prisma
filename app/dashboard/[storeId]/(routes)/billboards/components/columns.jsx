@@ -4,7 +4,6 @@ import Image from "next/image";
 import { CellAction } from "./cell-action";
 
 export const columns = [
- 
   {
     accessorKey: "action",
     header: "Action",

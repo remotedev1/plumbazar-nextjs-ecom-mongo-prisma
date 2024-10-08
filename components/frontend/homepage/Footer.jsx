@@ -6,6 +6,7 @@ const Footer = () => {
   const [contactForm, setContactForm] = useState({
     name: "",
     email: "",
+    phone: "",
     message: "",
   });
 
@@ -20,13 +21,6 @@ const Footer = () => {
     setSubscribeEmail(e.target.value);
   };
 
-  const handleSubmitContact = (e) => {
-    e.preventDefault();
-    // Handle contact form submission
-    console.log(contactForm);
-    // Reset form after submission
-    setContactForm({ name: "", email: "", message: "" });
-  };
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -36,11 +30,20 @@ const Footer = () => {
     setSubscribeEmail("");
   };
 
+  const handleSubmitContact = async (e) => {
+    e.preventDefault();
+  
+    // Call the SendContactForm function with form data
+  
+    // Reset the form after submission
+    setContactForm({ name: "", email: "", message: "" });
+  };
+
   return (
     <div className="bg-gray-900 ">
       <div className="px-4 pt-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
         <div className="grid row-gap-10 mb-8 lg:grid-cols-4">
-          <div className="grid grid-cols-2 gap-5 row-gap-8 lg:col-span-4 md:grid-cols-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:col-span-4 ">
             {/* Resources Links */}
             <div>
               <p className="font-medium tracking-wide text-gray-300">
@@ -170,6 +173,15 @@ const Footer = () => {
                   value={contactForm.email}
                   onChange={handleContactChange}
                   placeholder="Your Email"
+                  required
+                  className="w-full p-2 border border-gray-700 rounded bg-gray-800 text-gray-200"
+                />
+                <input
+                  type="tel"
+                  name="phone"
+                  value={contactForm.phone}
+                  onChange={handleContactChange}
+                  placeholder="Your Phone"
                   required
                   className="w-full p-2 border border-gray-700 rounded bg-gray-800 text-gray-200"
                 />

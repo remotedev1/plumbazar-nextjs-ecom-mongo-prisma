@@ -15,7 +15,7 @@ const ProductsList = ({ searchParams }) => {
   const [products, setProducts] = useState([]); // Products state
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [skip, setSkip] = useState(0); // Pagination: how many products to skip
-  const [take] = useState(10); // Pagination: how many products to take per request
+  const [take] = useState(20); // Pagination: how many products to take per request
   const [searchQuery, setSearchQuery] = useState(searchParams.query || ""); // Search query
   const [selectedBrand, setSelectedBrand] = useState(searchParams.brand || ""); // Selected brand
   const [selectedCategory, setSelectedCategory] = useState(
@@ -94,7 +94,6 @@ const ProductsList = ({ searchParams }) => {
   // Handle category filter change
   const handleCategoryChange = (e) => {
     setProducts([]);
-
     setSelectedCategory(e.target.value);
   };
 

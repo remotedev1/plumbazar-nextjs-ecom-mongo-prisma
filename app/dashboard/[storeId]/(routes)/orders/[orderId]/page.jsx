@@ -86,7 +86,7 @@ const OrderDetails = async ({ params }) => {
                 Payment : &nbsp; <ChangePaymentStatus order={order} />
               </div>
               <div className=" flex font-semibold text-base leading-7 text-black mt-4">
-                Delivery status : &nbsp; <ChangeDeliveryStatus order={order} />
+                Delivery status : &nbsp;  <span className="text-red-500">({order.deliveryStatus})</span>  &nbsp;  <ChangeDeliveryStatus order={order} />
               </div>
             </div>
           </div>
@@ -177,7 +177,7 @@ const OrderDetails = async ({ params }) => {
                 Cancel Order
               </button>
               <p className="font-medium text-lg text-gray-900 pl-6 py-3 max-lg:text-center">
-                Cash on Delivery
+                {order?.payment?.type}
               </p>
             </div>
             <div className="flex font-semibold text-lg text-black py-6">

@@ -111,17 +111,13 @@ export async function PATCH(req, { params }) {
 export async function DELETE(req, { params }) {
   try {
     const { user } = await auth();
-    if (user.role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
-    if (!params.billboardId) {
-      return new NextResponse("Billboard ID is Required", { status: 400 });
-    }
+    // if (user.role !== "SUPERADMIN") {
+    //   return new NextResponse("Unauthorized", { status: 401 });
+    // }
 
     const billboard = await db.billboard.findUnique({
       where: {
-        id: params.brandId,
+        id: params.billboardId,
       },
     });
 

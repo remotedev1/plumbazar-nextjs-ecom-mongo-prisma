@@ -1,4 +1,7 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Carousel from "react-multi-carousel";
@@ -19,6 +22,36 @@ const Billboard = ({ data }) => {
     },
   };
 
+  const CustomButtonGroupAsArrows = ({
+    next,
+    previous,
+    goToSlide,
+    ...rest
+  }) => {
+    const {
+      carouselState: { currentSlide },
+    } = rest;
+    return (
+      <div className="carousel-button-group absolute -bottom-[1.69rem] md:bottom-0 left-1/2 -translate-x-1/2 -translate-y-1/2 space-x-1 pb-2">
+        <Button
+          className={cn(
+            "hover:bg-slate-100 bg-transparent rounded-full text-black",
+            currentSlide === 0 ? "disable" : ""
+          )}
+          onClick={() => previous()}
+        >
+          <ChevronsLeft className="w-8 h-8 md:w-10 md:h-10"/>
+        </Button>
+        <Button
+          className={cn("hover:bg-slate-100 bg-transparent rounded-full text-black", "")}
+          onClick={() => next()}
+        >
+          <ChevronsRight  className="w-8 h-8 md:w-10 md:h-10"/>
+        </Button>
+      </div>
+    );
+  };
+
   return (
     <div className="relative w-full ">
       <Carousel
@@ -26,9 +59,11 @@ const Billboard = ({ data }) => {
         showDots={false}
         swipeable
         minimumTouchDrag={80}
-        arrows={true}
+        arrows={false}
+        renderButtonGroupOutside={true}
+        customButtonGroup={<CustomButtonGroupAsArrows />}
         autoPlay
-        autoPlaySpeed={5000}
+        autoPlaySpeed={3000}
         shouldResetAutoplay
         pauseOnHover
         infinite
@@ -39,7 +74,7 @@ const Billboard = ({ data }) => {
         {billboardData.map((item, index) => (
           <div
             key={index}
-            className="relative h-[20vh] md:h-[40vh] lg:h-[80vh] w-full"
+            className="relative h-[24vh] md:h-[40vh] lg:h-[80vh] w-full pb-3"
           >
             {/* Wrapper div to maintain aspect ratio */}
             <Link href={item.action} className="w-full h-full">
@@ -56,8 +91,6 @@ const Billboard = ({ data }) => {
           </div>
         ))}
       </Carousel>
-
-     
     </div>
   );
 };
