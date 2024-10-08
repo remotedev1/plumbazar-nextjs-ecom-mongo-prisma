@@ -4,9 +4,13 @@ import "react-multi-carousel/lib/styles.css";
 import Container from "../ui/container";
 import { responsiveTestimonialsCarousel } from "@/lib/variables";
 import { useData } from "@/providers/data-provider";
+import { Button } from "../ui/button";
+import { ChevronsLeft, ChevronsRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const Testimonials = () => {
   const { testimonials, loading, error } = useData();
+
   return (
     <div className="min-w-screen flex items-center justify-center py-8 md:py-16">
       <Container>
@@ -17,7 +21,17 @@ export const Testimonials = () => {
               are saying.
             </h1>
           </div>
-
+          <div className="flex justify-center my-10">
+            <iframe
+              width="800"
+              height="450"
+              className="max-w-full rounded-md"
+              src="https://www.youtube.com/embed/jU3bKjckvLs"
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              // allowFullScreen
+            ></iframe>
+          </div>
           {loading ? (
             <div className="text-center text-gray-600">
               Loading testimonials...
@@ -27,6 +41,7 @@ export const Testimonials = () => {
               <Carousel
                 responsive={responsiveTestimonialsCarousel}
                 swipeable
+                arrows={false}
                 autoPlay
                 autoPlaySpeed={5000}
                 pauseOnHover
@@ -78,17 +93,6 @@ export const Testimonials = () => {
               </Carousel>
             </div>
           )}
-        </div>
-        <div className="flex justify-center">
-          <video
-            width="800"
-            height="450"
-            controls
-            className="max-w-full rounded-md"
-          >
-            <source src="https://youtu.be/PmYocEA5gsU" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
         </div>
       </Container>
     </div>

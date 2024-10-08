@@ -1,6 +1,9 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+import axios from "axios";
+import { FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 
 const Footer = () => {
   const [contactForm, setContactForm] = useState({
@@ -10,6 +13,7 @@ const Footer = () => {
     message: "",
   });
 
+  const [loading, setLoading] = useState("");
   const [subscribeEmail, setSubscribeEmail] = useState("");
 
   const handleContactChange = (e) => {
@@ -21,7 +25,6 @@ const Footer = () => {
     setSubscribeEmail(e.target.value);
   };
 
-
   const handleSubscribe = (e) => {
     e.preventDefault();
     // Handle subscription submission
@@ -32,11 +35,28 @@ const Footer = () => {
 
   const handleSubmitContact = async (e) => {
     e.preventDefault();
-  
-    // Call the SendContactForm function with form data
-  
-    // Reset the form after submission
-    setContactForm({ name: "", email: "", message: "" });
+    setLoading(true); // Set loading state to true
+
+    try {
+      const response = await axios.post("/api/contact-us", {
+        name: contactForm.name,
+        email: contactForm.email,
+        phone: contactForm.phone,
+        message: contactForm.message,
+      });
+
+      if (response.data.success) {
+        // Handle successful submission
+        console.log("Contact form submitted successfully:", response.data);
+      } else {
+        console.error("Failed to submit contact form:", response.data.error);
+      }
+    } catch (error) {
+      console.error("Error submitting contact form:", error);
+    }
+
+    setLoading(false); // Set loading state to false after submission
+    setContactForm({ name: "", email: "", phone: "", message: "" }); // Reset form
   };
 
   return (
@@ -52,7 +72,7 @@ const Footer = () => {
               <ul className="mt-2 space-y-2">
                 <li>
                   <Link
-                    href="/"
+                    href="/reports"
                     className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-200"
                   >
                     Reports
@@ -60,7 +80,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    href="/"
+                    href="/guides"
                     className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-200"
                   >
                     Guides
@@ -156,7 +176,9 @@ const Footer = () => {
             </div>
             {/* Contact Form */}
             <div>
-              <p className="font-medium tracking-wide text-gray-300">Contact Us</p>
+              <p className="font-medium tracking-wide text-gray-300">
+                Contact Us
+              </p>
               <form onSubmit={handleSubmitContact} className="mt-4 space-y-2">
                 <input
                   type="text"
@@ -173,7 +195,6 @@ const Footer = () => {
                   value={contactForm.email}
                   onChange={handleContactChange}
                   placeholder="Your Email"
-                  required
                   className="w-full p-2 border border-gray-700 rounded bg-gray-800 text-gray-200"
                 />
                 <input
@@ -183,6 +204,8 @@ const Footer = () => {
                   onChange={handleContactChange}
                   placeholder="Your Phone"
                   required
+                  pattern="[0-9]{10}" // Basic validation for a 10-digit phone number
+                  title="Please enter a valid 10-digit phone number."
                   className="w-full p-2 border border-gray-700 rounded bg-gray-800 text-gray-200"
                 />
                 <textarea
@@ -194,16 +217,25 @@ const Footer = () => {
                   className="w-full p-2 border border-gray-700 rounded bg-gray-800 text-gray-200"
                 />
                 <button
+                  className={cn(
+                    "w-full rounded-md bg-primary  hover:bg-primary/60 px-6 py-3 font-medium text-white",
+                    {
+                      "cursor-not-allowed bg-primary/60": loading, // Apply styles when loading
+                    }
+                  )}
+                  disabled={loading}
                   type="submit"
-                  className="w-full p-2 text-white bg-primary rounded hover:bg-primary/60 transition-colors duration-300"
                 >
-                  Send
+                  {loading ? "Submitting..." : "Submit"}{" "}
+                  {/* Show loader text */}
                 </button>
               </form>
             </div>
             {/* Subscribe to Newsletter */}
             <div>
-              <p className="font-medium tracking-wide text-gray-300">Subscribe to Newsletter</p>
+              <p className="font-medium tracking-wide text-gray-300">
+                Subscribe to Newsletter
+              </p>
               <form onSubmit={handleSubscribe} className="mt-4">
                 <input
                   type="email"
@@ -229,12 +261,25 @@ const Footer = () => {
           </p>
           <div className="flex items-center mt-4 space-x-4 sm:mt-0">
             <Link
-              href="/"
+              target="_blank"
+              href="https://in.linkedin.com/company/plumbazar"
               className="text-gray-500 transition-colors duration-300 hover:text-teal-accent-400"
             >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="h-5">
-                <path d="M24,4.6c-0.9,0.4-1.8,0.7-2.8,0.8c1-0.6,1.8-1.6,2.2-2.7c-1,0.6-2,1-3.1,1.2c-0.9-1-2.2-1.6-3.6-1.6 c-2.7,0-4.9,2.2-4.9,4.9c0,0.4,0,0.8,0.1,1.1C7.7,8.1,4.1,6.1,1.7,3.1C1.2,3.9,1,4.7,1,5.6c0,1.7,0.9,3.2,2.2,4.1 C2.4,9.7,1.6,9.5,1,9.1c0,0,0,0,0,0.1c0,2.4,1.7,4.4,3.9,4.8c-0.4,0.1-0.8,0.2-1.3,0.2c-0.3,0-0.6,0-0.9-0.1c0.6,2,2.4,3.4,4.6,3.4 c-1.7,1.3-3.8,2.1-6.1,2.1c-0.4,0-0.8,0-1.1-0.1C1.7,22,3.6,23,5.7,23c6.8,0,10.5-5.6,10.5-10.5c0-0.2,0-0.3,0-0.5C22.4,6.7,23.3,5.8,24,4.6z" />
-              </svg>
+              <FaLinkedin />
+            </Link>
+            <Link
+              target="_blank"
+              href="https://www.instagram.com/plumbazar/"
+              className="text-gray-500 transition-colors duration-300 hover:text-teal-accent-400"
+            >
+              <FaInstagram />
+            </Link>
+            <Link
+              href="https://www.youtube.com/@Plumbazar"
+              target="_blank"
+              className="text-gray-500 transition-colors duration-300 hover:text-teal-accent-400"
+            >
+              <FaYoutube />
             </Link>
           </div>
         </div>

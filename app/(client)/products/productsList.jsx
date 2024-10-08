@@ -282,9 +282,9 @@ const ProductsList = ({ searchParams }) => {
                         value={selectedBrand}
                         onChange={handleBrandChange}
                         className=" border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full  p-2 bg-white"
+                        disabled={!!selectedCategory}
                       >
-                        <option value="">Select Brand</option>
-                        {/* Map through brand options */}
+                        <option defaultValue>Select Brand</option>
                         {brands.map((brand) => (
                           <option key={brand.name} value={brand.name}>
                             {brand.name}
@@ -308,8 +308,9 @@ const ProductsList = ({ searchParams }) => {
                         value={selectedCategory}
                         onChange={handleCategoryChange}
                         className=" border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
+                        disabled={!!selectedBrand}
                       >
-                        <option value="">Select Category</option>
+                        <option defaultValue>Select Category</option>
                         {/* Map through category options */}
                         {categories.map((category) => (
                           <option key={category.name} value={category.name}>
