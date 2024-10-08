@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import useCart from "@/hooks/use-cart";
 import { getSession } from "next-auth/react";
@@ -11,11 +11,15 @@ import Currency from "@/components/ui/currency";
 import { ShippingAddress } from "./_components/shipping-address";
 import toast from "react-hot-toast";
 import { postOrder } from "@/actions/post-order";
+import sha256 from "crypto-js/sha256";
+import axios from "axios";
+import { cn } from "@/lib/utils";
 
 export default function Checkout() {
   const router = useRouter();
   const cart = useCart();
   const [isPending, startTransition] = useTransition();
+  const [loading, setLoading] = useState(false);
 
   const cartItems = useMemo(
     () =>
@@ -29,34 +33,50 @@ export default function Checkout() {
     [cart.items]
   );
 
-
-
   // Calculate total using useMemo to optimize
   const total = useMemo(
     () =>
       cart.items.reduce(
         (total, item) =>
           total +
-          (Number(item.msp) + (Number(item.gst) * Number(item.msp)) / 100) * 
+          (Number(item.msp) + (Number(item.gst) * Number(item.msp)) / 100) *
             Number(item.quantity),
         0
       ),
     [cart.items]
   );
 
-  const totalPrice = total > 500 ? total : 500 + total;
+  function calculateTotalWithShipping(total) {
+    let shippingCost = 0;
+
+    if (total < 5000) {
+      shippingCost = 200;
+    } else if (total >= 5000 && total < 10000) {
+      shippingCost = 500;
+    } else if (total >= 10000) {
+      shippingCost = 1000;
+    }
+
+    const finalTotal = total + shippingCost;
+
+    return { finalTotal, shippingCost };
+  }
+  // Example usage:
+  const { finalTotal, shippingCost } = calculateTotalWithShipping(total);
 
   const removeAll = useCart((state) => state.removeAll);
 
-  const onSubmit = async () => {
-    const updatedSession = await getSession(); // Get the latest session data
-
-    const updatedAddress = updatedSession?.user?.address;
-
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (isNaN(total)) return;
+    setLoading(true);
     if (cartItems.length <= 0) {
       toast.error("Please add items to cart to checkout");
       return;
     }
+
+    const updatedSession = await getSession(); // Get the latest session data
+    const updatedAddress = updatedSession?.user?.address;
 
     if (
       !updatedAddress ||
@@ -72,18 +92,72 @@ export default function Checkout() {
 
     const values = { address: updatedAddress, cartItems };
 
-
     startTransition(() => {
-      postOrder(values).then((data) => {
+      postOrder(values).then(async (data) => {
         if (data?.error) {
           toast.error(data.error);
         } else if (data?.success) {
-          toast.success(data.success);
+          toast.success("proceed to payment");
           removeAll();
-          router.push(`/order-summary/${data.order.id}`);
+
+          // Use the order ID from the response as the transaction ID
+          const transactionId = data.order.id;
+          const merchantUserId = `MUID-${Date.now()}`; // Use a dynamically generated merchant user ID
+
+          const payload = {
+            merchantId: process.env.NEXT_PUBLIC_MERCHANT_ID,
+            merchantTransactionId: transactionId, // Set the order ID as the transaction ID
+            merchantUserId: merchantUserId,
+            amount: (data.order.total + data.order.shippingCost) * 100, // Convert amount to paise
+            redirectUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/confirm-order-payment?merchantTransactionId=${transactionId}`,
+            callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/confirm-order-payment?merchantTransactionId=${transactionId}`,
+            redirectMode: "POST",
+            mobileNumber: updatedAddress.phone, // Use the phone number from the updated address
+            paymentInstrument: {
+              type: "PAY_PAGE",
+            },
+          };
+
+          const dataPayload = JSON.stringify(payload);
+          const dataBase64 = Buffer.from(dataPayload).toString("base64");
+          const fullURL =
+            dataBase64 + "/pg/v1/pay" + process.env.NEXT_PUBLIC_SALT_KEY;
+          const dataSha256 = sha256(fullURL);
+          const checksum =
+            dataSha256 + "###" + process.env.NEXT_PUBLIC_SALT_INDEX;
+
+          const UAT_PAY_API_URL =
+            "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay";
+
+          try {
+            const response = await axios.post(
+              UAT_PAY_API_URL,
+              {
+                request: dataBase64,
+              },
+              {
+                headers: {
+                  accept: "application/json",
+                  "Content-Type": "application/json",
+                  "X-VERIFY": checksum,
+                },
+              }
+            );
+
+            // Assuming the response includes the redirect URL for payment confirmation
+            const redirect =
+              response.data.data.instrumentResponse.redirectInfo.url;
+
+            // Redirect the user to the payment page
+            router.push(redirect);
+          } catch (error) {
+            toast.error("An error occurred while processing the payment.");
+            console.error("Payment error:", error);
+          }
         }
       });
     });
+    setLoading(false);
   };
 
   return (
@@ -110,7 +184,7 @@ export default function Checkout() {
               name="radio"
               defaultChecked=""
             />
-            <span className="peer-checked:border-blue-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-blue-800 bg-white" />
+            {/*  <span className="peer-checked:border-blue-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-blue-800 bg-white" />
             <label className="peer-checked:border-2 peer-checked:border-blue-700 peer-checked:bg-gray-50 flex items-center cursor-pointer select-none rounded-lg border border-gray-300 p-4">
               <FaRupeeSign size={20} />
               <div className="ml-5">
@@ -119,7 +193,7 @@ export default function Checkout() {
                   Cash on delivery
                 </p>
               </div>
-            </label>
+            </label>*/}
           </div>
         </div>
         <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
@@ -141,10 +215,7 @@ export default function Checkout() {
                 <p className="text-sm font-medium text-gray-900">Shipping</p>
                 <div>
                   <p className="font-semibold text-gray-900 text-end">
-                    <Currency value={500} lineThrough={total > 500} />
-                  </p>
-                  <p className="text-xs  text-gray-900">
-                    Free shipping over <Currency value={500} />.
+                    <Currency value={shippingCost} />
                   </p>
                 </div>
               </div>
@@ -152,14 +223,19 @@ export default function Checkout() {
             <div className="mt-6 flex items-center justify-between">
               <p className="text-sm font-medium text-gray-900">Total</p>
               <p className="text-2xl font-semibold text-gray-900">
-                <Currency value={totalPrice} />
+                <Currency value={finalTotal} />
               </p>
             </div>
           </div>
           <button
-            className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
+            className={`${cn(
+              "w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white",
+              {
+                "cursor-not-allowed bg-gray-300": loading || isPending,
+              }
+            )}`}
             type="submit"
-            disabled={isPending}
+            disabled={loading || isPending}
             onClick={onSubmit}
           >
             Place Order

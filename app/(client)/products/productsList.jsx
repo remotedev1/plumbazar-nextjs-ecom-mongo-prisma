@@ -11,9 +11,9 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { useData } from "@/providers/data-provider";
 
 const ProductsList = ({ searchParams }) => {
-  const { brands, categories, loading, error } = useData();
+  const { brands, categories } = useData();
   const [products, setProducts] = useState([]); // Products state
-  const [loadingProducts, setLoadingProducts] = useState(null);
+  const [loadingProducts, setLoadingProducts] = useState(false);
   const [skip, setSkip] = useState(0); // Pagination: how many products to skip
   const [take] = useState(10); // Pagination: how many products to take per request
   const [searchQuery, setSearchQuery] = useState(searchParams.query || ""); // Search query
@@ -76,6 +76,7 @@ const ProductsList = ({ searchParams }) => {
 
   // Fetch products when the component mounts or when filters or debounced search change
   useEffect(() => {
+    setSkip(0);
     fetchProducts();
   }, [debouncedSearch, selectedBrand, selectedCategory]); // Now watching debouncedSearch instead of searchQuery
 
@@ -86,11 +87,14 @@ const ProductsList = ({ searchParams }) => {
 
   // Handle brand filter change
   const handleBrandChange = (e) => {
+    setProducts([]);
     setSelectedBrand(e.target.value);
   };
 
   // Handle category filter change
   const handleCategoryChange = (e) => {
+    setProducts([]);
+
     setSelectedCategory(e.target.value);
   };
 
@@ -99,6 +103,7 @@ const ProductsList = ({ searchParams }) => {
     setSearchQuery("");
     setSelectedBrand("");
     setSelectedCategory("");
+    fetchProducts();
   };
 
   // Infinite scrolling logic with debounce
@@ -139,6 +144,8 @@ const ProductsList = ({ searchParams }) => {
   const handleLoadMore = () => {
     fetchProducts(true); // Fetch products with the "load more" flag
   };
+
+  // {products.length === 0 && !loadingProducts && <NoResults />}
 
   return (
     <section className="py-8 overflow-x-hidden">
@@ -188,7 +195,7 @@ const ProductsList = ({ searchParams }) => {
                   className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
                   disabled={!!selectedCategory}
                 >
-                  <option selected>Select Brand</option>
+                  <option defaultValue>Select Brand</option>
                   {/* Map through brand options */}
                   {brands.map((brand) => (
                     <option key={brand.name} value={brand.name}>
@@ -215,7 +222,7 @@ const ProductsList = ({ searchParams }) => {
                   className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full w-full py-2.5 px-4 bg-white"
                   disabled={!!selectedBrand}
                 >
-                  <option selected>Select Category</option>
+                  <option defaultValue>Select Category</option>
                   {/* Map through category options */}
                   {categories.map((category) => (
                     <option key={category.name} value={category.name}>
@@ -321,17 +328,14 @@ const ProductsList = ({ searchParams }) => {
 
         <div className="flex-1">
           {/* Main content: Products List */}
-          {products.length === 0 && !loadingProducts ? (
-            <NoResults />
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2">
-              {loadingProducts && products.length === 0
-                ? [...Array(10).keys()].map((i) => <SkeletonCard key={i} />)
-                : products.map((product) => (
-                    <ProductCard key={product.id} data={product} />
-                  ))}
-            </div>
-          )}
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2">
+            {products.length === 0
+              ? [...Array(10).keys()].map((i) => <SkeletonCard key={i} />)
+              : products.map((product) => (
+                  <ProductCard key={product.id} data={product} />
+                ))}
+          </div>
           {/* Load More Button */}
           {hasMore && products.length > 0 && (
             <div className="mt-10 text-center flex justify-center">
@@ -341,7 +345,6 @@ const ProductsList = ({ searchParams }) => {
                 <button
                   onClick={handleLoadMore}
                   className="btn btn-outline bg-primary w-44 text-white p-4 rounded-sm shadow-sm"
-                  disabled={loading}
                 >
                   Load More
                 </button>

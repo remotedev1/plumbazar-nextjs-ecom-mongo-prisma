@@ -35,7 +35,7 @@ export const CategorySchema = z.object({
 });
 
 export const clienteleSchema = z.object({
-  name: z.string().max(35),
+  name: z.string().max(50),
   images: z.array(z.any()).max(1),
 });
 

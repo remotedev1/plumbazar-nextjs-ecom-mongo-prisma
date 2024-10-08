@@ -7,13 +7,6 @@ export const getPendingAmount = async (storeId) => {
     where: {
       isPaid: false,
     },
-    include: {
-      orderItems: {
-        include: {
-          product: true,
-        },
-      },
-    },
   });
 
   const result = unpaidOrders.reduce(

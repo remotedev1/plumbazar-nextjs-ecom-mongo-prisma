@@ -203,6 +203,7 @@ enum DeliveryStatus {
 model Order {
   id             String         @id @default(auto()) @map("_id") @db.ObjectId
   total          Int
+  shippingCost   Int
   orderItems     OrderItem[]
   isPaid         Boolean        @default(false)
   address        Address
