@@ -16,6 +16,7 @@ export const publicRoutes = [
   "/our-services",
   "/cart",
   "/api/search-product",
+  "/api/search-product/by-id",
   "/api/brands",
   "/api/categories",
   "/api/testimonials",
