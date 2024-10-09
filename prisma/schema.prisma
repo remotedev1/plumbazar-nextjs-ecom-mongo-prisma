@@ -315,7 +315,6 @@ model Payment {
   status        PaymentStatus
   transactionId String?
   amount        Float
-  ptc           String?
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   Order         Order[]

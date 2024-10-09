@@ -65,7 +65,6 @@ export default function Checkout() {
   const { finalTotal, shippingCost } = calculateTotalWithShipping(total);
 
   const removeAll = useCart((state) => state.removeAll);
-
   const onSubmit = async (e) => {
     e.preventDefault();
     if (isNaN(total)) return;
@@ -108,9 +107,9 @@ export default function Checkout() {
             merchantTransactionId: transactionId, // Set the order ID as the transaction ID
             merchantUserId: merchantUserId,
             amount: (data.order.total + data.order.shippingCost) * 100, // Convert amount to paise
-            redirectUrl: `https://${process.env.NEXT_PUBLIC_APP_URL}/api/confirm-order-payment?merchantTransactionId=${transactionId}`,
-            callbackUrl: `https://${process.env.NEXT_PUBLIC_APP_URL}/api/confirm-order-payment?merchantTransactionId=${transactionId}`,
+            redirectUrl: `http://${process.env.NEXT_PUBLIC_APP_URL}/api/confirm-order-payment?merchantTransactionId=${transactionId}`,
             redirectMode: "POST",
+            callbackUrl: `http://${process.env.NEXT_PUBLIC_APP_URL}/api/confirm-order-payment?merchantTransactionId=${transactionId}`,
             mobileNumber: updatedAddress.phone, // Use the phone number from the updated address
             paymentInstrument: {
               type: "PAY_PAGE",
