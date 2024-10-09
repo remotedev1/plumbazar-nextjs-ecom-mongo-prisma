@@ -103,14 +103,13 @@ export default function Checkout() {
           // Use the order ID from the response as the transaction ID
           const transactionId = data.order.id;
           const merchantUserId = `MUID-${Date.now()}`; // Use a dynamically generated merchant user ID
-
           const payload = {
             merchantId: process.env.NEXT_PUBLIC_MERCHANT_ID,
             merchantTransactionId: transactionId, // Set the order ID as the transaction ID
             merchantUserId: merchantUserId,
             amount: (data.order.total + data.order.shippingCost) * 100, // Convert amount to paise
-            redirectUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/confirm-order-payment?merchantTransactionId=${transactionId}`,
-            callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/confirm-order-payment?merchantTransactionId=${transactionId}`,
+            redirectUrl: `https://${process.env.NEXT_PUBLIC_APP_URL}/api/confirm-order-payment?merchantTransactionId=${transactionId}`,
+            callbackUrl: `https://${process.env.NEXT_PUBLIC_APP_URL}/api/confirm-order-payment?merchantTransactionId=${transactionId}`,
             redirectMode: "POST",
             mobileNumber: updatedAddress.phone, // Use the phone number from the updated address
             paymentInstrument: {

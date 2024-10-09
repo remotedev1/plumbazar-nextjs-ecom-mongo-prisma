@@ -4,7 +4,7 @@ import axios from "axios";
 import sha256 from "crypto-js/sha256";
 import { NextResponse } from "next/server";
 
-export async function GET(req) {
+export async function POST(req) {
   const { searchParams } = new URL(req.url);
   const merchantTransactionId = searchParams.get("merchantTransactionId");
   if (!merchantTransactionId) {
@@ -49,11 +49,10 @@ export async function GET(req) {
       },
     });
 
-    console.log( `https://${process.env.NEXT_PUBLIC_APP_URL}/order-summary/${response.data.data.merchantTransactionId}`)
 
     if (response.data.code == "PAYMENT_SUCCESS")
       return NextResponse.redirect(
-        `http://${process.env.NEXT_PUBLIC_APP_URL}/order-summary/${response.data.data.merchantTransactionId}`,
+        `https://${process.env.NEXT_PUBLIC_APP_URL}/order-summary/${response.data.data.merchantTransactionId}`,
         {
           status: 301,
         }
