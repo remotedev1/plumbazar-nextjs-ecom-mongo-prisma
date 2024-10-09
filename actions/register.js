@@ -38,6 +38,6 @@ export const register = async (values, callbackUrl) => {
     verificationToken.token
   );
   return {
-    success: `Verification email sent to ${verificationToken.email}`,
+    success: `Verification email sent to ${verificationToken.email}, please check in your spam`,
   };
 };

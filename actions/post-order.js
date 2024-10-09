@@ -66,7 +66,8 @@ export const postOrder = async (values) => {
       },
     });
 
-    await SendAdminOrderNotification("enquiry@plumbazar.com", createdOrder);
+    //TODO
+    // await SendAdminOrderNotification("enquiry@plumbazar.com", createdOrder);
 
     return { success: "Order created successfully", order: createdOrder };
   } catch (error) {

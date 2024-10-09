@@ -24,7 +24,7 @@ export async function POST(req, res) {
 
     const options = {
       method: "GET",
-      url: `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${process.env.NEXT_PUBLIC_MERCHANT_ID}/${merchantTransactionId}`,
+      url: `https://api.phonepe.com/apis/hermes/pg/v1/status/${process.env.NEXT_PUBLIC_MERCHANT_ID}/${merchantTransactionId}`,
       headers: {
         accept: "application/json",
         "Content-Type": "application/json",
@@ -35,7 +35,6 @@ export async function POST(req, res) {
 
     // CHECK PAYMENT STATUS
     const response = await axios.request(options);
-    console.log(response.data.code == "PAYMENT_SUCCESS");
 
     const payments = await db.payment.create({
       data: {
@@ -63,9 +62,7 @@ export async function POST(req, res) {
         },
       },
     });
-    console.log(
-      `http://${process.env.NEXT_PUBLIC_APP_URL}/order-summary/${response.data.data.merchantTransactionId}`
-    );
+
     if (response.data.code == "PAYMENT_SUCCESS")
       return NextResponse.redirect(
         `http://${process.env.NEXT_PUBLIC_APP_URL}/order-summary/${response.data.data.merchantTransactionId}`,

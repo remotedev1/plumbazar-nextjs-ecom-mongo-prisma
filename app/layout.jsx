@@ -12,6 +12,23 @@ export const metadata = {
   manifest: "/manifest.json",
   title: "Plumbazar",
   description: "Plumbazar ecom",
+  openGraph: {
+    title: 'Plumbazar',
+    description: 'An e-commerce site',
+    url: 'https://plumbazar.com',
+    images: [
+      {
+        url: '/website-thumbnail.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'plumbazar',
+      },
+    ],
+    siteName: 'plumbazar',
+  },
+  icons: {
+    icon: '/favicon.ico', // Path to the favicon
+  },
 };
 
 export default async function RootLayout({ children, params: { locale } }) {

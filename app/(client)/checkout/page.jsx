@@ -107,9 +107,9 @@ export default function Checkout() {
             merchantTransactionId: transactionId, // Set the order ID as the transaction ID
             merchantUserId: merchantUserId,
             amount: (data.order.total + data.order.shippingCost) * 100, // Convert amount to paise
-            redirectUrl: `http://${process.env.NEXT_PUBLIC_APP_URL}/api/confirm-order-payment?merchantTransactionId=${transactionId}`,
+            redirectUrl: `https://${process.env.NEXT_PUBLIC_APP_URL}/api/confirm-order-payment?merchantTransactionId=${transactionId}`,
             redirectMode: "POST",
-            callbackUrl: `http://${process.env.NEXT_PUBLIC_APP_URL}/api/confirm-order-payment?merchantTransactionId=${transactionId}`,
+            callbackUrl: `https://${process.env.NEXT_PUBLIC_APP_URL}/api/confirm-order-payment?merchantTransactionId=${transactionId}`,
             mobileNumber: updatedAddress.phone, // Use the phone number from the updated address
             paymentInstrument: {
               type: "PAY_PAGE",
@@ -125,7 +125,7 @@ export default function Checkout() {
             dataSha256 + "###" + process.env.NEXT_PUBLIC_SALT_INDEX;
 
           const UAT_PAY_API_URL =
-            "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay";
+            "https://api.phonepe.com/apis/hermes/pg/v1/pay";
 
           try {
             const response = await axios.post(

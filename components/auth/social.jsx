@@ -17,9 +17,9 @@ export const Social = () => {
       <Button size="lg" className="w-full" variant="outline" onClick={() => onClick("google")}>
         <FcGoogle className="w-5 h-5" />
       </Button>
-      <Button size="lg" className="w-full" variant="outline" onClick={() => onClick("facebook")}>
+      {/* <Button size="lg" className="w-full" variant="outline" onClick={() => onClick("facebook")}>
         <FaFacebook className="w-5 h-5" />
-      </Button>
+      </Button> */}
     </div>
   );
 };

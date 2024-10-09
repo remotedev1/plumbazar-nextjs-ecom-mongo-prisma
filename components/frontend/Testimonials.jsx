@@ -21,7 +21,7 @@ export const Testimonials = () => {
               are saying.
             </h1>
           </div>
-          {/* <div className="flex justify-center my-10">
+          <div className="flex justify-center my-10">
             <iframe
               width="800"
               height="450"
@@ -31,7 +31,7 @@ export const Testimonials = () => {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               // allowFullScreen
             ></iframe>
-          </div> */}
+          </div>
           {loading ? (
             <div className="text-center text-gray-600">
               Loading testimonials...

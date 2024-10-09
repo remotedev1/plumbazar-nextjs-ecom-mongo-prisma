@@ -73,7 +73,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/reports"
-                    className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-200"
+                    className="text-gray-500 transition-colors duration-300 hover:text-white"
                   >
                     Reports
                   </Link>
@@ -81,7 +81,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/guides"
-                    className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-200"
+                    className="text-gray-500 transition-colors duration-300 hover:text-white"
                   >
                     Guides
                   </Link>
@@ -89,7 +89,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/"
-                    className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-200"
+                    className="text-gray-500 transition-colors duration-300 hover:text-white"
                   >
                     Blogs
                   </Link>
@@ -97,7 +97,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/"
-                    className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-200"
+                    className="text-gray-500 transition-colors duration-300 hover:text-white"
                   >
                     News & updates
                   </Link>
@@ -111,7 +111,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/why-us"
-                    className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-200"
+                    className="text-gray-500 transition-colors duration-300 hover:text-white"
                   >
                     Why plumbazar
                   </Link>
@@ -119,7 +119,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/our-services"
-                    className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-200"
+                    className="text-gray-500 transition-colors duration-300 hover:text-white"
                   >
                     Services
                   </Link>
@@ -127,7 +127,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/partner-program"
-                    className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-200"
+                    className="text-gray-500 transition-colors duration-300 hover:text-white"
                   >
                     Partner program
                   </Link>
@@ -135,7 +135,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/privacy-policy"
-                    className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-200"
+                    className="text-gray-500 transition-colors duration-300 hover:text-white"
                   >
                     Privacy policy
                   </Link>
@@ -143,7 +143,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/refund-and-cancel"
-                    className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-200"
+                    className="text-gray-500 transition-colors duration-300 hover:text-white"
                   >
                     Refund and cancel
                   </Link>
@@ -151,7 +151,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/return-policy"
-                    className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-200"
+                    className="text-gray-500 transition-colors duration-300 hover:text-white"
                   >
                     Return policy
                   </Link>
@@ -159,7 +159,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/shipping-policy"
-                    className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-200"
+                    className="text-gray-500 transition-colors duration-300 hover:text-white"
                   >
                     Shipping policy
                   </Link>
@@ -167,7 +167,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/terms-and-conditions"
-                    className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-200"
+                    className="text-gray-500 transition-colors duration-300 hover:text-white"
                   >
                     Terms and conditions
                   </Link>
