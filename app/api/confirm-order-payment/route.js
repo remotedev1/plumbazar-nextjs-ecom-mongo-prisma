@@ -49,9 +49,11 @@ export async function GET(req) {
       },
     });
 
+    console.log( `https://${process.env.NEXT_PUBLIC_APP_URL}/order-summary/${response.data.data.merchantTransactionId}`)
+
     if (response.data.code == "PAYMENT_SUCCESS")
       return NextResponse.redirect(
-        `https://${process.env.NEXT_PUBLIC_APP_URL}/order-summary/${response.data.data.merchantTransactionId}`,
+        `http://${process.env.NEXT_PUBLIC_APP_URL}/order-summary/${response.data.data.merchantTransactionId}`,
         {
           status: 301,
         }
