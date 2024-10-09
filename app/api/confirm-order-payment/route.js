@@ -4,7 +4,7 @@ import axios from "axios";
 import sha256 from "crypto-js/sha256";
 import { NextResponse } from "next/server";
 
-export async function POST(req) {
+export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const merchantTransactionId = searchParams.get("merchantTransactionId");
   if (!merchantTransactionId) {
