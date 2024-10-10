@@ -11,6 +11,45 @@ import { cn } from "@/lib/utils";
 export const Testimonials = () => {
   const { testimonials, loading, error } = useData();
 
+  const CustomButtonGroupAsArrows = ({
+    next,
+    previous,
+    goToSlide,
+    ...rest
+  }) => {
+    const {
+      carouselState: { currentSlide },
+    } = rest;
+
+    return (
+      <div className="carousel-button-group w-full flex justify-between items-center absolute top-1/3 transform -translate-y-1/2 px-4 ">
+        <Button
+          className={cn(
+            "bg-slate-100 text-white hover:text-black",
+            currentSlide === 0 ? "disable" : ""
+          )}
+          onClick={() => previous()}
+        >
+          <ChevronsLeft />
+        </Button>
+        <Button
+          className={cn("bg-slate-100 text-black", "")}
+          onClick={() => next()}
+        >
+          <ChevronsRight />
+        </Button>
+      </div>
+    );
+  };
+
+  // Define responsive behavior for the carousel
+  const responsive = {
+    mobile: {
+      breakpoint: { max: 4000, min: 0 },
+      items: 1,
+    },
+  };
+
   return (
     <div className="min-w-screen flex items-center justify-center py-8 md:py-16">
       <Container>
@@ -21,17 +60,42 @@ export const Testimonials = () => {
               are saying.
             </h1>
           </div>
-          <div className="flex justify-center my-10">
-            <iframe
-              width="800"
-              height="450"
-              className="max-w-full rounded-md"
-              src="https://www.youtube.com/embed/jU3bKjckvLs"
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              // allowFullScreen
-            ></iframe>
+          <div className="max-w-[80vw] mx-auto overflow-hidden relative">
+            <Carousel
+              responsive={responsive}
+              showDots={false}
+              swipeable
+              minimumTouchDrag={80}
+              arrows={false}
+              renderButtonGroupOutside={true}
+              customButtonGroup={<CustomButtonGroupAsArrows />}
+              shouldResetAutoplay
+              pauseOnHover
+              infinite
+              additionalTransform={0}
+              itemClass="p-1"
+              centerMode={false}
+            >
+              <div className="relative pb-[56.25%] h-[5rem]">
+                <iframe
+                  className="absolute top-0 left-0 w-full h-full rounded-md"
+                  src="https://www.youtube.com/embed/jU3bKjckvLs?rel=0"
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                ></iframe>
+              </div>
+
+              <div className="relative pb-[56.25%] h-0">
+                <iframe
+                  className="absolute top-0 left-0 w-full h-full rounded-md"
+                  src="https://www.youtube.com/embed/h9Dz2A5m4X4?rel=0"
+                  title="Aadith Charan, Founder - A N Constructions"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                ></iframe>
+              </div>
+            </Carousel>
           </div>
+
           {loading ? (
             <div className="text-center text-gray-600">
               Loading testimonials...

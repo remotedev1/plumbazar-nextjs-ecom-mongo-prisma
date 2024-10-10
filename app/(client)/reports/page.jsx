@@ -1,7 +1,14 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
-import { BlogPost, Objective, Section } from "./components";
+import Paragraph, {
+  BlogPost,
+  Objective,
+  ParagraphHeading,
+  ParagraphSubHeading,
+  Section,
+} from "./components";
+import blogContent from "./components/data";
 
 export default function ResponsiveTabs() {
   const title = "Complete Guide to Materials Procurement in Construction";
@@ -14,82 +21,32 @@ export default function ResponsiveTabs() {
 
   useEffect(() => {
     // Simulate a data fetch or complex calculation
-    const blogContent = (
-      <>
-        <p>
-          Materials procurement is a crucial aspect of construction project
-          management...
-        </p>
-        <Section title="Understanding Materials Procurement">
-          <p>What is Materials Procurement?</p>
-          <p>
-            Materials procurement is a crucial aspect of construction project
-            management. It involves the process of sourcing, acquiring, and
-            managing materials needed for construction. Effective materials
-            procurement ensures that projects are completed on time, within
-            budget, and to the desired quality standards. This guide will
-            explore the various facets of materials procurement, providing
-            detailed insights and statistical data to help understand its
-            significance and best practices.
-          </p>
-          <p>Key Objectives:</p>
-          <Objective
-            number={1}
-            text="Timely Delivery: Ensuring materials arrive when needed to keep the project on schedule."
-          />
-          <Objective
-            number={2}
-            text="Cost Efficiency: Acquiring materials at the best possible prices to stay within budget."
-          />
-          <Objective
-            number={3}
-            text="Quality Assurance: Obtaining materials that meet specified standards and requirements."
-          />
-          <Objective
-            number={4}
-            text="Compliance: Adhering to legal, regulatory, and ethical standards."
-          />
-          <Objective
-            number={5}
-            text="Supplier Management: Building and maintaining strong relationships with reliable suppliers."
-          />
-        </Section>
-        <Section title="Role of Materials Procurement in Construction Management">
-          <p>What is Materials Procurement?</p>
+    const sectionContent = blogContent.sections.map((section, index) => (
+      <Section key={index} title={section.title}>
+        {section.content.map((item, idx) => {
+          switch (item.type) {
+            case "heading":
+              return <ParagraphHeading key={idx}>{item.text}</ParagraphHeading>;
+            case "subheading":
+              return (
+                <ParagraphSubHeading key={idx} >
+                  {item.text}
+                </ParagraphSubHeading>
+              );
+            case "paragraph":
+              return <Paragraph key={idx}>{item.text}</Paragraph>;
+            case "objective":
+              return (
+                <Objective key={idx} number={item.number} text={item.text} />
+              );
+            default:
+              return null;
+          }
+        })}
+      </Section>
+    ));
 
-          <p>
-            The role of materials procurement in construction management
-            includes:
-          </p>
-          <Objective
-            number={1}
-            text="Scheduling: Ensuring materials are available when needed to maintain project timelines."
-          />
-          <Objective
-            number={2}
-            text="Budgeting: Managing costs through efficient purchasing and negotiating favorable terms."
-          />
-          <Objective
-            number={3}
-            text="Quality Control: Sourcing materials that meet quality and specification standards."
-          />
-          <Objective
-            number={4}
-            text="Risk Management: Mitigating risks related to supply chain disruptions and price volatility."
-          />
-          <Objective
-            number={5}
-            text="Compliance: Ensuring adherence to legal, regulatory, and ethical standards."
-          />
-          <Objective
-            number={6}
-            text="Sustainability: Promoting the use of environmentally friendly and sustainable materials."
-          />
-        </Section>
-      </>
-    );
-
-    setContent(blogContent); // Set content after fetching
+    setContent(sectionContent); // Set content after fetching
     setLoading(false); // Set loading to false after setting content
   }, []);
 
@@ -127,7 +84,7 @@ export default function ResponsiveTabs() {
         <TabsContent value="tab1">
           <div className="p-4 bg-white shadow-md rounded-md">
             {loading ? (
-              <p>Loading...</p> // Display loading until content is ready
+              <Paragraph>Loading...</Paragraph> // Display loading until content is ready
             ) : (
               <BlogPost
                 title={title}

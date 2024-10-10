@@ -28,3 +28,30 @@ export const Objective = ({ number, text }) => {
     </div>
   );
 };
+
+export const ParagraphHeading = ({ children, className = "" }) => {
+  return (
+    <p className={`text-gray-700 mb-4 leading-relaxed font-bold text-xl ${className}`}>
+      {children}
+    </p>
+  );
+};
+export const ParagraphSubHeading = ({ children, className = "" }) => {
+  return (
+    <p
+      className={`text-gray-500 mb-4 leading-relaxed font-semibold  ${className}`}
+    >
+      {children}
+    </p>
+  );
+};
+
+export const Paragraph = ({ children, className = "" }) => {
+  return (
+    <p className={`text-gray-700 mb-4 leading-relaxed ${className}`}>
+      {children}
+    </p>
+  );
+};
+
+export default Paragraph;

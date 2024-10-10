@@ -32,7 +32,7 @@ const Billboard = ({ data }) => {
       carouselState: { currentSlide },
     } = rest;
     return (
-      <div className="carousel-button-group absolute -bottom-[1.69rem] md:bottom-0 left-1/2 -translate-x-1/2 -translate-y-1/2 space-x-1 pb-2">
+      <div className="carousel-button-group absolute -bottom-[1.69rem] md:-bottom-2 left-1/2 -translate-x-1/2 -translate-y-1/2 space-x-1 ">
         <Button
           className={cn(
             "hover:bg-slate-100 bg-transparent rounded-full text-black",
@@ -74,7 +74,7 @@ const Billboard = ({ data }) => {
         {billboardData.map((item, index) => (
           <div
             key={index}
-            className="relative h-[24vh] md:h-[40vh] lg:h-[80vh] w-full pb-3"
+            className="relative h-[22vh] md:h-[35vh] lg:h-[60vh] w-full pb-3"
           >
             {/* Wrapper div to maintain aspect ratio */}
             <Link href={item.action} className="w-full h-full">

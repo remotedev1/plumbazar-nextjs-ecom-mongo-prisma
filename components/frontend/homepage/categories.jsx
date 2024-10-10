@@ -11,40 +11,10 @@ import Link from "next/link";
 
 const CategoryList = () => {
   const { categories, loading, error } = useData();
-  const CustomButtonGroupAsArrows = ({
-    next,
-    previous,
-    goToSlide,
-    ...rest
-  }) => {
-    const {
-      carouselState: { currentSlide },
-    } = rest;
-
-    return (
-      <div className="carousel-button-group absolute right-3 top-12 -translate-y-1/2 space-x-1">
-        <Button
-          className={cn(
-            "bg-slate-100 text-black",
-            currentSlide === 0 ? "disable" : ""
-          )}
-          onClick={() => previous()}
-        >
-          <ChevronsLeft />
-        </Button>
-        <Button
-          className={cn("bg-slate-100 text-black", "")}
-          onClick={() => next()}
-        >
-          <ChevronsRight />
-        </Button>
-      </div>
-    );
-  };
 
   return (
-    <div className="relative px-6 py-8">
-      <div className="flex flex-col items-start space-y-4 mb-8">
+    <div className="relative px-6 py-2 md:py-8">
+      <div className="flex flex-col items-start space-y-4 mb-4 md:mb-8">
         <h2 className="text-md md:text-3xl font-bold text-left ">
           Shop by Categories
         </h2>
@@ -73,7 +43,7 @@ const CategoryList = () => {
               passHref
             >
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 md:w-28 md:h-28 rounded-md overflow-hidden relative">
+                <div className="w-12 h-12 md:w-28 md:h-28 rounded-md overflow-hidden relative">
                   <Image
                     // TODO
                     src={category.images[0]}
@@ -84,7 +54,7 @@ const CategoryList = () => {
                     className="rounded-md"
                   />
                 </div>
-                <span className="mt-2 text-center font-semibold">
+                <span className="mt-2 text-sm md:text-lg text-center font-semibold">
                   {category.name}
                 </span>
               </div>

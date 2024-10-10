@@ -24,17 +24,22 @@ export default async function Home() {
           <CategoryList />
         </span>
         <BrandList data={brands} />
-
-        <OurServices />
+        <span className="w-full bg-gray-50 py-5">
+          <OurServices />
+        </span>
         <WhyChooseUs />
 
         {/* <ProductCarousel
           title={"Jaquar Products"}
           filter={{ brand: "jaquar" }}
         /> */}
-        <ClienteleList />
+        <span className="w-full bg-gray-50 py-5">
+          <ClienteleList />
+        </span>
         <PartnerProgram />
-        <Testimonials />
+        <span className="w-full bg-gray-50 py-5">
+          <Testimonials />
+        </span>
       </div>
     </main>
   );

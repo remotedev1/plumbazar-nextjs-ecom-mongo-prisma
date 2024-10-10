@@ -120,9 +120,9 @@ const services = [
 
 const OurServices = () => {
   return (
-    <div className=" py-8 md:py-16">
-      <div className="relative flex flex-col justify-center items-center mb-5">
-        <h2 className="text-2xl md:text-5xl font-bold text-gray-600 text-center">
+    <div className=" py-8 md:py-8">
+      <div className="relative flex flex-col justify-center items-center">
+        <h2 className="text-2xl md:text-5xl font-bold text-gray-600 text-center pb-8">
           Our Services
         </h2>
       </div>

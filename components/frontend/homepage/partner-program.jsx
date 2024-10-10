@@ -18,7 +18,7 @@ const data = [
 
 export const PartnerProgram = () => {
   return (
-    <div className="bg-gray-50  py-8 md:py-16">
+    <div className="  py-8 md:py-16">
       <Container>
         {/* Section Title */}
         <div className="text-center mb-8">
@@ -50,11 +50,10 @@ export const PartnerProgram = () => {
                   <circle cx="4" cy="4" r="4" />
                 </svg>
                 <Link href="/partner-program">
-
-                <span className="text-gray-700 cursor-pointer hover:bg-primary hover:text-white hover:p-1 transition-all duration-300">
-                  {item.title}
-                </span>
-                {/* Tooltip */}
+                  <span className="text-gray-700 cursor-pointer hover:bg-primary hover:text-white hover:p-1 transition-all duration-300">
+                    {item.title}
+                  </span>
+                  {/* Tooltip */}
                   <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block w-max bg-black text-white text-xs py-2 px-3 rounded-md shadow-lg">
                     Click to know more
                   </div>

@@ -15,7 +15,7 @@ const data = [
 
 export const WhyChooseUs = () => {
   return (
-    <section className="pb-5 bg-slate-50 py-8 md:py-16">
+    <section className="pb-5  py-8 md:py-16">
       <div className="container mx-auto">
         {/* Section Title */}
         <div className="flex flex-col items-center mb-5 text-center">
