@@ -1,7 +1,8 @@
 // content/blogContent.js
 export const report1 = {
   title: "Complete Guide to Materials Procurement in Construction",
-
+  date: "2024-06-01",
+  author: "Deb Dulal Das",
   sections: [
     {
       title: "Understanding Materials Procurement",
@@ -697,76 +698,140 @@ export const report2 = {
   title:
     "E-Procurement Solutions Revolutionizing Material Supply Chains in Construction",
   author: "Rahul Sahani, Co-founder & COO, McCoy Mart",
-  introduction: {
-    text: "Contributing nearly 9% to India’s GDP, the construction industry is undergoing a major transformation. Keeping up with the rising demand for urbanization and a growing population, we can observe increasing investments from both the public and private sectors. Today, there is a need for more of everything, from hotels and industrial parks to large-scale infrastructure and renewable energy projects.",
-  },
-  challenges: {
-    heading: "Challenges in Traditional Procurement",
-    text: [
-      "The industry is booming; however, procurement in the construction sector is not an easy task. Traditional procurement processes, often complex and time-consuming, present significant challenges.",
-      "Construction organizations spend substantial time and effort procuring the right people and quality goods, diverting their energy from their core business of implementing projects.",
-      "The management of multiple suppliers, price negotiations, and logistical coordination makes procurement complex. Companies face delays due to fluctuating material costs influenced by market forces and geopolitical factors.",
-      "Moreover, traditional processes often lack transparency, leading to disputes, delays, and increased expenditures, jeopardizing project timelines and overall success.",
-    ],
-  },
-  digitalTransformation: {
-    heading: "The Rise of E-Procurement Solutions",
-    text: [
-      "Startups are exploring ways to streamline procurement processes through technology. E-procurement digital solutions are reshaping the construction industry by providing a centralized, automated platform for various procurement activities.",
-      "From gathering product information to comparing prices and tracking orders, these solutions facilitate real-time interactions via a single digital interface.",
-    ],
-    benefits: {
-      heading: "Benefits of E-Procurement Solutions",
-      points: [
+  sections: [
+    {
+      title:
+        "E-Procurement Solutions Revolutionizing Material Supply Chains in Construction",
+      content: [
         {
-          title: "Centralized Material Sourcing",
-          text: "Digital platforms centralize material sourcing, allowing companies to find everything from trusted suppliers under one roof, reducing decision-making time.",
+          type: "paragraph",
+          text: "Contributing nearly 9% to India’s GDP, the construction industry is undergoing a major transformation. Keeping up with the rising demand for urbanization and growing population, we can observe increasing investments from both the public and private sectors, as today, there is a need for more of everything, from hotels and industrial parks to large-scale infrastructure and renewable energy projects.",
         },
         {
-          title: "Cost Savings via Real-Time Price Comparisons",
-          text: "Digital platforms enable users to compare delivery costs and times across multiple suppliers, leading to informed purchasing decisions and improved project profitability.",
+          type: "paragraph",
+          text: "The industry is booming, however, procurement in the construction sector is not an easy task. The traditional procurement processes, often complex and time-consuming, have proven to add challenges. It is for this reason that construction organizations normally spend a lot of time and effort in procuring the right people and quality goods, which would otherwise divert their energy from their core business of implementing projects.",
         },
         {
-          title: "Heightened Transparency and Compliance",
-          text: "Users can access their order history and transactions, reducing the risk of fraud and fostering trust among stakeholders while ensuring compliance with industry regulations.",
+          type: "paragraph",
+          text: "The introduction of digital procurement platforms in the traditional ways of doing construction business has the potential to streamline the way things are done, such as how construction companies source materials and track orders. This online marketplace model can disrupt the processes and make them faster, cost-effective, and transparent, but it will come with its own challenges, like reluctance to change and adapt.",
         },
         {
-          title: "Improved Supply Chain Visibility",
-          text: "E-procurement platforms enhance supply chain visibility, allowing users to track orders and monitor delivery schedules, enabling better inventory management and project planning.",
+          type: "heading",
+          text: "Traditional procurement challenges",
+        },
+        {
+          type: "paragraph",
+          text: "With several parties involved and numerous contingencies that can occur, there is no denying that procurement in construction has always been a complex process. Earlier, it required the management of multiple suppliers for products and services, price negotiations, and logistical coordination, and despite that, companies would face challenges that could delay everything. Besides that, material costs fluctuated due to market forces, availability, and geopolitical factors, making procurement an even more costly and resource-intensive process.",
+        },
+        {
+          type: "paragraph",
+          text: "Additionally, traditional procurement processes often lacked transparency, with no information to track orders. This lack of clarity would lead to disputes, delays, and expenditures, jeopardizing the project’s timeline and overall success.",
+        },
+        {
+          type: "paragraph",
+          text: "To curb these challenges, it was important to look at the bottom of the pyramid and find solutions that could revolutionize from where it all starts – procurement. And, it was then that startups ventured into finding ways to make procurement easier for businesses via technology and digitising the process.",
+        },
+        {
+          type: "heading",
+          text: "The rise of e-procurement solutions",
+        },
+        {
+          type: "paragraph",
+          text: "Looking back, we can find instances where digitizing the process has thrust the economy of the industry, such as the food and beverage sector, financial sector, and power sector, among others, and material supply procurement in construction is no different.",
+        },
+        {
+          type: "paragraph",
+          text: "Similarly, e-procurement digital solutions are reshaping the construction industry by providing a centralized, automated platform to know everything, from gathering information on a wide range of products, comparing their prices, asking for quotes, placing orders, or tracking them – all in real-time through a single digital interface.",
+        },
+        {
+          type: "heading",
+          text: "Centralised material sourcing: ",
+        },
+        {
+          type: "paragraph",
+          text: "Digital platforms are centralizing material sourcing, such that companies can find everything under one roof from trusted suppliers. Anyone can now view a vast list of materials and suppliers in one place, bringing down decision-making time, encouraging faster processes, and reducing downtime.",
+        },
+        {
+          type: "heading",
+          text: "Cost savings via real-time price comparisons: ",
+        },
+        {
+          type: "paragraph",
+          text: "When users are browsing products and services digitally, they spend less time on the road finding people. Digital platforms can help compare various factors, such as delivery costs and delivery time, across multiple suppliers, empowering businesses to make informed and strategic purchasing decisions. With this capability, users can now leverage the power of bidding on contractors and material suppliers – leading to significant cost savings and improved project profitability.",
+        },
+        {
+          type: "heading",
+          text: "Heightened transparency and compliance:",
+        },
+        {
+          type: "paragraph",
+          text: "With digital solutions, users can now access their order history and all the transactions, from order creation to delivery. This transparency can significantly reduce the risk of any fraud possible in the pipeline, fostering trust among various stakeholders and project owners. Moreover, it enables the producers and providers to be accountable for delivering quality products and meeting compliance with industry regulations.",
+        },
+        {
+          type: "heading",
+          text: "Improved supply chain visibility:",
+        },
+        {
+          type: "paragraph",
+          text: "Today, everyone is accustomed to online shopping. With e-procurement platforms joining the space, users will trust the process, which will eventually enhance supply chain visibility. Users could track orders, monitor delivery schedules, and anticipate any potential delays. This increased visibility will enable better inventory management and more accurate project planning, helping companies stay on schedule and avoid costly overruns.",
+        },
+        {
+          type: "paragraph",
+          text: "Besides the above benefits, construction material e-procurement will also help capture the current market trends with all products in one sight and honest supplier reviews, instead of traditionally depending on a single supplier who could impact the business significantly – for better or worse.",
+        },
+        {
+          type: "heading",
+          text: "Challenges to e-procurement adoption",
+        },
+        {
+          type: "paragraph",
+          text: "Just like a coin, everything has a second side – despite its many benefits, the construction industry has been slow to adopt e-procurement solutions. With that comes a reluctance to accept and transform",
+        },
+        {
+          type: "heading",
+          text: "Resistance to change:",
+        },
+        {
+          type: "paragraph",
+          text: "Many construction firms, particularly smaller ones, are hesitant to move away from traditional procurement methods due to long-term relationships with local vendors. Due to the perceived complexity and cost of e-procurement platforms, small firms would rather choose to rely on their personal relationships with suppliers, creating barriers to adoption.",
+        },
+        {
+          type: "heading",
+          text: "Integration with existing systems:",
+        },
+        {
+          type: "paragraph",
+          text: "Several construction companies often use a mix of existing systems for project management, accounting, and supply chain management. Integrating the existing systems with newer technology could be a challenging and costly affair as it might involve training their resources, which could lead to project inefficiencies and data mismanagement.",
+        },
+        {
+          type: "paragraph",
+          text: "However, integrating the existing systems with the newer technology can be cumbersome and time-consuming as it is better, faster in project completion, has better data and analytics, and can help you save costs in the long term.",
+        },
+        {
+          type: "heading",
+          text: "Supplier readiness:",
+        },
+        {
+          type: "paragraph",
+          text: "Due to the slower pace of technology adoption in smaller cities or local markets, suppliers are not fully equipped to participate in e-procurement. However, with the younger generation getting into businesses, the above challenges are taking a turn. The progress in adoption is there, however slow.",
+        },
+        {
+          type: "heading",
+          text: "Up next",
+        },
+        {
+          type: "paragraph",
+          text: "Despite these challenges, the future of e-procurement in construction is promising. Currently, India’s building product market size is USD 45 billion, according to an EY report, and it is anticipated to grow at a CAGR of over 6% between 2024 and 2029. With government initiatives aimed at improving sectors such as industrial, infrastructure, energy and utilities, and commercial and residential construction – this surge will further be fueled by the need to support increasing urbanisation.",
+        },
+        {
+          type: "paragraph",
+          text: "Thus, as digital platforms continue to evolve and address industry-specific needs, more construction companies, or for that matter, individual owners, will likely adopt these solutions. While centralized sourcing, cost savings, and enhanced transparency will drive the industry toward digital procurement, autonomy and the will to be in control of the processes will enable long-term success.",
+        },
+        {
+          type: "paragraph",
+          text: "Reference: https://www.expresscomputer.in/guest-blogs/e-procurement-solutions-revolutionising-material-supply-chains-in-construction/115836/",
         },
       ],
     },
-  },
-  adoptionChallenges: {
-    heading: "Challenges to E-Procurement Adoption",
-    text: [
-      "Despite its many benefits, the construction industry has been slow to adopt e-procurement solutions.",
-      {
-        title: "Resistance to Change",
-        text: "Many firms, especially smaller ones, are hesitant to move from traditional methods due to established relationships with local vendors.",
-      },
-      {
-        title: "Integration with Existing Systems",
-        text: "Integrating existing systems with newer technology can be challenging and costly, often involving resource training and potential data mismanagement.",
-      },
-      {
-        title: "Supplier Readiness",
-        text: "Many suppliers, particularly in smaller cities, are not fully equipped for e-procurement. However, the younger generation entering the market is gradually changing this landscape.",
-      },
-    ],
-  },
-  futureOutlook: {
-    heading: "The Future of E-Procurement in Construction",
-    text: [
-      "The future of e-procurement in construction looks promising. With India’s building product market size estimated at USD 45 billion and expected to grow at a CAGR of over 6% between 2024 and 2029, there is a strong impetus for adoption.",
-      "Government initiatives aimed at improving industrial, infrastructure, and residential construction will further fuel this growth. As digital platforms evolve to address industry-specific needs, more construction companies are likely to adopt these solutions.",
-    ],
-  },
-  conclusion: {
-    text: "While centralized sourcing, cost savings, and enhanced transparency will drive the industry toward digital procurement, autonomy and the will to control processes will ensure long-term success.",
-  },
-  reference: {
-    link: "https://www.expresscomputer.in/guest-blogs/e-procurement-solutions-revolutionising-material-supply-chains-in-construction/115836/",
-    text: "E-Procurement Solutions Revolutionising Material Supply Chains in Construction",
-  },
+  ],
 };
