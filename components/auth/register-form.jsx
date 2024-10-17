@@ -141,6 +141,15 @@ export const RegisterForm = () => {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
+          {success && (
+            <div className="w-full flex justify-start">
+              Didn&apos;t get the code?
+              <br />
+              Codes can take up to 5 minutes to arrive.
+              <br />
+              Check your spam folder.
+            </div>
+          )}
           <Button type="submit" className="w-full" disabled={isPending}>
             Create an Account
           </Button>

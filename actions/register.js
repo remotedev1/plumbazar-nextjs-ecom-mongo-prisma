@@ -24,7 +24,7 @@ export const register = async (values, callbackUrl) => {
     return { error: "Email already in use!" };
   }
 
-  await db.user.create({
+  const user = await db.user.create({
     data: {
       name,
       email,
@@ -32,11 +32,8 @@ export const register = async (values, callbackUrl) => {
     },
   });
 
-  const verificationToken = await generateVerificationToken(email);
-  await SendVerificationEmail(
-    email,
-    verificationToken.token
-  );
+  const verificationToken = await generateVerificationToken(user.email);
+  await SendVerificationEmail(user.email, verificationToken.token);
   return {
     success: `Verification email sent to ${verificationToken.email}, please check in your spam`,
   };
