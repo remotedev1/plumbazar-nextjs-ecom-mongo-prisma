@@ -269,6 +269,7 @@ const InvoiceDetailsSchema = z.object({
   totalAmount: fieldValidators.nonNegativeNumber,
   additionalNotes: fieldValidators.stringOptional,
   tc: fieldValidators.stringOptional,
+  pc: fieldValidators.stringOptional,
 });
 
 const InvoiceSchema = z.object({

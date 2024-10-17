@@ -113,7 +113,7 @@ export const RfqForm = ({ initialData }) => {
             name="images"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Logo</FormLabel>
+                <FormLabel>Images</FormLabel>
                 <FormControl>
                   <ImageUpload
                     value={field.value.map((image) => image)}

@@ -175,7 +175,9 @@ const InvoiceTemplate = (data) => {
                 </div>
                 <div className="border-b border-gray-300">
                   <p className="sm:text-right text-gray-800">
-                    {(item.msp + (item.msp * item.gst) / 100) * item.quantity}
+                    {formatNumberWithCommas(
+                      (item.msp + (item.msp * item.gst) / 100) * item.quantity
+                    )}
                     {details.currency}
                   </p>
                 </div>
@@ -262,9 +264,9 @@ const InvoiceTemplate = (data) => {
           </div>
           <div className="my-2">
             <p className="font-semibold text-blue-600">Payment terms:</p>
-            <p className="font-regular text-gray-800">{details.paymentTerms}</p>
+            <p className="font-regular text-gray-800">{details.pc}</p>
           </div>
-          <div className="my-2">
+          {/* <div className="my-2">
             <span className="font-semibold text-md text-gray-800">
               Please send the payment to this address
               <p className="text-sm">
@@ -277,7 +279,7 @@ const InvoiceTemplate = (data) => {
                 Account no: {details.paymentInformation?.accountNumber}
               </p>
             </span>
-          </div>
+          </div> */}
         </div>
         <p className="text-gray-500 text-sm">
           If you have any questions concerning this invoice, use the following
@@ -285,9 +287,9 @@ const InvoiceTemplate = (data) => {
         </p>
         <div>
           <p className="block text-sm font-medium text-gray-800">
-            test@test.com
+            enquiry@plumbazar.com
           </p>
-          <p className="block text-sm font-medium text-gray-800">1234567898</p>
+          <p className="block text-sm font-medium text-gray-800">6366019800</p>
         </div>
       </div>
 

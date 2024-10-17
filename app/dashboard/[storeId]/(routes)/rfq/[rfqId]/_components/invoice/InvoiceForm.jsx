@@ -35,6 +35,7 @@ const InvoiceForm = () => {
     setValue("details.invoiceDate", new Date());
   }, []);
 
+
   // Get invoice number variable
   const invoiceNumber = getValues("details.invoiceNumber");
 

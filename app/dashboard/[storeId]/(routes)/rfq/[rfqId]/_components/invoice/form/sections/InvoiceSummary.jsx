@@ -24,6 +24,11 @@ const InvoiceSummary = () => {
             label="Terms & conditions"
             placeholder="Terms & conditions"
           />
+          <FormTextarea
+            name="details.pc"
+            label="Payments terms"
+            placeholder="Payments terms"
+          />
         </div>
       </div>
     </section>

@@ -273,6 +273,7 @@ model DraftInvoice {
   rfqId     String             @unique @db.ObjectId
   status    DraftInvoiceStatus @default(CREATED)
   tc        String?
+  pc        String?
   rfq       Rfq[]
 }
 

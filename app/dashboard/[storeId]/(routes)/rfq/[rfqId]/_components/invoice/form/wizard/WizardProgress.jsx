@@ -21,7 +21,6 @@ const WizardProgress = ({ wizard }) => {
 
   const step3Valid = !errors.details?.items;
   const step4Valid =
-    !errors.details?.paymentDue &&
     !errors.details?.subTotal &&
     !errors.details?.totalAmount &&
     !errors.details?.discountAmount &&

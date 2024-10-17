@@ -15,7 +15,7 @@ import InvoiceForm from "./InvoiceForm";
 import { useEffect } from "react";
 
 const InvoiceMain = ({ rfq, draftInvoiceData }) => {
-  const { handleSubmit, setValue, reset } = useFormContext();
+  const { handleSubmit, setValue, reset, formState } = useFormContext();
   const { onFormSubmit, formValues } = useInvoiceContext();
   useEffect(() => {
     if (draftInvoiceData) {
@@ -28,18 +28,16 @@ const InvoiceMain = ({ rfq, draftInvoiceData }) => {
           draftId: draftInvoiceData.id,
         },
       });
-    } else if (rfq?.user?.address) {
+    } else if (rfq?.user) {
       // If no draftInvoiceData, but rfq.user.address exists, set form values based on user info
-      const { id, name, email, address } = rfq.user;
-      const { address: addr, zip, city, phone } = address;
-
+      const { id, name, email, address, phone } = rfq.user;
       setValue("receiver.customerId", id);
       setValue("receiver.name", name || "");
-      setValue("receiver.address", addr || "");
-      setValue("receiver.zip", zip || "");
-      setValue("receiver.city", city || "");
+      setValue("receiver.address", address?.address || "");
+      setValue("receiver.zip", address?.zip || "");
+      setValue("receiver.city", address?.city || "");
       setValue("receiver.email", email || "");
-      setValue("receiver.phone", phone || "");
+      setValue("receiver.phone", rfq.phone || "");
       setValue("receiver.country", "India");
       setValue("details.rfqId", rfq.id);
     }

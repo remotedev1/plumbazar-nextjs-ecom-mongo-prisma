@@ -47,6 +47,8 @@ export async function POST(req, { params }) {
               discountAmount: parseFloat(details.discountAmount),
               shippingAmount: parseFloat(details.shippingAmount),
               additionalNotes: details.additionalNotes,
+              tc: details.tc,
+              pc: details.pc,
               subTotal: details.subTotal,
               totalAmount: details.totalAmount,
             },
