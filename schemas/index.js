@@ -57,9 +57,6 @@ export const ProductSchema = z.object({
   gst: z
     .number()
     .min(0, "GST must be a positive number")
-    .refine((value) => value === 18 || value > 0, {
-      message: "GST must be either 18 or a positive number",
-    })
     .default(18)
     .optional(),
   isFeatured: z.boolean().default(false).optional(),
@@ -252,8 +249,6 @@ const ItemSchema = z.object({
   msp: fieldValidators.stringToNumberWithMax,
   total: fieldValidators.stringToNumber,
 });
-
-
 
 const InvoiceDetailsSchema = z.object({
   invoiceNumber: fieldValidators.stringMin1,
