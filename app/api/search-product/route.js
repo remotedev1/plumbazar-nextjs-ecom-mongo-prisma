@@ -19,7 +19,7 @@ export async function GET(req) {
 
     // Initialize filter conditions
     const filters = {
-      isArchived: false,
+      isArchived: true,
     };
 
     // Filter by ID if provided
