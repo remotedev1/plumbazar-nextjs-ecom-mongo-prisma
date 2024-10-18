@@ -353,7 +353,7 @@ export const ProductForm = ({ initialData, brands, categories }) => {
                     <FormLabel>GST</FormLabel>
                     <Select
                       disabled={loading}
-                      onValueChange={(value) => field.onChange(value)}
+                      onValueChange={(value) => field.onChange(Number(value))}
                       value={field.value?.toString()}
                     >
                       <FormControl>
