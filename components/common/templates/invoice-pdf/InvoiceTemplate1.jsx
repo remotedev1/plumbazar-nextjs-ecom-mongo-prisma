@@ -9,8 +9,6 @@ import { formatNumberWithCommas } from "@/lib/helpers";
 // Variables
 import { DATE_OPTIONS } from "@/lib/variables";
 import InvoiceLayout from "./InvoiceLayout";
-import Image from "next/image";
-import { Separator } from "@/components/ui/separator";
 
 const InvoiceTemplate = (data) => {
   const { receiver, details } = data;
@@ -97,17 +95,21 @@ const InvoiceTemplate = (data) => {
                 {receiver.email}
               </h3>
             </div>
-            <div className="flex">
+            {/* <div className="flex">
               <h3 className="flex-1 text-gray-800">TIN:</h3>
               <h3 className="flex-1  font-semibold text-gray-800">xyz</h3>
-            </div>
+            </div> */}
             <div className="flex">
               <h3 className="flex-1   text-gray-800">PAN:</h3>
-              <h3 className="flex-1 font-semibold  text-gray-800">xyz</h3>
+              <h3 className="flex-1 font-semibold  text-gray-800">
+                AAGFB3445C
+              </h3>
             </div>
             <div className="flex">
               <h3 className="flex-1 text-gray-800">GSTIN:</h3>
-              <h3 className="flex-1 font-semibold  text-gray-800">xyz</h3>
+              <h3 className="flex-1 font-semibold  text-gray-800">
+                29AAGFB3445C1ZQ
+              </h3>
             </div>
           </div>
         </div>
@@ -116,19 +118,10 @@ const InvoiceTemplate = (data) => {
         <div>
           <h3 className="font-semibold mb-3">Company Address</h3>
           <span>
-            Akshya Nagar 1st Block 1st Cross,
-            <br /> Rammurthy nagar,
+            Balaji Sanitary unit, West Coast Complex,
+            <br /> Nellikai Rd, near State Bank, Bunder, Mangaluru,
             <br />
-            Bangalore-560016
-          </span>
-        </div>
-        <div>
-          <h3 className="font-semibold mb-3">Billing Address</h3>
-          <span>
-            Akshya Nagar 1st Block 1st Cross,
-            <br /> Rammurthy nagar,
-            <br />
-            Bangalore-560016
+            Karnataka 575001
           </span>
         </div>
       </div>
@@ -200,18 +193,17 @@ const InvoiceTemplate = (data) => {
                 {details.currency}
               </dd>
             </dl>
-            {details.discountAmount != undefined &&
-              details.discountAmount > 0 && (
-                <dl className="grid sm:grid-cols-5 gap-x-3">
-                  <dt className="col-span-3 font-semibold text-gray-800">
-                    Discount:
-                  </dt>
-                  <dd className="col-span-2 text-gray-500">
-                    {discount} {details.currency}
-                  </dd>
-                </dl>
-              )}
-            {details.taxAmount != undefined && details.taxAmount > 0 && (
+            {details.discountAmount >= 0 && (
+              <dl className="grid sm:grid-cols-5 gap-x-3">
+                <dt className="col-span-3 font-semibold text-gray-800">
+                  Discount:
+                </dt>
+                <dd className="col-span-2 text-gray-500">
+                  {discount} {details.currency}
+                </dd>
+              </dl>
+            )}
+            {details.taxAmount >= 0 && (
               <dl className="grid sm:grid-cols-5 gap-x-3">
                 <dt className="col-span-3 font-semibold text-gray-800">Tax:</dt>
                 <dd className="col-span-2 text-gray-500">
@@ -220,17 +212,16 @@ const InvoiceTemplate = (data) => {
                 </dd>
               </dl>
             )}
-            {details.shippingAmount != undefined &&
-              details.shippingAmount > 0 && (
-                <dl className="grid sm:grid-cols-5 gap-x-3">
-                  <dt className="col-span-3 font-semibold text-gray-800">
-                    Shipping:
-                  </dt>
-                  <dd className="col-span-2 text-gray-500">
-                    {details.shippingAmount} {details.currency}
-                  </dd>
-                </dl>
-              )}
+            {details.shippingAmount >= 0 && (
+              <dl className="grid sm:grid-cols-5 gap-x-3">
+                <dt className="col-span-3 font-semibold text-gray-800">
+                  Shipping:
+                </dt>
+                <dd className="col-span-2 text-gray-500">
+                  {details.shippingAmount} {details.currency}
+                </dd>
+              </dl>
+            )}
             <dl className="grid sm:grid-cols-5 gap-x-3">
               <dt className="col-span-3 font-semibold text-gray-800">Total:</dt>
               <dd className="col-span-2 text-gray-500">

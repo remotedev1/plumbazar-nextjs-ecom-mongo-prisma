@@ -272,8 +272,6 @@ model DraftInvoice {
   updatedAt DateTime           @updatedAt
   rfqId     String             @unique @db.ObjectId
   status    DraftInvoiceStatus @default(CREATED)
-  tc        String?
-  pc        String?
   rfq       Rfq[]
 }
 
@@ -302,6 +300,8 @@ type Details {
   dueDate         DateTime
   items           Json
   currency        String   @default("INR")
+  tc              String?
+  pc              String?
   taxAmount       Int
   discountAmount  Int
   shippingAmount  Int

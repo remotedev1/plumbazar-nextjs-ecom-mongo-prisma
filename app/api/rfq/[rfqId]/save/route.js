@@ -71,11 +71,8 @@ export async function POST(req, { params }) {
 
     return NextResponse.json({ status: 201 });
   } catch (error) {
-    console.error("Error creating draft invoice:", error);
-    return NextResponse.json(
-      { error: "Something went wrong" },
-      { status: 500 }
-    );
+    console.log("Error creating draft invoice:", error);
+    return NextResponse.json({ error: JSON.stringify(error) }, { status: 500 });
   }
 }
 

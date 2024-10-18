@@ -12,7 +12,7 @@ export async function GET(req, { params }) {
 
     // Initialize filter conditions
     const filters = {
-      isArchived: true, // Always exclude archived products
+      // isArchived: true, // Always exclude archived products
     };
 
     // Prioritize by ID if provided
