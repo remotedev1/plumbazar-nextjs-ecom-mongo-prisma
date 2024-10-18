@@ -124,7 +124,7 @@ const InvoiceActions = ({ draftInvoiceData, rfq }) => {
                 <h2>Waiting for approval</h2>
               )}
               {(draftInvoiceData?.status === "CREATED" ||
-                (draftInvoiceData?.status === "WAITING" &&
+                (draftInvoiceData?.status === "WAITING" ||
                   user.role !== "SALES")) && (
                 <BaseButton
                   type="submit"

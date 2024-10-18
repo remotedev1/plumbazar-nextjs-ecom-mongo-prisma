@@ -1,14 +1,12 @@
 import React from "react";
 
-// Components
-
-// Helpers
 // import { formatNumberWithCommas, isDataUrl } from "@/lib/helpers";
 import { formatNumberWithCommas } from "@/lib/helpers";
 
 // Variables
 import { DATE_OPTIONS } from "@/lib/variables";
 import InvoiceLayout from "./InvoiceLayout";
+import { logoData } from "@/public/light-logo";
 
 const InvoiceTemplate = (data) => {
   const { receiver, details } = data;
@@ -17,10 +15,12 @@ const InvoiceTemplate = (data) => {
 
   const tax = details.subTotal * (details.taxAmount / 100);
 
+
+
   return (
     <InvoiceLayout data={data}>
       <div className="flex flex-col items-center">
-        <img alt="plumbazar" src="/light-logo.png" className="w-24 " />
+        <img alt="plumbazar" src={logoData} className="w-24" />
         <hr className="my-2 bg-gray-400" />
         <div className="flex flex-col w-full justify-start">
           <h2 className="text-xl md:text-1xl font-semibold text-blue-800 text-uppercase">
@@ -264,9 +264,8 @@ const InvoiceTemplate = (data) => {
             <p className="font-regular text-gray-800">{details.pc}</p>
           </div>
           <div className="my-2">
-            <p className="font-semibold text-blue-600">terms and conditions:</p>
+            <p className="font-semibold text-blue-600">Terms and Conditions:</p>
             <p className="font-regular text-gray-800">{details.tc}</p>
-            
           </div>
           {/* <div className="my-2">
             <span className="font-semibold text-md text-gray-800">
