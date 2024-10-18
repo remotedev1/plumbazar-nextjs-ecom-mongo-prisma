@@ -74,7 +74,7 @@ export async function GET(req) {
     const { user } = await auth(); // we have access to the user id here that wants to create new store using our api
     let rfq = [];
 
-    if (user.role === "ADMIN") {
+    if (user.role !== "USER") {
       rfq = await db.rfq.findMany({
         include: {
           user: {
