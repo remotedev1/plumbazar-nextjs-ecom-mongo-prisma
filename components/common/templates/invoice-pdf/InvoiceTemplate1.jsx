@@ -68,7 +68,7 @@ const InvoiceTemplate = (data) => {
           </div>
         </div>
         <div className="">
-          <h3 className="font-semibold mb-3">Plumbazar .....</h3>
+          <h3 className="font-semibold mb-3">Plumbazar</h3>
 
           <div className="border p-2">
             <div className="flex">
@@ -89,12 +89,7 @@ const InvoiceTemplate = (data) => {
                 )}
               </h3>
             </div>
-            <div className="flex">
-              <h3 className="flex-1 text-gray-800">Email:</h3>
-              <h3 className="flex-1  font-semibold text-gray-800">
-                {receiver.email}
-              </h3>
-            </div>
+
             {/* <div className="flex">
               <h3 className="flex-1 text-gray-800">TIN:</h3>
               <h3 className="flex-1  font-semibold text-gray-800">xyz</h3>
@@ -256,6 +251,10 @@ const InvoiceTemplate = (data) => {
           <div className="my-2">
             <p className="font-semibold text-blue-600">Payment terms:</p>
             <p className="font-regular text-gray-800">{details.pc}</p>
+          </div>
+          <div className="my-2">
+            <p className="font-semibold text-blue-600">terms and conditions:</p>
+            <p className="font-regular text-gray-800">{details.tc}</p>
           </div>
           {/* <div className="my-2">
             <span className="font-semibold text-md text-gray-800">
