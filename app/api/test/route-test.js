@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import axios, { all } from "axios";
+import axios from "axios";
 import { Buffer } from "buffer";
 import fs from "fs/promises"; // For reading the JSON file
 import path from "path";
@@ -93,6 +93,7 @@ async function migrateProductImages() {
 
 // API Route Handler
 export async function GET() {
+  console.log("Migrating product images...");
   try {
     const result = await migrateProductImages();
     return NextResponse.json(result);

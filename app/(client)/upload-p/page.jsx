@@ -26,6 +26,7 @@ export default function Page() {
       >
         Call API
       </button>
+      {loading && <p>Updating..</p>}
       {loading && (
         <div className="flex items-center justify-center min-h-[40vh]">
           <div
