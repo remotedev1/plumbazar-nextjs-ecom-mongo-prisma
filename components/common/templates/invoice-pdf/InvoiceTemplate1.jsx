@@ -15,8 +15,6 @@ const InvoiceTemplate = (data) => {
 
   const tax = details.subTotal * (details.taxAmount / 100);
 
-
-
   return (
     <InvoiceLayout data={data}>
       <div className="flex flex-col items-center">
@@ -255,17 +253,24 @@ const InvoiceTemplate = (data) => {
         <div className="my-4">
           <div className="my-2">
             <p className="font-semibold text-blue-600">Additional notes:</p>
-            <p className="font-regular text-gray-800">
-              {details.additionalNotes}
-            </p>
+            <div
+              className="font-regular text-gray-800"
+              dangerouslySetInnerHTML={{ __html: details.additionalNotes }} // Render HTML content
+            />
           </div>
           <div className="my-2">
             <p className="font-semibold text-blue-600">Payment terms:</p>
-            <p className="font-regular text-gray-800">{details.pc}</p>
+            <div
+              className="font-regular text-gray-800"
+              dangerouslySetInnerHTML={{ __html: details.pc }} // Render HTML content
+            />
           </div>
           <div className="my-2">
             <p className="font-semibold text-blue-600">Terms and Conditions:</p>
-            <p className="font-regular text-gray-800">{details.tc}</p>
+            <div
+              className="font-regular text-gray-800"
+              dangerouslySetInnerHTML={{ __html: details.tc }} // Render HTML content
+            />
           </div>
           {/* <div className="my-2">
             <span className="font-semibold text-md text-gray-800">

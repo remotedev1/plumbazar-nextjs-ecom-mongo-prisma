@@ -31,7 +31,7 @@ export const Navbar = () => {
       href: "/products",
       label: "Shop",
     },
-    { label: "Rfq", href: "/rfq" },
+    { label: "RFQ", href: "/rfq" },
   ];
 
   const dropdownOptions = [

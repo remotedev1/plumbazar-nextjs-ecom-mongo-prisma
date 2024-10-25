@@ -17,6 +17,7 @@ import { useEffect } from "react";
 const InvoiceMain = ({ rfq, draftInvoiceData }) => {
   const { handleSubmit, setValue, reset, formState } = useFormContext();
   const { onFormSubmit, formValues } = useInvoiceContext();
+
   useEffect(() => {
     if (draftInvoiceData) {
       // Reset the form with draftInvoiceData if it exists
@@ -46,11 +47,7 @@ const InvoiceMain = ({ rfq, draftInvoiceData }) => {
   return (
     <>
       <Form {...useFormContext()}>
-        <form
-          onSubmit={handleSubmit(onFormSubmit, (err) => {
-            // console.log(err);
-          })}
-        >
+        <form onSubmit={handleSubmit(onFormSubmit, (err) => {})}>
           <div className="flex flex-wrap justify-center gap-5">
             <InvoiceForm />
             <InvoiceActions draftInvoiceData={draftInvoiceData} rfq={rfq} />

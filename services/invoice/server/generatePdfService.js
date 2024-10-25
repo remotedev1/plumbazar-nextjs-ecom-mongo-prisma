@@ -21,20 +21,15 @@ import { CHROMIUM_EXECUTABLE_PATH, ENV, TAILWIND_CDN } from "@/lib/variables";
  */
 export async function generatePdfService(req) {
   const body = await req.json();
-  // Create a browser instance
   let browser;
+
   try {
     const ReactDOMServer = (await import("react-dom/server")).default;
-
-    // Get the selected invoice template
-    // const templateId = body.details.pdfTemplate;
     const InvoiceTemplate = await getInvoiceTemplate(1);
-    // Read the HTML template from a React component
     const htmlTemplate = ReactDOMServer.renderToStaticMarkup(
       InvoiceTemplate(body)
     );
 
-    // Launch the browser in production or development mode depending on the environment
     if (ENV === "production") {
       const puppeteer = await import("puppeteer-core");
       browser = await puppeteer.launch({
@@ -52,63 +47,64 @@ export async function generatePdfService(req) {
       });
     }
 
-    if (!browser) {
-      throw new Error("Failed to launch browser");
-    }
+    if (!browser) throw new Error("Failed to launch browser");
 
     const page = await browser.newPage();
-    // console.log("Page opened"); // Debugging log
-
-    // Set the HTML content of the page
-    await page.setContent(await htmlTemplate, {
-      // * "waitUntil" prop makes fonts work in templates
+    await page.setContent(htmlTemplate, {
       waitUntil: ["load", "networkidle0", "domcontentloaded"],
     });
-    // console.log("Page content set"); // Debugging log
 
+    await page.addStyleTag({ url: TAILWIND_CDN });
 
-    
-    // Add Tailwind CSS
-    await page.addStyleTag({
-      url: TAILWIND_CDN,
-    });
-    // console.log("Style tag added"); // Debugging log
+    // Define Header and Footer templates
+    const headerTemplate = `
+      <div style="font-size: 10px; width: 100%; text-align: center; padding: 5px 0;">
+        <span>Plumbazar - Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
+      </div>
+    `;
 
-    // Generate the PDF
+    const footerTemplate = `
+      <div style="font-size: 10px; width: 100%; text-align: center; padding: 5px 0;">
+        <span>Invoice generated on ${new Date().toLocaleDateString()}</span>
+      </div>
+    `;
+
+    // Generate the PDF with header and footer
     const pdf = await page.pdf({
       format: "a4",
       printBackground: true,
+      displayHeaderFooter: true,
+      headerTemplate,
+      footerTemplate,
+      margin: {
+        top: "50px", // Adjust as needed
+        bottom: "50px", // Adjust as needed
+        left: "20px",
+        right: "20px",
+      },
     });
-    console.log("PDF generated"); // Debugging log
 
     for (const page of await browser.pages()) {
       await page.close();
     }
 
-    // Close the Puppeteer browser
     await browser.close();
-    // console.log("Browser closed"); // Debugging log
 
-    // Create a Blob from the PDF data
     const pdfBlob = new Blob([pdf], { type: "application/pdf" });
 
-    const response = new NextResponse(pdfBlob, {
+    return new NextResponse(pdfBlob, {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": "inline; filename=invoice.pdf",
       },
       status: 200,
     });
-
-    return response;
   } catch (error) {
-    // Return an error response
     return new NextResponse(`Error generating PDF: \n${error}`, {
       status: 500,
     });
   } finally {
-    if (browser) {
+    if (browser)
       await Promise.race([browser.close(), browser.close(), browser.close()]);
-    }
   }
 }

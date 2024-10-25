@@ -1,7 +1,7 @@
 "use client";
 
 // Components
-import FormTextarea from "../../../form-fields/FormTextarea";
+import RichTextEditor from "../../../form-fields/RichTextEditor";
 import Subheading from "../../../Subheading";
 import Charges from "../Charges";
 
@@ -11,23 +11,21 @@ const InvoiceSummary = () => {
       <Subheading>Summary:</Subheading>
       <div className="p-5 max-w-lg mx-auto ">
         <div className="flex flex-col gap-5 ">
-          {/* Final charges */}
           <Charges />
-          {/* Additional notes & Payment terms */}
-          <FormTextarea
+          <RichTextEditor
             name="details.additionalNotes"
-            label="Additional notes"
+            label="Additional Notes"
             placeholder="Your additional notes"
           />
-          <FormTextarea
+          <RichTextEditor
             name="details.tc"
-            label="Terms & conditions"
-            placeholder="Terms & conditions"
+            label="Terms & Conditions"
+            placeholder="Your Terms & Conditions notes"
           />
-          <FormTextarea
+          <RichTextEditor
             name="details.pc"
-            label="Payments terms"
-            placeholder="Payments terms"
+            label="Payments Terms"
+            placeholder="Your Payments Terms notes"
           />
         </div>
       </div>
