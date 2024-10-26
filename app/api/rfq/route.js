@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import cloudinary from "@/lib/cloudinary";
 import { db } from "@/lib/db";
 import { SendRfqNotification } from "@/lib/mailService";
 import { NextResponse } from "next/server";
@@ -12,51 +11,43 @@ export async function POST(req) {
     }
 
     const formData = await req.formData();
-
     const phone = formData.get("phone");
     const notes = formData.get("notes");
     const images = formData.getAll("newImages");
+
     if (!phone) {
       return new NextResponse("Phone number is required", { status: 400 });
     }
 
-    if (!images) {
+    if (!images || images.length === 0) {
       return new NextResponse("Images are required", { status: 400 });
     }
 
-    // Upload images to Cloudinary
-    const folderPath = "rfq";
-
-    const uploadedImages = await Promise.all(
+    // Convert images to Base64
+    const base64Images = await Promise.all(
       images.map(async (image) => {
         if (image instanceof File) {
           const arrayBuffer = await image.arrayBuffer();
-          const buffer = Buffer.from(arrayBuffer);
-          const result = await cloudinary.uploader.upload(
-            `data:${image.type};base64,${buffer.toString("base64")}`,
-            { folder: folderPath }
-          );
-          return { url: result.secure_url };
+          const base64String = Buffer.from(arrayBuffer).toString("base64");
+          return `data:${image.type};base64,${base64String}`;
         } else {
           throw new Error("Invalid file format");
         }
       })
     );
 
+    // Save RFQ with images as Base64 strings
     const newRfq = await db.rfq.create({
       data: {
         userId: user.id,
-        phone: phone,
-        notes: notes,
-        images: uploadedImages.map((img) => img.url),
+        phone,
+        notes,
+        images: base64Images, // Store the Base64 strings directly
       },
     });
 
-    //send email update to admin
-    await SendRfqNotification(
-      //TODO
-      "enquiry@plumbazar.com"
-    );
+    // Send email notification to admin
+    await SendRfqNotification("enquiry@plumbazar.com");
 
     return NextResponse.json({
       newRfq,
@@ -67,6 +58,7 @@ export async function POST(req) {
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
+
 
 // Getting all the rfq's
 export async function GET(req) {

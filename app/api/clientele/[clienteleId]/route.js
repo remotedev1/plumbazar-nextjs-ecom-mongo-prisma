@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import cloudinary from "@/lib/cloudinary";
 import { auth } from "@/auth";
 
 export async function GET(req, { params }) {
@@ -43,14 +42,6 @@ export async function DELETE(req, { params }) {
       return new NextResponse("clientele not found", { status: 404 });
     }
 
-    // Delete images from Cloudinary
-    await Promise.all(
-      category.images.map(async (image) => {
-        const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`clientele/${publicId}`);
-      })
-    );
-
     await db.clientele.delete({
       where: {
         id: params.clienteleId,
@@ -67,84 +58,67 @@ export async function DELETE(req, { params }) {
 export async function PATCH(req, { params }) {
   try {
     const { user } = await auth();
+
+    // Authorization check
     if (user.role !== "ADMIN") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+
     if (!params.clienteleId) {
-      return new NextResponse("clientele id is required", { status: 400 });
+      return new NextResponse("Clientele ID is required", { status: 400 });
     }
+
     const formData = await req.formData();
     const name = formData.get("name");
-    const images = formData.getAll("images");
-    const newImages = formData.getAll("newImages");
+    const images = formData.getAll("images"); // Existing images
+    const newImages = formData.getAll("newImages"); // New images to be uploaded
 
+    // Validations
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
     }
 
-    if (!images || !newImages) {
-      return new NextResponse("Images are required", { status: 400 });
-    }
-
-    // Fetch current images from the database
+    // Fetch current clientele data from the database
     const currentClientele = await db.clientele.findUnique({
-      where: {
-        id: params.clienteleId,
-      },
+      where: { id: params.clienteleId },
     });
 
     if (!currentClientele) {
-      return new NextResponse("clientele not found", { status: 404 });
+      return new NextResponse("Clientele not found", { status: 404 });
     }
 
-    // Find images to delete (present in DB but not in the images array from the form)
-    const imagesToDelete = currentClientele.images.filter(
-      (dbImage) => !images.includes(dbImage) // Images in DB but not in the new array of URLs
-    );
-
-    // Delete images from Cloudinary
-    await Promise.all(
-      imagesToDelete.map(async (image) => {
-        const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`clientele/${publicId}`);
-      })
-    );
-
-    const folderPath = "clientele";
-
-    // Upload new images to Cloudinary
+    // Process new images to base64 format
     const uploadedImages = await Promise.all(
       newImages.map(async (image) => {
-        if (image instanceof File) {
-          const arrayBuffer = await image.arrayBuffer();
-          const buffer = Buffer.from(arrayBuffer);
-          const result = await cloudinary.uploader.upload(
-            `data:${image.type};base64,${buffer.toString("base64")}`,
-            { folder: folderPath }
-          );
-          return result.secure_url;
-        } else {
+        if (!(image instanceof File)) {
           throw new Error("Invalid file format");
         }
+        const arrayBuffer = await image.arrayBuffer();
+        const base64String = Buffer.from(arrayBuffer).toString("base64");
+        return `data:${image.type};base64,${base64String}`;
       })
     );
 
-    // Combine new uploaded images and the existing images that weren't deleted
+    // Combine retained existing images and newly uploaded images
     const finalImages = [...images, ...uploadedImages].flat();
 
-    const clientele = await db.clientele.update({
-      where: {
-        id: params.clienteleId,
-      },
+    // Update the clientele in the database
+    const updatedClientele = await db.clientele.update({
+      where: { id: params.clienteleId },
       data: {
         name,
         images: finalImages,
       },
     });
 
-    return NextResponse.json(clientele);
+    return NextResponse.json(updatedClientele);
   } catch (error) {
-    console.log("[CLIENTELE_PATCH]", error);
+    console.error("[CLIENTELE_PATCH]", error);
+
+    if (error.message === "Invalid file format") {
+      return new NextResponse("Invalid file format", { status: 400 });
+    }
+
     return new NextResponse("Internal error", { status: 500 });
   }
 }

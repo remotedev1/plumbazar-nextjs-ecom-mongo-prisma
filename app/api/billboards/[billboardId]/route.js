@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import cloudinary from "@/lib/cloudinary";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
@@ -39,7 +38,6 @@ export async function PATCH(req, { params }) {
     const images = formData.getAll("images"); // URLs of existing images
     const newImages = formData.getAll("newImages"); // New images as File objects
 
- 
     if (!images || !newImages) {
       return new NextResponse("Images are required", { status: 400 });
     }
@@ -54,20 +52,6 @@ export async function PATCH(req, { params }) {
     if (!currentBillboard) {
       return new NextResponse("Billboard not found", { status: 404 });
     }
-
-    // Find images to delete (present in DB but not in the images array from the form)
-    const imagesToDelete = currentBillboard.images.filter(
-      (dbImage) => !images.includes(dbImage) // Images in DB but not in the new array of URLs
-    );
-
-    // Delete images from Cloudinary
-    await Promise.all(
-      imagesToDelete.map(async (image) => {
-        const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`billboards/${publicId}`);
-      })
-    );
-
 
     // Upload new images to Cloudinary
     const uploadedImages = await Promise.all(
@@ -124,14 +108,6 @@ export async function DELETE(req, { params }) {
     if (!billboard) {
       return new NextResponse("billboard not found", { status: 404 });
     }
-
-    // Delete images from Cloudinary
-    await Promise.all(
-      billboard.images.map(async (image) => {
-        const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`billboards/${publicId}`);
-      })
-    );
 
     await db.billboard.deleteMany({
       where: {

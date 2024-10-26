@@ -1,49 +1,38 @@
 import { auth } from "@/auth";
-import cloudinary from "@/lib/cloudinary";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export async function POST(req, { params }) {
   try {
-    const { user } = await auth(); // we have access to the user id here that wants to create new store using our api
+    const { user } = await auth(); // Authentication check
     const formData = await req.formData();
 
     const action = formData.get("action");
     const images = formData.getAll("newImages");
 
- 
-    if (!images) {
-      return new NextResponse("images is required", { status: 400 });
+    // Validations
+    if (!images || images.length === 0) {
+      return new NextResponse("Images are required", { status: 400 });
     }
 
-
-
-    // Upload images to Cloudinary path
-    const folderPath = "billboards";
-    // Upload images to Cloudinary
+    // Process new images to base64 format
     const uploadedImages = await Promise.all(
       images.map(async (image) => {
-        if (image instanceof File) {
-          const arrayBuffer = await image.arrayBuffer();
-          const buffer = Buffer.from(arrayBuffer);
-          const result = await cloudinary.uploader.upload(
-            `data:${image.type};base64,${buffer.toString("base64")}`,
-            { folder: folderPath }
-          );
-          return { url: result.secure_url };
-        } else {
+        if (!(image instanceof File)) {
           throw new Error("Invalid file format");
         }
+        const arrayBuffer = await image.arrayBuffer();
+        const base64String = Buffer.from(arrayBuffer).toString("base64");
+        return `data:${image.type};base64,${base64String}`; // Convert image to base64 format
       })
     );
 
-    // create new billboard using prisma client instance and return the billboard data to the client
-
+    // Create new billboard using Prisma client instance
     const billboard = await db.billboard.create({
       data: {
         postedBy: user.id,
         action,
-        images: uploadedImages.map((img) => img.url),
+        images: uploadedImages, // Store base64 images directly
       },
     });
 
@@ -63,7 +52,6 @@ export async function GET(req, { params }) {
     if (user.role !== "ADMIN") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
 
     // get all the billboard
 

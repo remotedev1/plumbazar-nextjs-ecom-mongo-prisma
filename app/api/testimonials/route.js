@@ -1,70 +1,67 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
-import cloudinary from "@/lib/cloudinary";
 
-export async function POST(req, { params }) {
+export async function POST(req) {
   try {
     const { user } = await auth();
+
+    // Ensure only admins can post testimonials
     if (user.role !== "ADMIN") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-
     const formData = await req.formData();
 
     const name = formData.get("name");
-    const organization = formData.get("organization");
-    const designation = formData.get("designation");
+    const organization = formData.get("organization") || "";
+    const designation = formData.get("designation") || "";
     const message = formData.get("message");
     const images = formData.getAll("newImages");
 
-    if (!name) {
-      return new NextResponse("Name is required", { status: 400 });
-    }
+    // Validate required fields
+    if (!name) return new NextResponse("Name is required", { status: 400 });
+    if (!message)
+      return new NextResponse("Message is required", { status: 400 });
 
-    if (!message) {
-      return new NextResponse("message is required", { status: 400 });
-    }
-
-    // Upload images to Cloudinary
-    const uploadedImages = await Promise.all(
+    // Convert images to base64 strings
+    const base64Images = await Promise.all(
       images.map(async (image) => {
-        if (image instanceof File) {
-          const arrayBuffer = await image.arrayBuffer();
-          const buffer = Buffer.from(arrayBuffer);
-          const result = await cloudinary.uploader.upload(
-            `data:${image.type};base64,${buffer.toString("base64")}`,
-            { folder: "testimonials" }
-          );
-          return { url: result.secure_url };
-        } else {
+        if (!(image instanceof File)) {
           throw new Error("Invalid file format");
         }
+        const arrayBuffer = await image.arrayBuffer();
+        const base64String = Buffer.from(arrayBuffer).toString("base64");
+        return `data:${image.type};base64,${base64String}`;
       })
     );
 
+    // Save testimonial in the database
     const testimonial = await db.testimonial.create({
       data: {
         postedBy: user.id,
         name,
-        message,
         organization,
         designation,
-        images: uploadedImages.map((img) => img.url),
+        message,
+        images: base64Images, // Store base64-encoded images
       },
     });
 
     return NextResponse.json(testimonial);
   } catch (error) {
-    console.log("[TESTIMONIAL_POST]", error);
+    console.error("[TESTIMONIAL_POST]", error);
+
+    if (error.message === "Invalid file format") {
+      return new NextResponse("Invalid file format", { status: 400 });
+    }
+
     return new NextResponse("Internal error", { status: 500 });
   }
 }
 
 export async function GET(req, { params }) {
   try {
-
     const testimonials = await db.testimonial.findMany();
     return NextResponse.json(testimonials);
   } catch (error) {

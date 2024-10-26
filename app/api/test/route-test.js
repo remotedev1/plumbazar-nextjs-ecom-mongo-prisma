@@ -26,6 +26,7 @@ async function loadProductJson() {
 
 // Main migration function
 async function migrateProductImages() {
+  console.log("Starting migration...");
   try {
     const productsInJson = await loadProductJson();
 
@@ -36,12 +37,16 @@ async function migrateProductImages() {
       },
       select: { id: true, name: true, images: true },
     });
+    console.log(dbProducts)
+
 
     let updatedCount = 0;
     const startTime = Date.now();
 
     // Iterate through each product in the JSON data
     for (const jsonProduct of productsInJson) {
+    console.log("started")
+
       const matchingProduct = dbProducts.find(
         (dbProduct) => dbProduct.name.trim() === jsonProduct.name.trim()
       );

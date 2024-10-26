@@ -36,6 +36,7 @@ export async function PATCH(req, { params }) {
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+
     const formData = await req.formData();
 
     // Fetch current product from the database
@@ -64,11 +65,11 @@ export async function PATCH(req, { params }) {
     if (formData.has("categoryId"))
       updateData.categoryId = formData.get("categoryId");
     if (formData.has("isFeatured"))
-      updateData.isFeatured = formData.get("isFeatured")=== "true";;
+      updateData.isFeatured = formData.get("isFeatured") === "true";
     if (formData.has("isArchived"))
-      updateData.isArchived = formData.get("isArchived")=== "true";;
+      updateData.isArchived = formData.get("isArchived") === "true";
 
-    // Handle images separately as before
+    // Handle images separately
     const images = formData.getAll("images");
     const newImages = formData.getAll("newImages");
 
@@ -80,59 +81,28 @@ export async function PATCH(req, { params }) {
       return new NextResponse("MSP is required", { status: 400 });
     }
 
-    // Determine which images to delete
-    const imagesToDelete = currentProduct.images.filter(
-      (dbImage) => !images.includes(dbImage) // Images in DB but not in the new array of URLs
-    );
+    // Determine which images to keep
+    const imagesToKeep = [...images, ...newImages];
 
-    // Delete images from Cloudinary
-    await Promise.all(
-      imagesToDelete.map(async (image) => {
-        const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`products/${publicId}`);
-      })
-    );
-
-    // Upload new images to Cloudinary (if they are provided)
-    let uploadedImages = [];
-    if (newImages && newImages.length > 0) {
-      uploadedImages = await Promise.all(
-        newImages.map(async (image) => {
-          if (image instanceof File) {
-            const arrayBuffer = await image.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
-            const result = await cloudinary.uploader.upload(
-              `data:${image.type};base64,${buffer.toString("base64")}`,
-              { folder: "products" }
-            );
-            return result.secure_url;
-          } else {
-            throw new Error("Invalid file format");
-          }
-        })
-      );
-    }
-
-    // Combine new uploaded images and the existing images that weren't deleted
-    const finalImages = [...images, ...uploadedImages];
-    if (images.length && uploadedImages.length) {
-      updateData.images = finalImages;
+    // Update images in the database
+    if (imagesToKeep.length) {
+      updateData.images = imagesToKeep;
     }
 
     // Update the product
-    await db.product.update({
+    const product = await db.product.update({
       where: {
         id: params.productId,
       },
-      data: updateData, // Use the constructed update data
+      data: {
+        ...updateData, // Use the constructed update data
+      },
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, product });
   } catch (error) {
-    console.log(`[PRODUCT_PATCH] `, error);
-    return new NextResponse("Internal Server Error", {
-      status: 500,
-    });
+    console.error(`[PRODUCT_PATCH] `, error);
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
 
@@ -174,14 +144,6 @@ export async function DELETE(req, { params }) {
     if (!product) {
       return new NextResponse("Product not found", { status: 404 });
     }
-
-    // Delete images from Cloudinary
-    await Promise.all(
-      product.images.map(async (image) => {
-        const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`products/${publicId}`);
-      })
-    );
 
     // Delete the product from the database
     await db.product.delete({

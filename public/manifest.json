@@ -5,8 +5,8 @@
   "background_color": "#fff",
   "display": "browser",
   "orientation": "portrait",
-  "scope": "https://www.plumbazar.com/",
-  "start_url": "https://www.plumbazar.com/",
+  "scope": "/",
+  "start_url": "/",
   "icons": [
     {
       "src": "images/icons/icon-72x72.png",

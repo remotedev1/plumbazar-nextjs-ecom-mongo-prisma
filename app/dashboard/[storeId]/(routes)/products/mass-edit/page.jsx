@@ -53,7 +53,9 @@ const MassUpdateProducts = () => {
         take: itemsPerPage,
       };
       const queryString = buildQueryString(filter);
-      const response = await axios.get(`/api/search-product?${queryString}&fetchCount=true`);
+      const response = await axios.get(
+        `/api/search-product?${queryString}&fetchCount=true`
+      );
       const { products, totalProducts } = response.data;
 
       setData(products);
@@ -80,7 +82,10 @@ const MassUpdateProducts = () => {
       const formData = new FormData();
       formData.append("msp", updatedMsp);
       formData.append("mrp", updatedMrp);
-      await axios.patch(`/api/${storeId}/products/${productId}`, formData);
+      await axios.patch(
+        `/api/${storeId}/products/${productId}/mass-edit`,
+        formData
+      );
       toast.success("Product updated successfully!");
     } catch (error) {
       console.error("Failed to update product", error);
@@ -142,27 +147,33 @@ const MassUpdateProducts = () => {
             />
           </div>
           <div className="flex flex-col justify-center items-center gap-3">
-            <Label htmlFor={`mrp-${product.id}`}>MRP &nbsp;
-            <input
-              id={`mrp-${product.id}`}
-              type="number"
-              value={product.mrp}
-              onChange={(e) => handleChange(product.id, "mrp", e.target.value)}
-              className="border rounded px-2 py-1"
-              placeholder="MRP"
-              min="0" // Prevent negative values
-            />
+            <Label htmlFor={`mrp-${product.id}`}>
+              MRP &nbsp;
+              <input
+                id={`mrp-${product.id}`}
+                type="number"
+                value={product.mrp}
+                onChange={(e) =>
+                  handleChange(product.id, "mrp", e.target.value)
+                }
+                className="border rounded px-2 py-1"
+                placeholder="MRP"
+                min="0" // Prevent negative values
+              />
             </Label>
-            <Label htmlFor={`msp-${product.id}`}>MSP &nbsp;
-            <input
-              id={`msp-${product.id}`}
-              type="number"
-              value={product.msp}
-              onChange={(e) => handleChange(product.id, "msp", e.target.value)}
-              className="border rounded px-2 py-1"
-              placeholder="MSP"
-              min="0" // Prevent negative values
-            />
+            <Label htmlFor={`msp-${product.id}`}>
+              MSP &nbsp;
+              <input
+                id={`msp-${product.id}`}
+                type="number"
+                value={product.msp}
+                onChange={(e) =>
+                  handleChange(product.id, "msp", e.target.value)
+                }
+                className="border rounded px-2 py-1"
+                placeholder="MSP"
+                min="0" // Prevent negative values
+              />
             </Label>
             <Button
               disabled={loading}

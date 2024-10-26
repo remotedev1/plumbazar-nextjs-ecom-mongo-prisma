@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import cloudinary from "@/lib/cloudinary";
 import { db } from "@/lib/db";
 import { generateSlug } from "@/lib/helpers";
 import { NextResponse } from "next/server";
@@ -13,64 +12,47 @@ export async function POST(req, { params }) {
 
     const formData = await req.formData();
 
+    // Extract and validate form fields
     const name = formData.get("name");
     const mrp = formData.get("mrp");
     const msp = formData.get("msp");
-    const purchasedPrice = formData.get("purchasedPrice");
+    const purchasedPrice = formData.get("purchasedPrice") || 0; // Default to 0 if not provided
     const gst = formData.get("gst");
     const brandId = formData.get("brandId");
     const description = formData.get("description");
     const categoryId = formData.get("categoryId");
     const isFeatured = formData.get("isFeatured") === "true";
     const isArchived = formData.get("isArchived") === "true";
-
     const images = formData.getAll("newImages");
 
-    if (!name) {
-      return new NextResponse("Name is required", { status: 400 });
+    // Validate required fields
+    const validationErrors = [];
+    if (!name) validationErrors.push("Name is required");
+    if (!gst) validationErrors.push("GST is required");
+    if (!mrp) validationErrors.push("MRP is required");
+    if (!msp) validationErrors.push("MSP is required");
+    if (!brandId) validationErrors.push("Brand ID is required");
+    if (!categoryId) validationErrors.push("Category ID is required");
+    if (!images.length) validationErrors.push("Images are required");
+
+    if (validationErrors.length) {
+      return new NextResponse(validationErrors.join(", "), { status: 400 });
     }
 
-    if (!gst) {
-      return new NextResponse("gst is required", { status: 400 });
-    }
-
-    if (!images.length) {
-      return new NextResponse("Images are required", { status: 400 });
-    }
-
-    if (!mrp) {
-      return new NextResponse("MRP is required", { status: 400 });
-    }
-
-    if (!msp) {
-      return new NextResponse("MSP is required", { status: 400 });
-    }
-
-    if (!brandId) {
-      return new NextResponse("Brand id is required", { status: 400 });
-    }
-    if (!categoryId) {
-      return new NextResponse("Category id is required", { status: 400 });
-    }
-
-    // Upload new images to Cloudinary (if they are not already in the images array)
-    const folderPath = "products";
+    // Convert images to Base64 strings
     const uploadedImages = await Promise.all(
       images.map(async (image) => {
-        if (image instanceof File) {
-          const arrayBuffer = await image.arrayBuffer();
-          const buffer = Buffer.from(arrayBuffer);
-          const result = await cloudinary.uploader.upload(
-            `data:${image.type};base64,${buffer.toString("base64")}`,
-            { folder: folderPath }
-          );
-          return result.secure_url;
-        } else {
+        if (!(image instanceof File)) {
           throw new Error("Invalid file format");
         }
+        const arrayBuffer = await image.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        const base64String = buffer.toString("base64");
+        return `data:${image.type};base64,${base64String}`;
       })
     );
 
+    // Create product in the database
     const product = await db.product.create({
       data: {
         postedBy: user.id,
@@ -85,13 +67,13 @@ export async function POST(req, { params }) {
         description,
         categoryId,
         images: uploadedImages,
-        slug: generateSlug(name),
+        slug: generateSlug(name), // Assuming you have a slug generator function
       },
     });
 
     return NextResponse.json(product);
   } catch (error) {
-    console.log("[PRODUCTS_POST]", error);
+    console.error("[PRODUCTS_POST]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import cloudinary from "@/lib/cloudinary";
 import { auth } from "@/auth";
 
 export async function GET(req, { params }) {
@@ -43,14 +42,6 @@ export async function DELETE(req, { params }) {
       return new NextResponse("category not found", { status: 404 });
     }
 
-    // Delete images from Cloudinary
-    await Promise.all(
-      category.images.map(async (image) => {
-        const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`categories/${publicId}`);
-      })
-    );
-
     await db.category.delete({
       where: {
         id: params.categoryId,
@@ -70,13 +61,15 @@ export async function PATCH(req, { params }) {
     if (user.role !== "ADMIN") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+
     if (!params.categoryId) {
       return new NextResponse("Category id is required", { status: 400 });
     }
+
     const formData = await req.formData();
     const name = formData.get("name");
-    const images = formData.getAll("images");
-    const newImages = formData.getAll("newImages");
+    const images = formData.getAll("images"); // Existing images (URLs or Base64)
+    const newImages = formData.getAll("newImages"); // New images to be uploaded
 
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
@@ -86,7 +79,7 @@ export async function PATCH(req, { params }) {
       return new NextResponse("Images are required", { status: 400 });
     }
 
-    // Fetch current images from the database
+    // Fetch current category from the database
     const currentCategory = await db.category.findUnique({
       where: {
         id: params.categoryId,
@@ -97,48 +90,30 @@ export async function PATCH(req, { params }) {
       return new NextResponse("Category not found", { status: 404 });
     }
 
-    // Find images to delete (present in DB but not in the images array from the form)
-    const imagesToDelete = currentCategory.images.filter(
-      (dbImage) => !images.includes(dbImage) // Images in DB but not in the new array of URLs
-    );
-
-    // Delete images from Cloudinary
-    await Promise.all(
-      imagesToDelete.map(async (image) => {
-        const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`categories/${publicId}`);
-      })
-    );
-
-    const folderPath = "categories";
-
-    // Upload new images to Cloudinary
+    // Convert new images to Base64 strings
     const uploadedImages = await Promise.all(
       newImages.map(async (image) => {
         if (image instanceof File) {
           const arrayBuffer = await image.arrayBuffer();
-          const buffer = Buffer.from(arrayBuffer);
-          const result = await cloudinary.uploader.upload(
-            `data:${image.type};base64,${buffer.toString("base64")}`,
-            { folder: folderPath }
-          );
-          return result.secure_url;
+          const base64String = Buffer.from(arrayBuffer).toString("base64");
+          return `data:${image.type};base64,${base64String}`;
         } else {
           throw new Error("Invalid file format");
         }
       })
     );
 
-    // Combine new uploaded images and the existing images that weren't deleted
-    const finalImages = [...images, ...uploadedImages].flat();
+    // Combine new Base64 images with existing images that weren't deleted
+    const finalImages = [...images, ...uploadedImages];
 
+    // Update the category in the database
     const category = await db.category.update({
       where: {
         id: params.categoryId,
       },
       data: {
         name,
-        images: finalImages,
+        images: finalImages, // Store Base64 strings directly
       },
     });
 
