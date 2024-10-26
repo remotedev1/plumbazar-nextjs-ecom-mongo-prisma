@@ -12,6 +12,11 @@ export async function POST(req) {
       return new NextResponse("Please sign in", { status: 400 });
     }
 
+    // Check if the user is authorized
+    if (!checkAuthorization(user, ["SUPERADMIN", "ADMIN"])) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     if (!products || products.length === 0) {
       return new NextResponse("Products are required", { status: 400 });
     }

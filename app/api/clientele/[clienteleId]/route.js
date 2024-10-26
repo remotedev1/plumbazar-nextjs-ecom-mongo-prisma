@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { auth } from "@/auth";
+import { checkAuthorization } from "@/lib/helpers";
 
 export async function GET(req, { params }) {
   try {
@@ -24,7 +25,8 @@ export async function GET(req, { params }) {
 export async function DELETE(req, { params }) {
   try {
     const { user } = await auth();
-    if (user.role !== "ADMIN" || user.role !== "SUPERADMIN") {
+    // Check if the user is authorized
+    if (!checkAuthorization(user, ["SUPERADMIN"])) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -59,10 +61,10 @@ export async function PATCH(req, { params }) {
   try {
     const { user } = await auth();
 
-    // Authorization check
-    if (user.role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
+      // Check if the user is authorized
+      if (!checkAuthorization(user, ["SUPERADMIN"])) {
+        return new NextResponse("Unauthorized", { status: 401 });
+      }
 
     if (!params.clienteleId) {
       return new NextResponse("Clientele ID is required", { status: 400 });

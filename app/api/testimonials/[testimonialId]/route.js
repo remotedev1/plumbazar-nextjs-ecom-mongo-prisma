@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import cloudinary from "@/lib/cloudinary";
 import { auth } from "@/auth";
+import { checkAuthorization } from "@/lib/helpers";
 
 export async function GET(req, { params }) {
   try {
@@ -26,10 +26,10 @@ export async function DELETE(req, { params }) {
   try {
     const { user } = await auth();
 
-    if (user.role !== "ADMIN") {
+    // Check if the user is authorized
+    if (!checkAuthorization(user, ["SUPERADMIN"])) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
     if (!params.testimonialId) {
       return new NextResponse("testimonial id is required", { status: 400 });
     }
@@ -43,14 +43,6 @@ export async function DELETE(req, { params }) {
     if (!testimonial) {
       return new NextResponse("testimonial not found", { status: 404 });
     }
-
-    // Delete images from Cloudinary
-    await Promise.all(
-      testimonial.images.map(async (image) => {
-        const publicId = image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`billboards/${publicId}`);
-      })
-    );
 
     await db.testimonial.delete({
       where: {
@@ -69,8 +61,8 @@ export async function PATCH(req, { params }) {
   try {
     const { user } = await auth();
 
-    // Authorization check
-    if (user.role !== "ADMIN") {
+    // Check if the user is authorized
+    if (!checkAuthorization(user, ["SUPERADMIN"])) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 

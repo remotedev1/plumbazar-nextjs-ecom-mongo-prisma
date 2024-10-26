@@ -1,13 +1,15 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { generateSlug } from "@/lib/helpers";
+import { checkAuthorization, generateSlug } from "@/lib/helpers";
 import { NextResponse } from "next/server";
 
 export async function POST(req, { params }) {
   try {
     const { user } = await auth();
-    if (!user) {
-      return new NextResponse("Unauthenticated", { status: 403 });
+
+    // Check if the user is authorized
+    if (!checkAuthorization(user, ["SUPERADMIN", "ADMIN"])) {
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const formData = await req.formData();

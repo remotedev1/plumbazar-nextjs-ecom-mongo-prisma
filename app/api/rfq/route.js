@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { checkAuthorization } from "@/lib/helpers";
 import { SendRfqNotification } from "@/lib/mailService";
 import { NextResponse } from "next/server";
 
@@ -59,39 +60,28 @@ export async function POST(req) {
   }
 }
 
-
 // Getting all the rfq's
 export async function GET(req) {
   try {
-    const { user } = await auth(); // we have access to the user id here that wants to create new store using our api
-    let rfq = [];
+    const { user } = await auth();
 
-    if (user.role !== "USER") {
-      rfq = await db.rfq.findMany({
-        include: {
-          user: {
-            select: {
-              name: true,
-              address: true,
-            },
-          },
-        },
-      });
-    } else {
-      rfq = await db.rfq.findMany({
-        where: {
-          userId: user.id,
-        },
-        include: {
-          user: {
-            select: {
-              name: true,
-              address: true,
-            },
-          },
-        },
-      });
+    // Check if the user is authorized
+    if (!checkAuthorization(user, ["SUPERADMIN", "SALES", "ADMIN", "USER"])) {
+      return new NextResponse("Unauthorized", { status: 401 });
     }
+    const rfq = await db.rfq.findMany({
+      where: {
+        userId: user.id,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            address: true,
+          },
+        },
+      },
+    });
     return NextResponse.json(rfq);
   } catch (error) {
     console.log(`[RFQ_GET] ${error}`, error);

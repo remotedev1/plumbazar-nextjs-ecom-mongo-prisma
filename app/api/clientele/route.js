@@ -1,13 +1,14 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { checkAuthorization } from "@/lib/helpers";
 import { NextResponse } from "next/server";
 
 export async function POST(req, { params }) {
   try {
     const { user } = await auth();
 
-    // Authorization check
-    if (user.role !== "ADMIN") {
+     // Check if the user is authorized
+     if (!checkAuthorization(user, ["SUPERADMIN"])) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 

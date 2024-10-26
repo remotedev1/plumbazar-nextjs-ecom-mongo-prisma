@@ -1,15 +1,15 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { checkAuthorization } from "@/lib/helpers";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
     const { user } = await auth();
-
-    if (user.role !== "ADMIN") {
+    // Check if the user is authorized
+    if (!checkAuthorization(user, ["SUPERADMIN"])) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
     const formData = await req.formData();
     const name = formData.get("name");
     const images = formData.getAll("newImages");
@@ -50,7 +50,6 @@ export async function POST(req) {
     return new NextResponse("Internal error", { status: 500 });
   }
 }
-
 
 export async function GET(req, { params }) {
   try {

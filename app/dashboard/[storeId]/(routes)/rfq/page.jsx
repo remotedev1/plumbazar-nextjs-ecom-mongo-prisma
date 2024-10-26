@@ -15,7 +15,7 @@ const RfqPage = () => {
 
   useEffect(() => {
     startTransition(async () => {
-      const rfqData = await axios.get(`/api/rfq`);
+      const rfqData = await axios.get(`/api/rfq/admin`);
       setData(rfqData.data);
     });
   }, [user]);

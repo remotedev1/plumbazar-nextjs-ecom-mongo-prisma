@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import cloudinary from "@/lib/cloudinary";
 import { db } from "@/lib/db";
+import { checkAuthorization } from "@/lib/helpers";
 import { NextResponse } from "next/server";
 
 export async function GET(req, { params }) {
@@ -33,7 +34,9 @@ export async function GET(req, { params }) {
 export async function PATCH(req, { params }) {
   try {
     const { user } = await auth();
-    if (!user) {
+
+    // Check if the user is authorized
+    if (!checkAuthorization(user, ["SUPERADMIN", "ADMIN"])) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -109,7 +112,9 @@ export async function PATCH(req, { params }) {
 export async function DELETE(req, { params }) {
   try {
     const { user } = await auth();
-    if (!user) {
+
+    // Check if the user is authorized
+    if (!checkAuthorization(user, ["SUPERADMIN", "ADMIN"])) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     const { storeId } = params;

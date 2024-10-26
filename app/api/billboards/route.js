@@ -1,10 +1,15 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { checkAuthorization } from "@/lib/helpers";
 import { NextResponse } from "next/server";
 
 export async function POST(req, { params }) {
   try {
-    const { user } = await auth(); // Authentication check
+    const { user } = await auth();
+    // Check if the user is authorized
+    if (!checkAuthorization(user, ["SUPERADMIN"])) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
     const formData = await req.formData();
 
     const action = formData.get("action");
@@ -48,10 +53,6 @@ export async function POST(req, { params }) {
 export async function GET(req, { params }) {
   try {
     const { user } = await auth(); // we have access to the user id here that wants to create new store using our api
-
-    if (user.role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
 
     // get all the billboard
 
