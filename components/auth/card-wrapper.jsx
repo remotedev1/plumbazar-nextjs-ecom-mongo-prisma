@@ -16,10 +16,10 @@ export const CardWrapper = ({
   showSocial,
 }) => {
   return (
-    <Card className="w-[400px]  shadow-md my-5">
+    <Card className="w-[100vw] md:w-[400px]  shadow-md my-10">
       <CardHeader>
         <div className="flex justify-center">
-        <Image src={"/light-logo.png"} alt="Logo" width={100} height={100} />
+          <Image src={"/light-logo.png"} alt="Logo" width={100} height={100} />
         </div>
         <Header label={headerLabel} />
       </CardHeader>
@@ -29,7 +29,7 @@ export const CardWrapper = ({
           <Social />
         </CardFooter>
       )}
-      <CardFooter className="grid grid-cols-2">
+      <CardFooter className="grid md:grid-cols-2">
         <BackButton href={backButtonHref} label={backButtonLabel} />
         <Button variant="link" className="font-normal w-full" size="sm" asChild>
           <Link href="/">Go Back To Home?</Link>

@@ -23,7 +23,7 @@ export const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [success, setSuccess] = useState(null);
 
   const form = useForm({
     resolver: zodResolver(RegisterSchema),
@@ -46,7 +46,7 @@ export const RegisterForm = () => {
   const onSubmit = (values) => {
     if (form.getValues("password") !== confirmPassword) return;
     setError("");
-    setSuccess("");
+    setSuccess(null);
     startTransition(() => {
       register(values).then((result) => {
         if (result.error) {
@@ -142,7 +142,7 @@ export const RegisterForm = () => {
           <FormError message={error} />
           <FormSuccess message={success} />
           {success && (
-            <div className="w-full flex justify-start">
+            <div className="w-full flex justify-start text-sm">
               Didn&apos;t get the code?
               <br />
               Codes can take up to 5 minutes to arrive.
