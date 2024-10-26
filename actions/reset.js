@@ -20,7 +20,7 @@ export const reset = async (values) => {
   const passwordResetToken = await generatePasswordResetToken(email);
   await SendResetPasswordEmail(
     //TODO
-    "intelligentlederberg@fearlessmails.com",
+    email,
     passwordResetToken.token
   );
 
