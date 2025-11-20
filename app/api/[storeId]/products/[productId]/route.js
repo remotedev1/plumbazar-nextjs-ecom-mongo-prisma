@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import cloudinary from "@/lib/cloudinary";
 import { db } from "@/lib/db";
 import { checkAuthorization } from "@/lib/helpers";
 import { NextResponse } from "next/server";

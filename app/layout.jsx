@@ -6,6 +6,7 @@ import { ModalProvider } from "@/providers/modal-provider";
 import { ToastProvider } from "@/providers/toast-provider";
 import { DataProvider } from "@/providers/data-provider";
 import Script from "next/script";
+import PageLoader from "@/components/common/pageLoader";
 
 const font = Urbanist({ subsets: ["latin"] });
 
@@ -71,6 +72,7 @@ export default async function RootLayout({ children, params: { locale } }) {
             <ToastProvider />
             <DataProvider>{children}</DataProvider>
           </ThemeProvider>
+          <PageLoader/>
         </body>
       </html>
     </Sessions>

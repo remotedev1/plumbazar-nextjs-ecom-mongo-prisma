@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"rfqId":{"$numberInt":"1"}},"name":"DraftInvoice_rfqId_key","unique":true}],"uuid":"109a5135dc914d999b58764a3bba5cf0","collectionName":"DraftInvoice","type":"collection"}

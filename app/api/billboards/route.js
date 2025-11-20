@@ -52,8 +52,6 @@ export async function POST(req, { params }) {
 
 export async function GET(req, { params }) {
   try {
-    const { user } = await auth(); // we have access to the user id here that wants to create new store using our api
-
     // get all the billboard
 
     const billboards = await db.billboard.findMany({});

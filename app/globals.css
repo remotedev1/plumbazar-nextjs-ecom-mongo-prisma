@@ -134,7 +134,6 @@ button {
   @apply hidden;
 }
 
-
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
@@ -142,6 +141,13 @@ button {
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* //nprogress customizations   */
+#nprogress .bar {
+  background: white !important;
+  height: 4px !important;
+  z-index: 9999 !important;
 }

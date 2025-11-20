@@ -32,7 +32,7 @@ export const CardWrapper = ({
       <CardFooter className="grid md:grid-cols-2">
         <BackButton href={backButtonHref} label={backButtonLabel} />
         <Button variant="link" className="font-normal w-full" size="sm" asChild>
-          <Link href="/">Go Back To Home?</Link>
+          <Link href="/">Go home?</Link>
         </Button>
       </CardFooter>
     </Card>

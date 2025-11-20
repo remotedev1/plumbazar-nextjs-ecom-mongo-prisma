@@ -64,13 +64,13 @@ export const LoginForm = () => {
   return (
     <CardWrapper
       headerLabel="Welcome back"
-      backButtonLabel="Don't have an account?"
+      backButtonLabel="Sign up?"
       backButtonHref="/auth/register"
       showSocial
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-4">
+          <div className="space-y-2">
             <FormField
               control={form.control}
               name="email"
@@ -90,7 +90,7 @@ export const LoginForm = () => {
               )}
             />
           </div>
-          <div className="space-y-4">
+          <div className="space-y-2">
             <FormField
               control={form.control}
               name="password"
@@ -105,14 +105,7 @@ export const LoginForm = () => {
                       placeholder="********"
                     />
                   </FormControl>
-                  <Button
-                    size="sm"
-                    variant="link"
-                    asChild
-                    className="px-0 font-normal"
-                  >
-                    <Link href="/auth/reset">Forgot password?</Link>
-                  </Button>
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -120,6 +113,9 @@ export const LoginForm = () => {
           </div>
           <FormError message={error || urlError} />
           <FormSuccess message={success} />
+          <Button size="sm" variant="link" asChild className="px-0 font-normal">
+            <Link href="/auth/reset">Forgot password?</Link>
+          </Button>
           <Button type="submit" className="w-full" disabled={isPending}>
             Login
           </Button>

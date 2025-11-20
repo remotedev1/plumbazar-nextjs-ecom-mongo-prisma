@@ -19,7 +19,6 @@ export default auth((req) => {
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
   // Check if the requested route is a dynamic route
-  const isDynamicProductRoute = nextUrl.pathname.startsWith("/products/");
   const isDashboardRoute = nextUrl.pathname.startsWith("/dashboard/");
 
   if (isApiAuthRoute) {
@@ -33,7 +32,7 @@ export default auth((req) => {
     return null;
   }
 
-  if (!isLoggedIn && !isPublicRoute && !isDynamicProductRoute) {
+  if (!isLoggedIn && !isPublicRoute && !isDashboardRoute) {
     let callbackUrl = nextUrl.pathname;
     if (nextUrl.search) {
       callbackUrl += nextUrl.search;

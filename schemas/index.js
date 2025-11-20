@@ -1,22 +1,22 @@
 import * as z from "zod";
 
 export const LoginSchema = z.object({
-  email: z.string().email({ message: "Email is required" }),
-  password: z.string().min(1, { message: "Password is required" }),
+  email: z.string().email({ message: "email is required" }),
+  password: z.string().min(1, { message: "password is required" }),
 });
 
 export const RegisterSchema = z.object({
-  email: z.string().email({ message: "Email is required" }),
-  password: z.string().min(6, { message: "Minimum 6 characters is required" }),
-  name: z.string().min(1, { message: "Name is required" }),
+  email: z.string().email({ message: "email is required" }),
+  password: z.string().min(6, { message: "minimum 6 characters is required" }),
+  name: z.string().min(1, { message: "name is required" }),
 });
 
 export const ResetSchema = z.object({
-  email: z.string().email({ message: "Email is required" }),
+  email: z.string().email({ message: "email is required" }),
 });
 
 export const newPasswordSchema = z.object({
-  password: z.string().min(6, { message: "Minimum 6 characters is required" }),
+  password: z.string().min(6, { message: "minimum 6 characters is required" }),
 });
 
 export const billboardSchema = z.object({
@@ -40,12 +40,12 @@ export const clienteleSchema = z.object({
 });
 
 export const ProductSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  images: z.array(z.any()).min(1, "At least one image is required"),
+  name: z.string().min(1, "name is required"),
+  images: z.array(z.any()).min(1, "at least one image is required"),
   msp: z.number().min(0, "MSP must be a positive number"),
   mrp: z.number().min(0, "MRP must be a positive number"),
-  brandId: z.string().min(1, "Category is required"),
-  categoryId: z.string().min(1, "Category is required"),
+  brandId: z.string().min(1, "category is required"),
+  categoryId: z.string().min(1, "category is required"),
   discount: z.coerce.number().optional(),
   features: z
     .object({
@@ -65,18 +65,18 @@ export const ProductSchema = z.object({
 
 export const OfferSchema = z
   .object({
-    title: z.string().min(1, "Title is required"),
-    description: z.string().min(1, "Description is required"),
+    title: z.string().min(1, "title is required"),
+    description: z.string().min(1, "description is required"),
     discountPercentage: z
       .number()
-      .min(0, "Discount percentage cannot be negative")
-      .max(100, "Discount percentage cannot exceed 100"),
+      .min(0, "discount percentage cannot be negative")
+      .max(100, "discount percentage cannot exceed 100"),
     validFrom: z.date(),
     validUntil: z
       .date()
       .refine(
         (date) => date > new Date(),
-        "Valid until date must be in the future"
+        "valid until date must be in the future"
       ),
     productIds: z.array(z.string()).optional(),
     brandIds: z.array(z.string()).optional(),
@@ -86,7 +86,7 @@ export const OfferSchema = z
     if (validUntil <= validFrom) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Valid until date must be after the start date",
+        message: "valid until date must be after the start date",
         path: ["validUntil"], // Path to the field that has the issue
       });
     }
@@ -96,17 +96,17 @@ export const StockInSchema = z.object({
   notes: z.string().optional(),
   products: z.array(
     z.object({
-      productId: z.string().min(1, "Product must be selected"), // Ensures productId is a non-empty string
+      productId: z.string().min(1, "product must be selected"), // Ensures productId is a non-empty string
       quantity: z
         .number()
         .int()
-        .positive("Quantity must be a positive integer"),
+        .positive("quantity must be a positive integer"),
       mrp: z.number().int().positive("mrp must be a positive integer"),
       msp: z.number().int().positive("msp must be a positive integer"),
       purchasePrice: z
         .number()
         .int()
-        .positive("Purchase Price must be a positive integer"),
+        .positive("purchase price must be a positive integer"),
     })
   ),
 });
@@ -128,21 +128,21 @@ export const PostReviewSchema = z.object({
 });
 
 export const shippingAddressSchema = z.object({
-  address: z.string().min(1, { message: "Address is required" }),
-  city: z.string().min(1, { message: "City is required" }),
-  state: z.string().min(1, { message: "State is required" }),
-  zip: z.string().min(1, { message: "Zip code is required" }),
+  address: z.string().min(1, { message: "address is required" }),
+  city: z.string().min(1, { message: "city is required" }),
+  state: z.string().min(1, { message: "state is required" }),
+  zip: z.string().min(1, { message: "zip code is required" }),
   phone: z
     .string()
-    .min(1, { message: "Phone number is required" })
-    .max(10, { message: "Phone number must not exceed 10 characters" }),
+    .min(1, { message: "phone number is required" })
+    .max(10, { message: "phone number must not exceed 10 characters" }),
 });
 
 export const RfqSchema = z.object({
   phone: z
     .string()
-    .min(1, { message: "Phone number is required" })
-    .max(10, { message: "Phone number must not exceed 10 characters" }),
+    .min(1, { message: "phone number is required" })
+    .max(10, { message: "phone number must not exceed 10 characters" }),
   images: z.array(z.any()).min(1), // optional field
   response: z.string().optional(),
   notes: z.string().optional(),
@@ -156,34 +156,34 @@ const DATE_OPTIONS = { year: "numeric", month: "long", day: "numeric" };
 const fieldValidators = {
   name: z
     .string()
-    .min(2, { message: "Must be at least 2 characters" })
-    .max(50, { message: "Must be at most 50 characters" }),
+    .min(2, { message: "must be at least 2 characters" })
+    .max(50, { message: "must be at most 50 characters" }),
   address: z
     .string()
-    .min(2, { message: "Must be at least 2 characters" })
-    .max(70, { message: "Must be between 2 and 70 characters" }),
+    .min(2, { message: "must be at least 2 characters" })
+    .max(70, { message: "must be between 2 and 70 characters" }),
   zipCode: z
     .string()
-    .min(2, { message: "Must be between 2 and 20 characters" })
-    .max(20, { message: "Must be between 2 and 20 characters" }),
+    .min(2, { message: "must be between 2 and 20 characters" })
+    .max(20, { message: "must be between 2 and 20 characters" }),
   city: z
     .string()
-    .min(1, { message: "Must be between 1 and 50 characters" })
-    .max(50, { message: "Must be between 1 and 50 characters" }),
+    .min(1, { message: "must be between 1 and 50 characters" })
+    .max(50, { message: "must be between 1 and 50 characters" }),
   country: z
     .string()
-    .min(1, { message: "Must be between 1 and 70 characters" })
-    .max(70, { message: "Must be between 1 and 70 characters" }),
+    .min(1, { message: "must be between 1 and 70 characters" })
+    .max(70, { message: "must be between 1 and 70 characters" }),
   email: z
     .string()
-    .email({ message: "Email must be a valid email" })
-    .min(5, { message: "Must be between 5 and 30 characters" })
-    .max(30, { message: "Must be between 5 and 30 characters" }),
+    .email({ message: "email must be a valid email" })
+    .min(5, { message: "must be between 5 and 30 characters" })
+    .max(30, { message: "must be between 5 and 30 characters" }),
   phone: z
     .string()
-    .min(1, { message: "Must be between 1 and 50 characters" })
+    .min(1, { message: "must be between 1 and 50 characters" })
     .max(50, {
-      message: "Must be between 1 and 50 characters",
+      message: "must be between 1 and 50 characters",
     }),
 
   // Dates
@@ -196,14 +196,14 @@ const fieldValidators = {
   // Items
   quantity: z.coerce
     .number()
-    .min(1, { message: "Must be a number greater than 0" }),
+    .min(1, { message: "must be a number greater than 0" }),
   unitPrice: z.coerce
     .number()
-    .min(1, { message: "Must be a number greater than 0" }),
+    .min(1, { message: "must be a number greater than 0" }),
 
   // Strings
   string: z.string(),
-  stringMin1: z.string().min(1, { message: "Must be at least 1 character" }),
+  stringMin1: z.string().min(1, { message: "must be at least 1 character" }),
   stringToNumber: z.coerce.number(),
 
   // Charges
@@ -212,13 +212,13 @@ const fieldValidators = {
   stringOptional: z.string().optional(),
 
   nonNegativeNumber: z.coerce.number().nonnegative({
-    message: "Must be a positive number",
+    message: "must be a positive number",
   }),
   // ! This is unused
   numWithCommas: z.coerce
     .number()
     .nonnegative({
-      message: "Must be a positive number",
+      message: "must be a positive number",
     })
     .transform((value) => {
       return formatNumberWithCommas(value);

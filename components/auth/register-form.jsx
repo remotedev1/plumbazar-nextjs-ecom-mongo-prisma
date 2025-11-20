@@ -61,13 +61,12 @@ export const RegisterForm = () => {
   return (
     <CardWrapper
       headerLabel="Create an account"
-      backButtonLabel="Already have an account?"
+      backButtonLabel="Sign in?"
       backButtonHref="/auth/login"
       showSocial
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-4">
             <FormField
               control={form.control}
               name="name"
@@ -86,8 +85,7 @@ export const RegisterForm = () => {
                 </FormItem>
               )}
             />
-          </div>
-          <div className="space-y-4">
+          
             <FormField
               control={form.control}
               name="email"
@@ -106,8 +104,7 @@ export const RegisterForm = () => {
                 </FormItem>
               )}
             />
-          </div>
-          <div className="space-y-4">
+        
             <FormField
               control={form.control}
               name="password"
@@ -126,19 +123,24 @@ export const RegisterForm = () => {
                 </FormItem>
               )}
             />
-          </div>
-          <div className="space-y-4">
-            <FormLabel>Confirm Password</FormLabel>
-            <FormControl>
-              <Input
-                type="text"
-                disabled={isPending}
+             <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                          disabled={isPending}
                 placeholder="********"
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </FormControl>
-            <FormMessage />
-          </div>
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />  
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+      />
           <FormError message={error} />
           <FormSuccess message={success} />
           {success && (
