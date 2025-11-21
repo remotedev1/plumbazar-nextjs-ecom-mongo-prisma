@@ -7,11 +7,11 @@ import WhatsApp from "@/components/frontend/whatsApp";
 export default async function RootLayout({ children }) {
   return (
     <div className="bg-white relative">
-      <TopNavbar />
-      <Navbar />
+      {/* <TopNavbar /> */}
+      {/* <Navbar /> */}
       {children}
-      <Footer />
-      <BottomNavbar />
+      {/* <Footer /> */}
+      {/* <BottomNavbar /> */}
       <WhatsApp />
     </div>
   );
