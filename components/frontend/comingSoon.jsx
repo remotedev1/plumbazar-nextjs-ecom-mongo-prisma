@@ -77,7 +77,7 @@ export default function ComingSoon() {
             Plumb<span className="text-blue-600">azar</span>.com
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 font-light">
-            Reliable Plumbing Services Coming Soon
+            Construction management Services Coming Soon
           </p>
         </header>
 
